@@ -23,13 +23,23 @@ nav {
     text-decoration: none;
     font-size: 1.1rem;
     font-weight: 400;
-    transition: 0.3s easy-in-out;
     color: #f4f4f4;
+    transition: 0.2s ease-in-out;
 }
 
 .navbar li a:hover {
-    font-size: 1.1rem;
-    font-weight: 600;
+    color: #84af6d;
+}
+
+.navbar li a:hover::after,
+.navbar li a.active::after {
+    content: "";
+    width: 30%;
+    height: 1px;
+    background: #84af6d;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
 }
 
 .logo {

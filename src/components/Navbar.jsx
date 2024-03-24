@@ -1,4 +1,5 @@
 import logo from "./../assets/logo_keychain.svg";
+import MainButton from "./MainButton";
 import "./Navbar.css";
 
 export default function () {
@@ -9,18 +10,21 @@ export default function () {
           <img src={logo} className="logo" alt="Logo de keychain" />
         </a>
         <div>
-          <ul class="navbar">
-            <li class="nav-item">
-              <a href="#solutions">Solutions</a>
+          <ul className="navbar">
+            <li>
+              <a className="active" href="#solutions">
+                Solutions
+              </a>
             </li>
-            <li class="nav-item">
+            <li>
               <a href="#services">Services</a>
             </li>
-            <li class="nav-item">
+            <li>
               <a href="#founders">Founders</a>
             </li>
           </ul>
         </div>
+        <MainButton text="Log In" />
       </nav>
     </>
   );

@@ -1,0 +1,13 @@
+.btn {
+    text-align: center;
+    padding: 9px 50px;
+    font-family: 'Montserrat', sans-serif;
+    background: #0096D2;
+    color: #F4F4F4;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+}
+.btn:hover {
+    color: #1c1c1c;
+}
