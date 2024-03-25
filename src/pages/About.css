@@ -1,5 +1,28 @@
 .about {
   display: flex;
-  place-items: center;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.main-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 13%;
+  line-height: 0.9;
+}
+
+@media (max-width: 850px) {
+  .main-content {
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    left: 0%;
+    top: 0%;
+    margin-top: 20%;
+    min-height: 60vh;
+  }
+
+
 }

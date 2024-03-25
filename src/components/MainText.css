@@ -1,0 +1,43 @@
+.texts {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+  }
+  
+  .texts span {
+    font-size: 80px;
+  }
+  
+  .texts span:nth-child(1) {
+    padding-left: 140px;
+  }
+  .texts span:nth-child(2) {
+    color: #0096D2;
+  }
+  .texts span:nth-child(3) {
+    padding-left: 50px;
+  }
+  
+  @media (max-width: 850px) {
+    .texts {
+      position: relative;
+      line-height: 0.9;
+      align-items: center;
+    }
+  
+    .texts span {
+      font-size: 60px;
+      align-items: left;
+    }
+  
+    .texts span:nth-child(1) {
+      padding-left: 0px;
+    }
+    .texts span:nth-child(2) {
+      padding-left: 0px;
+    }
+    .texts span:nth-child(3) {
+      padding-left: 0px;
+      padding-right: 100px;
+    }
+  }
