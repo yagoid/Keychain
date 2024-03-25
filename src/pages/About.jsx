@@ -1,3 +1,4 @@
+import hexagons1 from "./../assets/hexagons1.svg";
 import MainButton from "../components/MainButton";
 import MainText from "../components/MainText";
 import Navbar from "../components/Navbar";
@@ -13,6 +14,11 @@ export default function AboutPage() {
           <MainText />
           <MainButton text="Start" />
         </div>
+        <img
+          src={hexagons1}
+          className="hexagons1-background"
+          alt="Background of hexagons"
+        />
       </div>
     </>
   );

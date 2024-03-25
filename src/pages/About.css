@@ -5,12 +5,19 @@
 }
 
 .main-content {
-  position: absolute;
   display: flex;
   flex-direction: column;
-  top: 50%;
-  left: 13%;
+  margin-top: 45vh;
+  margin-left: 20vh;
   line-height: 0.9;
+}
+
+.hexagons1-background {
+  position: absolute;
+  width: 50vh;
+  height: 50vh;
+  top: 40%;
+  left: 60%;
 }
 
 @media (max-width: 850px) {
@@ -18,11 +25,8 @@
     position: relative;
     justify-content: space-between;
     align-items: center;
-    left: 0%;
-    top: 0%;
-    margin-top: 20%;
+    margin-top: 15vh;
+    margin-left: 0;
     min-height: 60vh;
   }
-
-
 }
