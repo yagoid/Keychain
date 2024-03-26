@@ -1,0 +1,22 @@
+.icon-set {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 25px;
+    line-height: 0.9;
+}
+
+.locator-square {
+    max-width: 25px;
+    cursor: pointer;
+}
+.locator-line {
+    align-items: center;
+    max-width: 3px;
+    margin: -3px 0;
+    z-index: -1;
+}
+
+.invisible-line {
+    opacity: 0;
+}

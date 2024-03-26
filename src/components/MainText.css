@@ -5,11 +5,11 @@
   }
   
   .texts span {
-    font-size: 80px;
+    font-size: 85px;
   }
   
   .texts span:nth-child(1) {
-    padding-left: 140px;
+    padding-left: 100px;
   }
   .texts span:nth-child(2) {
     color: #0096D2;
@@ -21,7 +21,6 @@
   @media (max-width: 850px) {
     .texts {
       position: relative;
-      line-height: 0.9;
       align-items: center;
     }
   
@@ -39,5 +38,12 @@
     .texts span:nth-child(3) {
       padding-left: 0px;
       padding-right: 100px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .texts span {
+      font-size: 40px;
+      align-items: left;
     }
   }
