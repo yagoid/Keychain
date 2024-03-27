@@ -1,14 +1,23 @@
 .btn {
     text-align: center;
-    width: 50px;
+    max-width: 40px;
     padding: 9px 50px;
     font-family: 'Montserrat', sans-serif;
-    background: #0096D2;
-    color: #F4F4F4;
     border-radius: 5px;
     text-decoration: none;
     transition: 0.2s ease-in-out;
 }
 .btn:hover {
     color: #1c1c1c;
+}
+
+.blue {
+    background: #0096D2;
+    color: #F4F4F4;
+}
+
+.green {
+    background: #84AF6D;
+    color: #F4F4F4;
+    font-size: 1.1rem;
 }

@@ -1,12 +1,13 @@
+import { TEXTS } from "./../assets/locales/texts.js";
 import "./MainText.css";
 
 export default function MainText() {
   return (
     <>
       <div className="texts">
-        <span>TRUST</span>
-        <span>DECENTRALIZE</span>
-        <span>ENJOY</span>
+        <span>{TEXTS.trust.en}</span>
+        <span>{TEXTS.decentralize.en}</span>
+        <span>{TEXTS.enjoy.en}</span>
       </div>
     </>
   );

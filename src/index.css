@@ -3,9 +3,10 @@
 
   color-scheme: light dark;
   color: #f4f4f4;
+  letter-spacing: 0.5px;
   background-color: #1c1c1c;
 
-  background-image: url('./assets/background.svg'); 
+  background-image: url('./assets/images/background2.svg'); 
   /* background-size: cover;  */
   /* background-position: center;  */
 }

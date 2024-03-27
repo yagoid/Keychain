@@ -1,0 +1,154 @@
+.services-tittle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 30vh;
+    line-height: 0;
+  }
+  
+.services-tittle span {
+    position: absolute;
+    display: block;
+    right: 26%;
+    width: 700px; /* Ancho de la línea */
+    height: 1px;
+    background-color: #84af6d; 
+    z-index: -1;
+}
+
+.services-tittle h1 {
+    margin-right: 125px;
+}
+
+.services-tittle h2 {
+    font-size: 1.7rem;
+    font-weight: 100;
+    margin-top: 4px;
+}
+
+.services-content {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+.column1 > :nth-child(2) {
+    margin-top: 60px;
+    margin-left: 20px;
+}
+
+.column2 > :nth-child(1) {
+    margin-top: 60px;
+}
+
+.column2 > :nth-child(2) {
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.services-paragraph {
+    max-width: 500px;
+    padding: 10px 30px;
+    border: 1px solid #000000;
+    background-color: #141414;
+    border-radius: 20px;
+}
+
+.tittle-paragraph {
+    font-size: 1.4rem;
+    color: #0096D2;
+    line-height: 0.5;
+}
+
+.text-paragraph {
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+@media (max-width: 1470px) {
+    .services-content {
+        margin-left: 3vh;
+        padding-right: 3vh;
+        gap: 20px;
+    }
+}
+  
+@media (max-width: 1013px) {
+    .solutions-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .tittle-paragraph {
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+    
+    .text-paragraph {
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 716px) {  
+    .services-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .column1 > :nth-child(2) {
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+    
+    .column2 > :nth-child(1) {
+        margin-top: 10px;
+    }
+    
+    .column2 > :nth-child(2) {
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .services-tittle {
+        align-items: center;
+        margin-right: 0;
+      }
+      
+    .services-tittle span {
+        position: absolute;
+        display: block;
+        right: 26%;
+        width: 700px; /* Ancho de la línea */
+        height: 1px;
+        background-color: #84af6d; 
+        z-index: -1;
+    }
+    
+    .services-tittle h1 {
+        margin-right: 125px;
+        font-size: 3.5rem;
+    }
+    
+    .services-tittle h2 {
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+    }
+}
+
+
+
+@media (max-width: 420px) {
+    .solutions-content {
+        margin-left: 2vh;
+    }
+
+    .solutions-content p {
+        font-size: 1rem;
+        margin-top: 5px;
+    }
+}

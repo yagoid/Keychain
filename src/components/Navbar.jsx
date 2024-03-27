@@ -1,11 +1,12 @@
-import Logo from "./../assets/logo_keychain.svg";
-import NavbarMenu from "./../assets/navbar_menu.svg";
+import Logo from "./../assets/images/logo_keychain.svg";
+import NavbarMenu from "./../assets/images/navbar_menu.svg";
 import MainButton from "./MainButton";
 import { useState } from "react";
+import { TEXTS } from "./../assets/locales/texts.js";
 import "./Navbar.css";
 
 export default function Navbar({ activeSection, setActiveSection, sections }) {
-  const [isMenuOpen, setisMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigateToSection = (index) => {
     setActiveSection(index);
@@ -19,7 +20,7 @@ export default function Navbar({ activeSection, setActiveSection, sections }) {
       <nav>
         <div className="icons">
           <img
-            onClick={() => setisMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="icon-menu"
             src={NavbarMenu}
             alt="NavBar Menu"
@@ -42,7 +43,7 @@ export default function Navbar({ activeSection, setActiveSection, sections }) {
           ))}
         </ul>
         <div className="login-button">
-          <MainButton text="Log In" />
+          <MainButton text={TEXTS.logIn.en} color={"blue"} />
         </div>
       </nav>
     </>

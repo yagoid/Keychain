@@ -1,7 +1,7 @@
-import LocatorSquareActive from "./../assets/locator_square_active.svg";
-import LocatorSquareActiveGreen from "./../assets/locator_square_active_green.svg";
-import LocatorSquare from "./../assets/locator_square.svg";
-import LocatorLine from "./../assets/locator_line.svg";
+import LocatorSquareActive from "./../assets/images/locator_square_active.svg";
+import LocatorSquareActiveGreen from "./../assets/images/locator_square_active_green.svg";
+import LocatorSquare from "./../assets/images/locator_square.svg";
+import LocatorLine from "./../assets/images/locator_line.svg";
 import "./LocatorBar.css";
 
 export default function LocationBar({

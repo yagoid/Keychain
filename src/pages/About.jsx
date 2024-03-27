@@ -1,14 +1,18 @@
 import { useState } from "react";
-import hexagons1 from "./../assets/hexagons1.svg";
+import "./About.css";
+import { TEXTS } from "./../assets/locales/texts.js";
+import hexagons1 from "./../assets/images/hexagons1.svg";
 import MainButton from "../components/MainButton";
 import MainText from "../components/MainText";
 import Navbar from "../components/Navbar";
-import "./About.css";
 import LocatorBar from "../components/LocatorBar";
+import SolutionsContent from "../components/SolutionsContent.jsx";
+import ServicesContent from "../components/ServicesContent.jsx";
+import FoundersContent from "../components/FoundersContent.jsx";
 
 export default function AboutPage() {
   const [activeSection, setActiveSection] = useState(0);
-  const aboutSections = ["Solutions", "Services", "Founders"];
+  const aboutSections = TEXTS.aboutSections.en;
   const numSections = 4;
 
   return (
@@ -23,7 +27,7 @@ export default function AboutPage() {
           {/* <a href="/home">Ir al home</a> */}
           <div className="main-content">
             <MainText />
-            <MainButton text="Start" />
+            <MainButton text={TEXTS.start.en} color={"blue"} />
           </div>
           <img
             src={hexagons1}
@@ -43,11 +47,13 @@ export default function AboutPage() {
           </section>
         </div>
         <div className="solutions-section">
-          <div className="solutions-tittle">
-            <h1 className="section-tittle">
-              <span></span>Solutions
-            </h1>
-          </div>
+          <SolutionsContent />
+        </div>
+        <div className="services-section">
+          <ServicesContent />
+        </div>
+        <div className="founders-section">
+          <FoundersContent />
         </div>
       </div>
     </>
