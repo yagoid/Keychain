@@ -12,8 +12,8 @@ export const TEXTS = {
       en: "Start"
     },
     aboutSections: {
-      es: ["Soluciones", "Servicios", "Fundadores"],
-      en: ["Solutions", "Services", "Founders"]
+      es: ["Main", "Soluciones", "Servicios", "Fundadores"],
+      en: ["Main", "Solutions", "Services", "Founders"]
     },
     trust: {
       es: "",
@@ -26,6 +26,10 @@ export const TEXTS = {
     enjoy: {
       es: "",
       en: "ENJOY"
+    },
+    main: {
+      es: "Main",
+      en: "Main"
     },
     solutions: {
       es: "Soluciones",

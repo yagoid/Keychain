@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./About.css";
 import { TEXTS } from "./../assets/locales/texts.js";
 import hexagons1 from "./../assets/images/hexagons1.svg";
@@ -11,51 +11,125 @@ import ServicesContent from "../components/ServicesContent.jsx";
 import FoundersContent from "../components/FoundersContent.jsx";
 
 export default function AboutPage() {
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
+  const [nameActiveSection, setNameActiveSection] = useState("Main");
+
+  const aboutRef = useRef(null);
+  const mainRef = useRef(null);
+  const solutionsRef = useRef(null);
+  const servicesRef = useRef(null);
+  const foundersRef = useRef(null);
+
   const aboutSections = TEXTS.aboutSections.en;
-  const numSections = 4;
+  let positionSolutionsSection = 0;
+  let positionServicesSection = 0;
+  let positionFoundersSection = 0;
+
+  // Scroll to section clicked on NavBar or LocatorBar
+  const scrollToSection = (ref) => {
+    ref.current.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(() => {
+    if (activeSection === 0) {
+      scrollToSection(mainRef);
+    } else if (activeSection === 1) {
+      scrollToSection(solutionsRef);
+    } else if (activeSection === 2) {
+      scrollToSection(servicesRef);
+    } else if (activeSection === 3) {
+      scrollToSection(foundersRef);
+    }
+  }, [activeSection]);
+
+  // Know the sections where user is
+  const handleScroll = () => {
+    if (solutionsRef.current) {
+      const { offsetTop } = solutionsRef.current;
+      positionSolutionsSection = offsetTop;
+    }
+    if (servicesRef.current) {
+      const { offsetTop } = servicesRef.current;
+      positionServicesSection = offsetTop;
+    }
+    if (foundersRef.current) {
+      const { offsetTop } = foundersRef.current;
+      positionFoundersSection = offsetTop;
+    }
+
+    const position = window.scrollY;
+    setScrollPosition(position);
+    // console.log("Scroll position", scrollPosition);
+
+    // console.log("solutions", positionSolutionsSection);
+    // console.log("services", positionServicesSection);
+    // console.log("funders", positionFoundersSection);
+
+    if (scrollPosition < positionSolutionsSection - 5) {
+      setNameActiveSection(TEXTS.main.en);
+    } else if (
+      scrollPosition >= positionSolutionsSection - 5 &&
+      scrollPosition < positionServicesSection - 5
+    ) {
+      setNameActiveSection(TEXTS.solutions.en);
+    } else if (
+      scrollPosition >= positionServicesSection - 5 &&
+      scrollPosition < positionFoundersSection - 150
+    ) {
+      setNameActiveSection(TEXTS.services.en);
+    } else if (scrollPosition >= positionFoundersSection - 150) {
+      setNameActiveSection(TEXTS.founders.en);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollPosition]);
 
   return (
-    <>
-      <div className="about">
-        <div className="main-section">
-          <Navbar
-            activeSection={activeSection}
-            setActiveSection={setActiveSection}
-            sections={aboutSections}
-          />
-          {/* <a href="/home">Ir al home</a> */}
-          <div className="main-content">
-            <MainText />
-            <MainButton text={TEXTS.start.en} color={"blue"} />
-          </div>
-          <img
-            src={hexagons1}
-            className="hexagons1-background"
-            alt="Background of hexagons"
-          />
-          <section className="locator-bar">
-            {Array.from({ length: numSections }).map((_, index) => (
-              <LocatorBar
-                key={index}
-                activeSection={activeSection}
-                setActiveSection={setActiveSection}
-                index={index}
-                lastIndex={index == numSections - 1 ? true : false}
-              ></LocatorBar>
-            ))}
-          </section>
+    <div id="scrollDemo" className="about" ref={aboutRef}>
+      <div id="main" className="main-section" ref={mainRef}>
+        <Navbar
+          setActiveSection={setActiveSection}
+          sections={aboutSections}
+          nameActiveSection={nameActiveSection}
+        />
+        {/* <a href="/home">Ir al home</a> */}
+        <div className="main-content">
+          <MainText />
+          <MainButton text={TEXTS.start.en} color={"blue"} />
         </div>
-        <div className="solutions-section">
-          <SolutionsContent />
-        </div>
-        <div className="services-section">
-          <ServicesContent />
-        </div>
-        <div className="founders-section">
-          <FoundersContent />
-        </div>
+        <img
+          src={hexagons1}
+          className="hexagons1-background"
+          alt="Background of hexagons"
+        />
+        <section className="locator-bar">
+          {aboutSections.map((section, index) => (
+            <LocatorBar
+              key={index}
+              setActiveSection={setActiveSection}
+              section={section}
+              nameActiveSection={nameActiveSection}
+              index={index}
+              lastIndex={index == aboutSections.length - 1 ? true : false}
+            ></LocatorBar>
+          ))}
+        </section>
       </div>
-    </>
+      <div id="solutions" className="solutions-section" ref={solutionsRef}>
+        <SolutionsContent />
+      </div>
+      <div id="services" className="services-section" ref={servicesRef}>
+        <ServicesContent />
+      </div>
+      <div id="founders" className="founders-section" ref={foundersRef}>
+        <FoundersContent />
+      </div>
+    </div>
   );
 }

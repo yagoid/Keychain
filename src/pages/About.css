@@ -8,17 +8,17 @@
 }
 
 .solutions-section {
-  margin-top: 10vh;
+  padding-top: 10vh;
   min-height: 90vh;
 }
 
 .services-section {
-  margin-top: 10vh;
-  min-height: 90vh;
+  padding-top: 10vh;
+  min-height: 70vh;
 }
 
 .founders-section {
-  margin-top: 10vh;
+  padding-top: 30vh;
   min-height: 60vh;
 }
 
@@ -42,6 +42,7 @@
   position: fixed;
   top: 30%;
   left: 5%;
+  z-index: 1;
 }
 
 @media (max-width: 850px) {

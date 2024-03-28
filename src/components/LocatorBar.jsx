@@ -5,22 +5,24 @@ import LocatorLine from "./../assets/images/locator_line.svg";
 import "./LocatorBar.css";
 
 export default function LocationBar({
-  activeSection,
   setActiveSection,
+  section,
+  nameActiveSection,
   index,
   lastIndex,
 }) {
   const changeActiveSection = () => {
     setActiveSection(index);
   };
+
   return (
     <>
       <div className="icon-set">
         <img
           onClick={changeActiveSection}
           src={
-            index === activeSection
-              ? activeSection === 0
+            nameActiveSection === section
+              ? section === "Main"
                 ? LocatorSquareActive
                 : LocatorSquareActiveGreen
               : LocatorSquare

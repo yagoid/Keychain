@@ -20,7 +20,7 @@
     position: relative;
     display: flex;
     justify-content: center;
-    gap: 200px;
+    gap: 150px;
 }
 
 .solutions-content div {
@@ -33,7 +33,6 @@
     /* border: 1px solid #84af6d; */
     border-radius: 20px;
     line-height: 1.2;
-
 }
 
 .paragraph1 {
@@ -69,7 +68,7 @@
     }
 }
 
-@media (max-width: 576px) {  
+@media (max-width: 700px) {  
     .solutions-tittle {
       margin-left: 5vh;
       font-size: 0.7rem;
