@@ -3,6 +3,18 @@ export const TEXTS = {
       es: "¡Bienvenido!",
       en: "Welcome!"
     },
+    footer: {
+      es: "©2024 Keychain. Todos los derechos reservados",
+      en: "©2024 KeyChain. All Rights Reserved"
+    },
+    privacyPolicy: {
+      es: "Política de Privacidad",
+      en: "Privacy Policy"
+    },
+    email: {
+      es: "Keychain@gmail.com",
+      en: "Keychain@gmail.com"
+    },
     logIn: {
       es: "Iniciar Sesión",
       en: "Log In"

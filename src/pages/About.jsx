@@ -9,6 +9,7 @@ import LocatorBar from "../components/LocatorBar";
 import SolutionsContent from "../components/SolutionsContent.jsx";
 import ServicesContent from "../components/ServicesContent.jsx";
 import FoundersContent from "../components/FoundersContent.jsx";
+import Footer from "../components/Footer.jsx";
 
 export default function AboutPage() {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -65,15 +66,15 @@ export default function AboutPage() {
     // console.log("services", positionServicesSection);
     // console.log("funders", positionFoundersSection);
 
-    if (scrollPosition < positionSolutionsSection - 5) {
+    if (scrollPosition < positionSolutionsSection - 50) {
       setNameActiveSection(TEXTS.main.en);
     } else if (
-      scrollPosition >= positionSolutionsSection - 5 &&
-      scrollPosition < positionServicesSection - 5
+      scrollPosition >= positionSolutionsSection - 50 &&
+      scrollPosition < positionServicesSection - 50
     ) {
       setNameActiveSection(TEXTS.solutions.en);
     } else if (
-      scrollPosition >= positionServicesSection - 5 &&
+      scrollPosition >= positionServicesSection - 50 &&
       scrollPosition < positionFoundersSection - 150
     ) {
       setNameActiveSection(TEXTS.services.en);
@@ -91,7 +92,7 @@ export default function AboutPage() {
   }, [scrollPosition]);
 
   return (
-    <div id="scrollDemo" className="about" ref={aboutRef}>
+    <div className="about" ref={aboutRef}>
       <div id="main" className="main-section" ref={mainRef}>
         <Navbar
           setActiveSection={setActiveSection}
@@ -130,6 +131,7 @@ export default function AboutPage() {
       <div id="founders" className="founders-section" ref={foundersRef}>
         <FoundersContent />
       </div>
+      <Footer />
     </div>
   );
 }
