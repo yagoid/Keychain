@@ -59,6 +59,18 @@ export const TEXTS = {
       es: "Fundadores",
       en: "Founders"
     },
+    solutionsParagraphTittle1: {
+      es: "Gestor de Contraseñas Seguro",
+      en: "Secure Password Manager"
+    },
+    solutionsParagraphTittle2: {
+      es: "Niveles de Seguridad Personalizables",
+      en: "Customizable Security Levels"
+    },
+    solutionsParagraphTittle3: {
+      es: "Gestión Simplificada de Contraseñas",
+      en: "Efficient Password Handling"
+    },
     solutionsParagraph1: {
       es: "Nuestra plataforma une la tecnología blockchain con un diseño intuitivo, ofreciendo una gestión de contraseñas sin complicaciones. Priorizamos la simplicidad sin sacrificar la seguridad, permitiéndote acceder y gestionar tus contraseñas de manera eficiente.",
       en: "Our platform combines blockchain technology with an intuitive design, offering hassle-free password management. We prioritize simplicity without sacrificing security, allowing you to access and manage your passwords efficiently"

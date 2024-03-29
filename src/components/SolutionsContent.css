@@ -8,9 +8,10 @@
 .solutions-tittle span {
     position: absolute;
     display: block;
-    width: 500px; /* Ancho de la línea */
-    height: 2px;
+    width: 600px; /* Ancho de la línea */
+    height: 1px;
     background-color: #0096D2; 
+    box-shadow: 0 0 10px 3px rgba(0, 150, 210, 0.2);
     left: 0%;
     margin-top: 30px;
     z-index: -1;
@@ -20,6 +21,7 @@
     position: relative;
     display: flex;
     justify-content: center;
+    margin-top: 40px;
     gap: 150px;
 }
 
@@ -28,17 +30,43 @@
 }
 
 .solutions-content p {
-    max-width: 300px;
-    padding: 30px 30px;
-    /* border: 1px solid #84af6d; */
-    border-radius: 20px;
     line-height: 1.2;
 }
+.solutions-paragraph > :nth-child(1) {
+    margin-bottom: 0px;
+}
+.solutions-paragraph > :nth-child(2) {
+    margin-top: 0px;
+}
 
-.paragraph1 {
+.solutions-paragraph {
+    max-width: 350px;
+    padding: 0px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #1c1c1c;
+    border: 1px solid rgba(132, 175, 109, 0.4);
+    /* box-shadow: inset 0 0 10px 10px rgba(132, 175, 109, 0.2); */
+    box-shadow: 0 2px 20px rgba(132, 175, 109, 0.2);
+    border-radius: 20px;
+}
+
+.icon-tittle {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-paragraph {
+    width: 25px;
+    height: 25px;
+    margin: auto 0;
+}
+
+.solutions-content > :nth-child(1) {
     margin-top: 50px;
 }
-.paragraph2 {
+.solutions-content > :nth-child(2) {
     margin-top: 150px;
 }
 
@@ -66,6 +94,13 @@
         font-size: 1rem;
         margin-top: 5px;
     }
+
+    .solutions-content > :nth-child(1) {
+        margin-top: auto;
+    }
+    .solutions-content > :nth-child(2) {
+        margin-top: auto;
+    }
 }
 
 @media (max-width: 700px) {  
@@ -87,5 +122,9 @@
     .solutions-content p {
         font-size: 1rem;
         margin-top: 5px;
+    }
+
+    .solutions-paragraph {
+        padding: 0px 5px;
     }
 }
