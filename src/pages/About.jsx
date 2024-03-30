@@ -66,20 +66,32 @@ export default function AboutPage() {
     // console.log("services", positionServicesSection);
     // console.log("funders", positionFoundersSection);
 
-    if (scrollPosition < positionSolutionsSection - 50) {
+    if (
+      scrollPosition < positionSolutionsSection - 50 &&
+      nameActiveSection != TEXTS.main.en
+    ) {
       setNameActiveSection(TEXTS.main.en);
+      setActiveSection(-1);
     } else if (
       scrollPosition >= positionSolutionsSection - 50 &&
-      scrollPosition < positionServicesSection - 50
+      scrollPosition < positionServicesSection - 50 &&
+      nameActiveSection != TEXTS.solutions.en
     ) {
       setNameActiveSection(TEXTS.solutions.en);
+      setActiveSection(-1);
     } else if (
       scrollPosition >= positionServicesSection - 50 &&
-      scrollPosition < positionFoundersSection - 150
+      scrollPosition < positionFoundersSection - 150 &&
+      nameActiveSection != TEXTS.services.en
     ) {
       setNameActiveSection(TEXTS.services.en);
-    } else if (scrollPosition >= positionFoundersSection - 150) {
+      setActiveSection(-1);
+    } else if (
+      scrollPosition >= positionFoundersSection - 150 &&
+      nameActiveSection != TEXTS.founders.en
+    ) {
       setNameActiveSection(TEXTS.founders.en);
+      setActiveSection(-1);
     }
   };
 

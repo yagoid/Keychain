@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TEXTS } from "./../assets/locales/texts.js";
+import KeychainIcon from "./../assets/images/keychain.svg";
 import "./Login.css";
 
 export default function LoginPage() {
@@ -15,39 +16,50 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleLogin}>
-        <div className="login-heading">
-          <h2>{TEXTS.log.en}</h2>
-          <h2>{TEXTS.in.en}</h2>
-        </div>
-        <h3 className="user-heading">{TEXTS.user.en}</h3>
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder={TEXTS.user.en}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="input-field"
-            required
-          />
-        </div>
-        <h3 className="password-heading">{TEXTS.password.en}</h3>
-        <div className="input-group">
-          <input
-            type="password"
-            placeholder={TEXTS.password.en}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-field"
-            required
-          />
-        </div>
-        <button type="submit" className="login-btn">
-          {TEXTS.signIn.en}
-        </button>
-        <p className="question">{TEXTS.createAccount.en}</p>
-      </form>
+    <div>
+      <a href="/">
+        <img className="login-logo" src={KeychainIcon} alt="Keychain logo" />
+      </a>
+      <div className="login-container">
+        <form className="login-form" onSubmit={handleLogin}>
+          <div className="login-heading">
+            <h2>{TEXTS.log.en}</h2>
+            <h2>{TEXTS.in.en}</h2>
+          </div>
+          <h3 className="input-heading">{TEXTS.user.en}</h3>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder={TEXTS.user.en}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="input-field"
+              required
+            />
+          </div>
+          <h3 className="input-heading">{TEXTS.password.en}</h3>
+          <div className="input-group">
+            <input
+              type="password"
+              placeholder={TEXTS.password.en}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input-field"
+              required
+            />
+          </div>
+          <button type="submit" className="login-btn">
+            {/* <a href="/home">Ir al home</a> */}
+            {TEXTS.signIn.en}
+          </button>
+          <div className="question-create-account">
+            <p className="question">{TEXTS.questionCreateAccount.en}</p>
+            <a href="/signup" className="crete-account">
+              {TEXTS.createAccount.en}
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

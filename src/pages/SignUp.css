@@ -1,0 +1,62 @@
+.signup-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 150px;
+    height: 100vh;
+}
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-form {
+    width: 250px;
+}
+
+.signup-heading h2 {
+    font-size: 1.6rem;
+    font-weight: 100;
+}
+
+.welcome-text {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 300px;
+}
+  
+.welcome-text span {
+    font-size: 85px;
+    line-height: 0.9;
+}
+  
+.welcome-text span:nth-child(1) {
+    padding-left: 0px;
+}
+.welcome-text span:nth-child(2) {
+    color: #0096D2;
+    padding-left: 250px;
+}
+
+@media (max-width: 1160px) {
+    .signup-page {
+        flex-direction: column;
+        gap: 2px;
+        height: 100vh;
+    }
+
+    .welcome-text {
+        order: -1;
+        margin-bottom: 0;
+    }
+
+    .welcome-text span {
+        font-size: 60px;
+    }
+
+    .welcome-text span:nth-child(2) {
+        padding-left: 150px;
+    }
+}

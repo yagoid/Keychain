@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Logo from "./../assets/images/logo_keychain.svg";
+import KeychainIcon from "./../assets/images/keychain.svg";
 import NavbarMenu from "./../assets/images/navbar_menu.svg";
 import MainButton from "./MainButton";
 import { TEXTS } from "./../assets/locales/texts.js";
@@ -60,7 +61,7 @@ export default function Navbar({
             alt="NavBar Menu"
           />
           <a onClick={navigateToMain}>
-            <img src={Logo} className="logo" alt="keychain's logo" />
+            <img src={KeychainIcon} className="logo" alt="keychain's logo" />
           </a>
         </div>
         <ul className={isMenuOpen ? "navbar open" : "navbar"}>
@@ -80,7 +81,7 @@ export default function Navbar({
           )}
         </ul>
         <div className="login-button">
-          <MainButton text={TEXTS.logIn.en} color={"blue"} />
+          <MainButton text={TEXTS.logIn.en} color={"blue"} route={"/login"} />
         </div>
       </nav>
     </>

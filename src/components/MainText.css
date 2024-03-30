@@ -18,32 +18,32 @@
     padding-left: 50px;
   }
   
-  @media (max-width: 850px) {
-    .texts {
-      position: relative;
-      align-items: center;
-    }
-  
-    .texts span {
-      font-size: 60px;
-      align-items: left;
-    }
-  
-    .texts span:nth-child(1) {
-      padding-left: 0px;
-    }
-    .texts span:nth-child(2) {
-      padding-left: 0px;
-    }
-    .texts span:nth-child(3) {
-      padding-left: 0px;
-      padding-right: 100px;
-    }
+@media (max-width: 850px) {
+  .texts {
+    position: relative;
+    align-items: center;
   }
 
-  @media (max-width: 576px) {
-    .texts span {
-      font-size: 40px;
-      align-items: left;
-    }
+  .texts span {
+    font-size: 60px;
+    align-items: left;
   }
+
+  .texts span:nth-child(1) {
+    padding-left: 0px;
+  }
+  .texts span:nth-child(2) {
+    padding-left: 0px;
+  }
+  .texts span:nth-child(3) {
+    padding-left: 0px;
+    padding-right: 100px;
+  }
+}
+
+@media (max-width: 576px) {
+  .texts span {
+    font-size: 40px;
+    align-items: left;
+  }
+}

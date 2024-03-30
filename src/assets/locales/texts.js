@@ -54,8 +54,8 @@ export const TEXTS = {
       en: "Password"
     },
     repeatPassword: {
-      es: "Contraseña",
-      en: "Password"
+      es: "Repite la contraseña",
+      en: "Repeat password"
     },
     createAccount: {
       es: "Crear cuenta",
@@ -71,9 +71,13 @@ export const TEXTS = {
       es: "Registrarse",
       en: "Sign up"
     },
-    questionAccount: {
+    questionAlreadyHaveAccount: {
       es: "¿Ya tienes una cuenta?",
       en: "Already have an account?"
+    },
+    questionCreateAccount: {
+      es: "¿No tienes cuenta?",
+      en: "Don't have an account?"
     },
     aboutSections: {
       es: ["Main", "Soluciones", "Servicios", "Fundadores"],
