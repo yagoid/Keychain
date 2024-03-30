@@ -1,6 +1,7 @@
 .about {
   display: flex;
   flex-direction: column;
+  animation: fadeIn 0.7s ease forwards;
 }
 
 .main-section {
@@ -25,7 +26,7 @@
 .main-content {
   display: flex;
   flex-direction: column;
-  margin-top: 40vh;
+  margin-top: 50vh;
   margin-left: 30vh;
   line-height: 0.9;
 }
@@ -59,5 +60,14 @@
 @media (max-width: 576px) {
   .main-content {
     margin-top: 10vh;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -1,7 +1,11 @@
 export const TEXTS = {
+    keychain: {
+      es: "Keychain",
+      en: "Keychain"
+    },
     welcome: {
-      es: "¡Bienvenido!",
-      en: "Welcome!"
+      es: "Bienvenido a",
+      en: "Welcome to"
     },
     footer: {
       es: "©2024 Keychain. Todos los derechos reservados",
@@ -11,17 +15,65 @@ export const TEXTS = {
       es: "Política de Privacidad",
       en: "Privacy Policy"
     },
-    email: {
+    emailKeychian: {
       es: "Keychain@gmail.com",
       en: "Keychain@gmail.com"
-    },
-    logIn: {
-      es: "Iniciar Sesión",
-      en: "Log In"
     },
     start: {
       es: "Empezar",
       en: "Start"
+    },
+    logIn: {
+      es: "Iniciar Sesión",
+      en: "Log In",
+      esLowerCase: "Iniciar sesión",
+      enLowerCase: "Log in"
+    },
+    log: {
+      es: "INICIAR",
+      en: "LOG"
+    },
+    in: {
+      es: "SESIÓN",
+      en: "IN"
+    },
+    email: {
+      es: "Email address",
+      en: "Email"
+    },
+    userName: {
+      es: "Nombre de usuario",
+      en: "User Name"
+    },
+    user: {
+      es: "Usuario",
+      en: "User"
+    },
+    password: {
+      es: "Contraseña",
+      en: "Password"
+    },
+    repeatPassword: {
+      es: "Contraseña",
+      en: "Password"
+    },
+    createAccount: {
+      es: "Crear cuenta",
+      en: "Create account",
+      esUpperCase: "Crear Cuenta",
+      enUpperCase: "Create Account"
+    },
+    signIn: {
+      es: "Iniciar sesión",
+      en: "Sign in"
+    },
+    signUp: {
+      es: "Registrarse",
+      en: "Sign up"
+    },
+    questionAccount: {
+      es: "¿Ya tienes una cuenta?",
+      en: "Already have an account?"
     },
     aboutSections: {
       es: ["Main", "Soluciones", "Servicios", "Fundadores"],

@@ -102,7 +102,7 @@ export default function AboutPage() {
         {/* <a href="/home">Ir al home</a> */}
         <div className="main-content">
           <MainText />
-          <MainButton text={TEXTS.start.en} color={"blue"} />
+          <MainButton text={TEXTS.start.en} color={"blue"} route={"/login"} />
         </div>
         <img
           src={hexagons1}

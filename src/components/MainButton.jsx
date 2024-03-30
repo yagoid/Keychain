@@ -1,12 +1,9 @@
 import "./MainButton.css";
 
-export default function MainButton({ text, color }) {
+export default function MainButton({ text, color, route }) {
   return (
     <>
-      <a
-        href="#sobre-mi"
-        className={color == "blue" ? "btn blue" : "btn green"}
-      >
+      <a href={route} className={color == "blue" ? "btn blue" : "btn green"}>
         <span>{text}</span>
       </a>
     </>

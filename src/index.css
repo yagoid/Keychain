@@ -6,7 +6,7 @@
   letter-spacing: 0.5px;
   background-color: #1c1c1c;
 
-  background-image: url('./assets/images/background2.svg'); 
+  /* background-image: url('./assets/images/background.svg');  */
   /* background-size: cover;  */
   /* background-position: center;  */
 }
@@ -28,3 +28,9 @@ h1 {
   font-size: 4.5em;
   font-weight: 100;
 }
+
+/* background: #1c1c1c; */
+/* background: #f4f4f4; */
+
+/* background: #0096D2; */
+/* background: #84af6d; */
