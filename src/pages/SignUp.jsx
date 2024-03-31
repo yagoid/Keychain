@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
+import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Login.css";
 import "./SignUp.css";
 
@@ -90,6 +91,11 @@ export default function SignUpPage() {
             </div>
           </form>
         </div>
+        <img
+          src={hexagons2}
+          className="hexagons2-background"
+          alt="Background of hexagons"
+        />
         <div className="welcome-text">
           <span>{TEXTS.welcome.en}</span>
           <span> {TEXTS.keychain.en}</span>

@@ -22,8 +22,9 @@ export default function SolutionsContent() {
       <div className="solutions-tittle">
         <h1>
           <span></span>
-          {TEXTS.solutions.en}
+          {TEXTS.solutionsSecondTittle.en}
         </h1>
+        <h3>{TEXTS.solutionsThirdTittle.en}</h3>
       </div>
       <div className="solutions-content">
         <div>

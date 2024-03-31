@@ -18,7 +18,7 @@
 
 .signup-heading h2 {
     font-size: 1.6rem;
-    font-weight: 100;
+    font-weight: 300;
 }
 
 .welcome-text {
@@ -40,6 +40,21 @@
     padding-left: 250px;
 }
 
+.hexagons2-background {
+    position: absolute;
+    top: 0%;
+    left: 52%;
+    z-index: -1;
+    height: auto;
+}
+
+@media (max-width: 1509px) {
+    .hexagons2-background {
+        top: 30%;
+        left: 10%;
+    }
+}
+
 @media (max-width: 1160px) {
     .signup-page {
         flex-direction: column;
@@ -49,7 +64,7 @@
 
     .welcome-text {
         order: -1;
-        margin-bottom: 0;
+        margin-bottom: 10px;
     }
 
     .welcome-text span {
@@ -58,5 +73,11 @@
 
     .welcome-text span:nth-child(2) {
         padding-left: 150px;
+    }
+}
+
+@media (max-width: 800px) {
+    .hexagons2-background {
+        display: none;
     }
 }

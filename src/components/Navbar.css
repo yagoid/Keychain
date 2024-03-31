@@ -45,7 +45,6 @@ a {
 .navbar li a {
     text-decoration: none;
     font-size: 1.1rem;
-    font-weight: 400;
     color: #f4f4f4;
     transition: 0.2s ease-in-out;
 }
@@ -90,14 +89,15 @@ a {
     margin: 10px 80px;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 950px) {
     .icon-menu {
         display: flex;
         padding-left: 30px;
     }
 
     .logo {
-        padding-right: 30px;
+        padding-top: 10px;
+        padding-right: 50px;
     }
 
     .icons {
