@@ -96,8 +96,8 @@ export const TEXTS = {
       en: ["Main", "Solutions", "Services", "Founders"]
     },
     homeSections: {
-      es: ["Main", "Administrador", "Generador"],
-      en: ["Main", "Manage", "Generator"]
+      es: ["Home", "Administrador", "Generador"],
+      en: ["Home", "Manage", "Generator"]
     },
     trust: {
       es: "CONFÍA",

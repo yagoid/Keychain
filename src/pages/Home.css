@@ -1,5 +1,6 @@
 .home {
     height: 100vh;
+    animation: fadeIn 0.7s ease forwards;
 }
 
 .home-texts {

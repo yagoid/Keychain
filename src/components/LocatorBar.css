@@ -6,6 +6,10 @@
     line-height: 0.9;
 }
 
+.icon-set a {
+    margin: -1px 0;
+}
+
 .locator-square {
     max-width: 25px;
     cursor: pointer;

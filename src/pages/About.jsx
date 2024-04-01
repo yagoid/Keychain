@@ -14,7 +14,7 @@ import Footer from "../components/Footer.jsx";
 export default function AboutPage() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
-  const [nameActiveSection, setNameActiveSection] = useState("Main");
+  const [nameActiveSection, setNameActiveSection] = useState(TEXTS.main.en);
 
   const aboutRef = useRef(null);
   const mainRef = useRef(null);
@@ -131,6 +131,7 @@ export default function AboutPage() {
               nameActiveSection={nameActiveSection}
               index={index}
               lastIndex={index == aboutSections.length - 1 ? true : false}
+              transmitter={TEXTS.about.en}
             ></LocatorBar>
           ))}
         </section>

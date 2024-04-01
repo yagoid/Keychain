@@ -61,19 +61,27 @@ export default function Navbar({
             src={NavbarMenu}
             alt="NavBar Menu"
           />
-          <a onClick={navigateToMain}>
+          <a
+            onClick={transmitter === TEXTS.about.en ? navigateToMain : null}
+            href={transmitter === TEXTS.home.en ? "/home" : null}
+          >
             <img src={KeychainIcon} className="logo" alt="keychain's logo" />
           </a>
         </div>
         <ul className={isMenuOpen ? "navbar open" : "navbar"}>
           {sections.map(
             (section, index) =>
-              section != TEXTS.main.en && (
+              section != TEXTS.main.en &&
+              section != TEXTS.home.en && (
                 <li key={index}>
                   <a
                     onClick={() => navigateToSection(index)}
                     className={section === nameActiveSection ? "active" : ""}
-                    // href={`#${section.toLowerCase()}`}
+                    href={
+                      transmitter === TEXTS.home.en
+                        ? `/${section.toLowerCase()}`
+                        : null
+                    }
                   >
                     {section}
                   </a>
