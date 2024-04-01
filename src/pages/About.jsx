@@ -110,11 +110,12 @@ export default function AboutPage() {
           setActiveSection={setActiveSection}
           sections={aboutSections}
           nameActiveSection={nameActiveSection}
+          transmitter={TEXTS.about.en}
         />
         {/* <a href="/home">Ir al home</a> */}
         <div className="main-content">
           <MainText />
-          <MainButton text={TEXTS.start.en} color={"blue"} route={"/login"} />
+          <MainButton text={TEXTS.start.en} color={"blue"} route={"/home"} />
         </div>
         <img
           src={hexagons1}

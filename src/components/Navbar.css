@@ -78,7 +78,7 @@ a {
     display: none;
     width: 45px;
     height: 45px;
-    /* position: absolute; */
+    cursor: pointer;
 }
 
 .invisible {
@@ -86,7 +86,15 @@ a {
 }
 
 .login-button {
+    margin: 0px 80px;
+}
+.logout-button a {
     margin: 10px 80px;
+    color: #f4f4f4;
+    transition: color 0.3s;
+}
+.logout-button a:hover {
+    color: #84af6d;
 }
 
 @media (max-width: 950px) {
@@ -135,6 +143,10 @@ a {
     }
 
     .login-button {
+        display: none;
+    }
+
+    .logout-button {
         display: none;
     }
 }

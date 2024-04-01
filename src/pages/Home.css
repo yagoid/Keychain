@@ -1,0 +1,118 @@
+.home {
+    height: 100vh;
+}
+
+.home-texts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 200px;
+    height: 100vh;
+    margin: 0vh 10vh;
+}
+
+.text-and-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 120px;
+}
+
+.first-home-text {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    font-size: 3rem;
+    font-weight: 300;
+    gap: 30px;
+}
+.first-home-text span:nth-child(1) {
+    font-weight: 500;
+    color: #0096D2;
+}
+
+.buttons {
+    display: flex;
+    gap: 50px;
+    width: 100%;
+}
+.buttons:nth-child(1) {
+    color: #0096D2;
+}
+
+.second-home-text {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 400px;
+    font-size: 1.8rem;
+    font-weight: 300;
+    gap: 10px;
+}
+.second-home-text span:nth-child(1) {
+    margin-left: 0px;
+}
+.second-home-text span:nth-child(2) {
+    margin-left: 20px;
+    font-size: 3.5rem;
+    font-weight: 500;
+    color: #0096D2;
+}
+.second-home-text span:nth-child(3) {
+    margin-left: 50px;
+}
+
+@media (max-width: 1161px) {
+    .home-texts {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+        height: 100vh;
+        margin: 0 10vh;
+    }
+}
+
+@media (max-width: 904px) {
+    .home-texts {
+        flex-direction: column;
+        gap: 100px;
+        margin: 30px 15vh;
+    }
+
+    .text-and-button {
+        gap: 80px;
+    }
+
+    .first-home-text {
+        font-size: 2rem;
+        font-weight: 300;
+    }
+
+    .second-home-text {
+        font-size: 1.3rem;
+        font-weight: 300;
+    }
+    .second-home-text span:nth-child(2) {
+        font-size: 3rem;
+        font-weight: 500;
+        margin-left: 10px;
+    }
+    .second-home-text span:nth-child(3) {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 530px) {
+    .home-texts {
+        margin: 30px 7vh;
+    }
+
+    .first-home-text {
+        width: auto;
+    }
+
+    .second-home-text {
+        width: auto;
+    }
+}

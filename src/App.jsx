@@ -11,6 +11,7 @@ function App() {
   return (
     <main>
       {currentPath === "/" && <AboutPage />}
+      {currentPath === "/home" && <HomePage />}
       {currentPath === "/login" && <LoginPage />}
       {currentPath === "/signup" && <SignUpPage />}
     </main>

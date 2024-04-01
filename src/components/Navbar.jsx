@@ -10,6 +10,7 @@ export default function Navbar({
   setActiveSection,
   sections,
   nameActiveSection,
+  transmitter,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollDirection, setScrollDirection] = useState("up");
@@ -80,9 +81,15 @@ export default function Navbar({
               )
           )}
         </ul>
-        <div className="login-button">
-          <MainButton text={TEXTS.logIn.en} color={"blue"} route={"/login"} />
-        </div>
+        {transmitter === TEXTS.about.en ? (
+          <div className="login-button">
+            <MainButton text={TEXTS.logIn.en} color={"blue"} route={"/login"} />
+          </div>
+        ) : (
+          <div className="logout-button">
+            <a href="/">{TEXTS.logOut.en}</a>
+          </div>
+        )}
       </nav>
     </>
   );

@@ -7,6 +7,14 @@ export const TEXTS = {
       es: "Bienvenido a",
       en: "Welcome to"
     },
+    home: {
+      es: "Home",
+      en: "Home"
+    },
+    about: {
+      es: "About",
+      en: "About"
+    },
     footer: {
       es: "©2024 Keychain. Todos los derechos reservados",
       en: "©2024 KeyChain. All Rights Reserved"
@@ -28,6 +36,10 @@ export const TEXTS = {
       en: "Log In",
       esLowerCase: "Iniciar sesión",
       enLowerCase: "Log in"
+    },
+    logOut: {
+      es: "Cerrar Sessión",
+      en: "Log Out"
     },
     log: {
       es: "INICIAR",
@@ -83,17 +95,45 @@ export const TEXTS = {
       es: ["Main", "Soluciones", "Servicios", "Fundadores"],
       en: ["Main", "Solutions", "Services", "Founders"]
     },
+    homeSections: {
+      es: ["Main", "Administrador", "Generador"],
+      en: ["Main", "Manage", "Generator"]
+    },
     trust: {
-      es: "",
+      es: "CONFÍA",
       en: "TRUST"
     },
     decentralize: {
-      es: "",
+      es: "DESCENTRALIZA",
       en: "DECENTRALIZE"
     },
     enjoy: {
-      es: "",
+      es: "DIVIÉRTETE",
       en: "ENJOY"
+    },
+    homeText: {
+      es: "Tu memoria es valiosa. Déjanos recordar tus contraseñas",
+      en: "Your memory is valuable. Let us remember your passwords"
+    },
+    approximately: {
+      es: "Aproximadamente,",
+      en: "Approximately,"
+    },
+    approximatelyNumber: {
+      es: "150.000",
+      en: "150,000"
+    },
+    approximatelyText: {
+      es: "contraseñas son comprometidas y desencriptadas por ser demasiado débiles",
+      en: "passwords are compromised and decrypted daily due to their weakness"
+    },
+    manage: {
+      es: "Administrar",
+      en: "Manage"
+    },
+    generator: {
+      es: "Generador",
+      en: "Generator"
     },
     main: {
       es: "Main",
