@@ -131,9 +131,49 @@ export const TEXTS = {
       es: "Administrar",
       en: "Manage"
     },
+    managePasswords: {
+      es: "Gestión de Contraseñas",
+      en: "Manage Passwords"
+    },
+    accessWith: {
+      es: "Accede con tu clave privada",
+      en: "Access with your private key"
+    },
+    privateKey: {
+      es: "Clave Privada",
+      en: "Private Key"
+    },
+    enter: {
+      es: "Acceder",
+      en: "Enter"
+    },
+    myKeys: {
+      es: "Mis Claves",
+      en: "My Keys"
+    },
+    platform: {
+      es: "Plataforma",
+      en: "Platform"
+    },
+    addPassword: {
+      es: "Añadir Contraseña",
+      en: "Add Password"
+    },
+    modify: {
+      es: "Modificar",
+      en: "Modify"
+    },
     generator: {
       es: "Generador",
       en: "Generator"
+    },
+    generateYourPassword: {
+      es: "Genera tus Contraseñas",
+      en: "Generate your Passwords"
+    },
+    generatePassword: {
+      es: "Genera la Contraseña Aleatoria",
+      en: "Generate Random  Passwords"
     },
     main: {
       es: "Main",

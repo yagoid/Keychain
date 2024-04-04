@@ -80,4 +80,16 @@
     .hexagons2-background {
         display: none;
     }
+
+    .welcome-text span {
+        font-size: 40px;
+    }
+
+    .welcome-text span:nth-child(2) {
+        padding-left: 100px;
+    }
+
+    .login-form {
+        padding: 30px 40px;
+      }
 }
