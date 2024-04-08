@@ -72,6 +72,14 @@ const PasswordRow = (row) => {
     setEditedText(text);
   };
 
+  const modifyText = () => {
+    setEditablePassword(!editablePassword);
+
+    if (editablePassword) {
+      console.log("Guardando...");
+    }
+  };
+
   return (
     <tr>
       {/* Columna 1 */}
@@ -99,10 +107,7 @@ const PasswordRow = (row) => {
       </td>
       {/* Columna 4 */}
       <td>
-        <button
-          className="btn-modify-password"
-          onClick={() => setEditablePassword(!editablePassword)}
-        >
+        <button className="btn-modify-password" onClick={() => modifyText()}>
           {editablePassword ? TEXTS.save.en : TEXTS.modify.en}
         </button>
       </td>
