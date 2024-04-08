@@ -163,6 +163,10 @@ export const TEXTS = {
       es: "Modificar",
       en: "Modify"
     },
+    save: {
+      es: "Guardar",
+      en: "Save"
+    },
     generator: {
       es: "Generador",
       en: "Generator"
