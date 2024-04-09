@@ -76,6 +76,7 @@ export default function PasswordManager() {
 }
 
 const PasswordManagerBlocks = ({ data, setData }) => {
+  // Añadir un nuevo bloque
   const handleAddPassword = () => {
     setData((prevData) => [
       ...prevData,
@@ -89,12 +90,25 @@ const PasswordManagerBlocks = ({ data, setData }) => {
     ]);
   };
 
+  // Guardar los cambios editados en la variable data
+  const handleSaveChanges = (id, platform, key) => {
+    // Encuentra el objeto correspondiente por su id
+    const updatedData = data.map((block) => {
+      if (block.id === id) {
+        return { ...block, platform: platform, key: key };
+      }
+      return block;
+    });
+
+    setData(updatedData);
+  };
+
   return (
     <section className="password-manager-block">
       <div className="blocks">
         {data.map((block, index) => (
           <div className="blocks-lines" key={index}>
-            <PasswordBlock block={block} data={data} setData={setData} />
+            <PasswordBlock block={block} saveChanges={handleSaveChanges} />
             <img
               src={chainLine}
               className={
@@ -112,7 +126,7 @@ const PasswordManagerBlocks = ({ data, setData }) => {
   );
 };
 
-const PasswordBlock = ({ block, data, setData }) => {
+const PasswordBlock = ({ block, saveChanges }) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [editableTexts, setEditableTexts] = useState(false);
   const [platform, setPlatform] = useState(block.platform);
@@ -126,15 +140,15 @@ const PasswordBlock = ({ block, data, setData }) => {
     setKey(text);
   };
 
-  // Acciones de cancelar o guardar los cambios
+  // Guardar los cambios editados
   const handleModifyText = () => {
     // La contraseña y la plataforma no pueden estar vacías
     if (editableTexts && (key == "" || platform == "")) {
       return;
     }
+    // No se guarda si no hay cambios
     if (editableTexts && key == block.key && platform == block.platform) {
       setEditableTexts(!editableTexts);
-      console.log("sdf");
       return;
     }
 
@@ -142,27 +156,15 @@ const PasswordBlock = ({ block, data, setData }) => {
 
     if (editableTexts) {
       console.log("Guardando...");
-      handleSaveChanges(block.id);
+      saveChanges(block.id, platform, key);
     }
   };
+  // Cancelar edición
   const handleCancelModifyText = () => {
     setEditableTexts(!editableTexts);
 
     setPlatform(block.platform);
     setKey(block.key);
-  };
-
-  // Guardar los cambios editados en la variable data
-  const handleSaveChanges = (id) => {
-    // Encuentra el objeto correspondiente por su id
-    const updatedData = data.map((block) => {
-      if (block.id === id) {
-        return { ...block, platform: platform, key: key };
-      }
-      return block;
-    });
-
-    setData(updatedData);
   };
 
   return (
