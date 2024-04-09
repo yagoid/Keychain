@@ -159,6 +159,22 @@ export const TEXTS = {
       es: "Añadir Contraseña",
       en: "Add Password"
     },
+    changeView: {
+      es: "Cambiar vista",
+      en: "Change view"
+    },
+    blockView: {
+      es: "Vista de bloque",
+      en: "Block view"
+    },
+    timestamp: {
+      es: "Timestamp",
+      en: "Timestamp"
+    },
+    proofOfWork: {
+      es: "Prueba de trabajo",
+      en: "Proof of work"
+    },
     modify: {
       es: "Modificar",
       en: "Modify"
@@ -166,6 +182,10 @@ export const TEXTS = {
     save: {
       es: "Guardar",
       en: "Save"
+    },
+    cancel: {
+      es: "Cancelar",
+      en: "Cancel"
     },
     generator: {
       es: "Generador",

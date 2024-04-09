@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { TEXTS } from "../assets/locales/texts.js";
 import Navbar from "../components/Navbar";
 import MainButton from "../components/MainButton";

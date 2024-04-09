@@ -1,0 +1,50 @@
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; /* Ancho del interruptor */
+    height: 20px; /* Altura del interruptor */
+  }
+  
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccccccce; /* Color de fondo del interruptor */
+    transition: .4s;
+    border-radius: 20px; /* Radio de los bordes */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px; /* Altura del botón deslizante */
+    width: 16px; /* Ancho del botón deslizante */
+    left: 2px; /* Espacio a la izquierda */
+    bottom: 2px; /* Espacio abajo */
+    background-color: #f4f4f4; /* Color del botón deslizante */
+    transition: .4s;
+    border-radius: 50%; /* Hacer el botón deslizante redondo */
+}
+
+input:checked + .slider {
+    background-color: #0096D2; /* Color del interruptor cuando está activado */
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px); /* Mover el botón deslizante a la derecha cuando está activado */
+}
+
+.text-switch {
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
