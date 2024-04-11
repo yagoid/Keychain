@@ -5,6 +5,7 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import SignUpPage from "./pages/SignUp";
 import "./App.css";
+import PasswordGeneratorPage from "./pages/PasswordGenerator";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -14,6 +15,7 @@ function App() {
       {currentPath === "/" && <AboutPage />}
       {currentPath === "/home" && <HomePage />}
       {currentPath === "/manage" && <ManagePage />}
+      {currentPath === "/generator" && <PasswordGeneratorPage />}
       {currentPath === "/login" && <LoginPage />}
       {currentPath === "/signup" && <SignUpPage />}
     </main>
