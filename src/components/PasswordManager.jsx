@@ -39,43 +39,6 @@ export default function PasswordManager() {
     setIsBlockView(!isBlockView);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 970) {
-        setIsBlockView(true);
-      }
-    };
-
-    handleResize();
-
-    // Agregamos un listener para el evento de cambio de tamaño de la ventana
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return (
-    <div className="password-manager">
-      <h1>{TEXTS.myKeys.en}</h1>
-      <div className="password-manager-container">
-        {isBlockView ? (
-          <PasswordManagerBlocks data={data} setData={setData} />
-        ) : (
-          <PasswordManagerTable data={data} />
-        )}
-      </div>
-      <label className="toggle-switch">
-        <input type="checkbox" checked={isBlockView} onChange={toggleSwitch} />
-        <span className="slider"></span>
-      </label>
-      <span className="text-switch">{TEXTS.blockView.en}</span>
-    </div>
-  );
-}
-
-const PasswordManagerBlocks = ({ data, setData }) => {
   // Añadir un nuevo bloque
   const handleAddPassword = () => {
     setData((prevData) => [
@@ -103,6 +66,54 @@ const PasswordManagerBlocks = ({ data, setData }) => {
     setData(updatedData);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 970) {
+        setIsBlockView(true);
+      }
+    };
+
+    handleResize();
+
+    // Agregamos un listener para el evento de cambio de tamaño de la ventana
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="password-manager">
+      <h1>{TEXTS.myKeys.en}</h1>
+      <div className="password-manager-container">
+        {isBlockView ? (
+          <PasswordManagerBlocks
+            data={data}
+            handleAddPassword={handleAddPassword}
+            handleSaveChanges={handleSaveChanges}
+          />
+        ) : (
+          <PasswordManagerTable
+            data={data}
+            handleSaveChanges={handleSaveChanges}
+          />
+        )}
+      </div>
+      <label className="toggle-switch">
+        <input type="checkbox" checked={isBlockView} onChange={toggleSwitch} />
+        <span className="slider"></span>
+      </label>
+      <span className="text-switch">{TEXTS.blockView.en}</span>
+    </div>
+  );
+}
+
+const PasswordManagerBlocks = ({
+  data,
+  handleAddPassword,
+  handleSaveChanges,
+}) => {
   return (
     <section className="password-manager-block">
       <div className="blocks">
@@ -240,65 +251,108 @@ const PasswordBlock = ({ block, saveChanges }) => {
   );
 };
 
-const PasswordManagerTable = ({ data }) => {
+const PasswordManagerTable = ({ data, handleSaveChanges }) => {
   return (
-    <table className="password-manager-table">
-      <colgroup>
-        <col style={{ width: "45%" }} />
-        <col style={{ width: "25%" }} />
-        <col style={{ width: "10%" }} />
-        <col style={{ width: "20%" }} />
-      </colgroup>
-      <thead>
-        <tr>
-          <th className="column-tittle">{TEXTS.platform.en}</th>
-          <th className="column-tittle">{TEXTS.password.en}</th>
-          <th className="column-tittle"></th>
-          <th className="column-tittle">
-            {/* <button className="btn-add-password">{TEXTS.addPassword.en}</button> */}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, index) => (
-          <PasswordRow key={index} row={row} />
-        ))}
-      </tbody>
-    </table>
+    <div className="table-vertical-scroll">
+      <table className="password-manager-table">
+        <colgroup>
+          <col style={{ width: "45%" }} />
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "10%" }} />
+          <col style={{ width: "20%" }} />
+        </colgroup>
+        <thead>
+          <tr>
+            <th className="column-tittle">{TEXTS.platform.en}</th>
+            <th className="column-tittle">{TEXTS.password.en}</th>
+            <th className="column-tittle"></th>
+            <th className="column-tittle">
+              {/* <button className="btn-add-password">{TEXTS.addPassword.en}</button> */}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <PasswordRow
+              key={index}
+              row={row}
+              saveChanges={handleSaveChanges}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
-const PasswordRow = ({ row }) => {
+const PasswordRow = ({ row, saveChanges }) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
-  const [editablePassword, setEditablePassword] = useState(false);
-  const [editedText, setEditedText] = useState(row.key);
+  const [editableTexts, setEditableTexts] = useState(false);
+  const [platform, setPlatform] = useState(row.platform);
+  const [key, setKey] = useState(row.key);
 
-  const handleTextChange = (text) => {
-    setEditedText(text);
+  // Cambiar el texto cuando se editan los inputs
+  const handlePlatformChange = (text) => {
+    setPlatform(text);
+  };
+  const handleKeyChange = (text) => {
+    setKey(text);
   };
 
-  const modifyText = () => {
-    setEditablePassword(!editablePassword);
-
-    if (editablePassword) {
-      console.log("Guardando...");
+  // Guardar los cambios editados
+  const handleModifyText = () => {
+    // La contraseña y la plataforma no pueden estar vacías
+    if (editableTexts && (key == "" || platform == "")) {
+      return;
     }
+    // No se guarda si no hay cambios
+    if (editableTexts && key == row.key && platform == row.platform) {
+      setEditableTexts(!editableTexts);
+      return;
+    }
+
+    setEditableTexts(!editableTexts);
+
+    if (editableTexts) {
+      console.log("Guardando...");
+      saveChanges(row.id, platform, key);
+    }
+  };
+  // Cancelar edición
+  const handleCancelModifyText = () => {
+    setEditableTexts(!editableTexts);
+
+    setPlatform(row.platform);
+    setKey(row.key);
   };
 
   return (
     <tr>
       {/* Columna 1 */}
-      <td>{row.platform}</td>
-      {/* Columna 2 */}
       <td>
-        {editablePassword ? (
+        {editableTexts ? (
           <input
+            className="input-modify-platform"
             type="text"
-            value={editedText}
-            onChange={(e) => handleTextChange(e.target.value)}
+            value={platform}
+            onChange={(e) => handlePlatformChange(e.target.value)}
+            required
           />
         ) : (
-          editedText
+          <span>{platform}</span>
+        )}
+      </td>
+      {/* Columna 2 */}
+      <td>
+        {editableTexts ? (
+          <input
+            className="input-modify-key"
+            type="text"
+            value={key}
+            onChange={(e) => handleKeyChange(e.target.value)}
+          />
+        ) : (
+          key
         )}
       </td>
       {/* Columna 3 */}
@@ -312,9 +366,21 @@ const PasswordRow = ({ row }) => {
       </td>
       {/* Columna 4 */}
       <td>
-        <button className="btn-modify-password" onClick={() => modifyText()}>
-          {editablePassword ? TEXTS.save.en : TEXTS.modify.en}
+        <button
+          className="btn-modify-password"
+          onClick={() => handleModifyText()}
+        >
+          {editableTexts ? TEXTS.save.en : TEXTS.modify.en}
         </button>
+        {editableTexts && (
+          <button
+            style={{ marginLeft: "50px" }}
+            className="btn-modify-password"
+            onClick={() => handleCancelModifyText()}
+          >
+            {TEXTS.cancel.en}
+          </button>
+        )}
       </td>
     </tr>
   );

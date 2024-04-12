@@ -197,7 +197,7 @@ export const TEXTS = {
     },
     generatePassword: {
       es: "Genera la contraseña aleatoria",
-      en: "Generate random  passwords"
+      en: "Generate random  password"
     },
     main: {
       es: "Main",
