@@ -1,18 +1,28 @@
 import React, { useState } from "react";
+import { doSignInWithEmailAndPassword } from "../services/firebase/auth"
+import { useAuth } from "./../contexts/authContext"
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
 import "./Login.css";
 
 export default function LoginPage() {
+  // const { userLoggedIn } = useAuth()
+
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Aquí puedes realizar la lógica de autenticación, por ejemplo, enviar los datos a un servidor
+
     console.log("Username:", username);
     console.log("Password:", password);
-    // También podrías redirigir al usuario a otra página si el inicio de sesión es exitoso
+    
+    if (!isSigningIn) {
+      setIsSigningIn(true)
+
+      // await doSignInWithEmailAndPassword(email, password)
+    }
   };
 
   return (

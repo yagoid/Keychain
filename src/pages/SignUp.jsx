@@ -13,12 +13,11 @@ export default function SignUpPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Aquí puedes realizar la lógica de autenticación, por ejemplo, enviar los datos a un servidor
+    
     console.log("Username:", username);
     console.log("Email:", email);
     console.log("Password:", password);
     console.log("Repeat Password:", repeatPassword);
-    // También podrías redirigir al usuario a otra página si el inicio de sesión es exitoso
   };
 
   return (
