@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { TEXTS } from "../assets/locales/texts.js";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./../contexts/authContext";
 import Navbar from "../components/Navbar";
-import MainButton from "../components/MainButton";
 import LocatorBar from "../components/LocatorBar";
 import hexagons2 from "./../assets/images/hexagons2.svg";
 import copyIcon from "./../assets/images/copy_icon.svg";
 import "./PasswordGenerator.css";
 
 export default function PasswordGeneratorPage() {
+  const { userLoggedIn } = useAuth();
+
   const [nameActiveSection, setNameActiveSection] = useState("Generator");
   const [passwordGenerated, setPasswordGenerated] = useState("Your password");
   const homeSections = TEXTS.homeSections.en;
@@ -22,6 +25,7 @@ export default function PasswordGeneratorPage() {
 
   return (
     <div className="password-generator">
+      {!userLoggedIn && <Navigate to={"../"} replace={true} />}
       <Navbar
         sections={homeSections}
         nameActiveSection={nameActiveSection}

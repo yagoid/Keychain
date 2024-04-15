@@ -4,6 +4,7 @@ import { doSignInWithEmailAndPassword } from "../services/firebase/auth";
 import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
+import ErrorIcon from "./../assets/images/error_icon.svg";
 import "./Login.css";
 
 export default function LoginPage() {
@@ -24,10 +25,18 @@ export default function LoginPage() {
       setIsSigningIn(true);
       try {
         await doSignInWithEmailAndPassword(email, password);
-        // El inicio de sesión fue exitoso, haz lo que necesites aquí, como redireccionar a otra página
       } catch (error) {
-        // Maneja cualquier error que pueda ocurrir durante el inicio de sesión
-        console.log("Error al iniciar sesión:", error);
+        console.log(error.code);
+        if (error.code === "auth/invalid-credential") {
+          // Email o contraseña incorrecta
+          setErrorMessage(TEXTS.credentialsError.en);
+          console.log(TEXTS.credentialsError.en);
+        } else {
+          // Otro tipo de error durante el inicio de sesión
+          setErrorMessage(TEXTS.loginError.en);
+          console.log(TEXTS.loginError.en);
+        }
+        setIsSigningIn(false);
       }
     }
   };
@@ -66,6 +75,12 @@ export default function LoginPage() {
               required
             />
           </div>
+          {errorMessage != "" && (
+            <div className="error-container">
+              <img src={ErrorIcon} className="error-icon" alt="Error icon" />
+              <span className="error-message">{errorMessage}</span>
+            </div>
+          )}
           <button type="submit" className="login-btn">
             {/* <Link to="/home">Ir al home</Link> */}
             {TEXTS.signIn.en}

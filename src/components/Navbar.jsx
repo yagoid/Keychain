@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import Logo from "./../assets/images/logo_keychain.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./../contexts/authContext";
+import { doSignOut } from "../services/firebase/auth";
+import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
 import NavbarMenu from "./../assets/images/navbar_menu.svg";
 import MainButton from "./MainButton";
-import { TEXTS } from "./../assets/locales/texts.js";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
 
 export default function Navbar({
   setActiveSection,
@@ -17,11 +18,18 @@ export default function Navbar({
   const [scrollDirection, setScrollDirection] = useState("up");
   const [prevScrollPosition, setPrevScrollPosition] = useState(0);
 
+  const navigate = useNavigate();
+
   const navigateToSection = (index) => {
     setActiveSection(index);
   };
   const navigateToMain = () => {
     setActiveSection(0);
+  };
+  const handleSignOut = () => {
+    doSignOut().then(() => {
+      navigate("/login");
+    });
   };
 
   useEffect(() => {
@@ -95,7 +103,7 @@ export default function Navbar({
             <MainButton text={TEXTS.logIn.en} color={"blue"} route={"/login"} />
           </div>
         ) : (
-          <div className="logout-button">
+          <div className="logout-button" onClick={handleSignOut}>
             <Link to="/">{TEXTS.logOut.en}</Link>
           </div>
         )}

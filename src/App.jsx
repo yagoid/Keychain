@@ -10,8 +10,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/authContext";
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
-
   return (
     <AuthProvider>
       <BrowserRouter>

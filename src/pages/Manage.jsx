@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { TEXTS } from "../assets/locales/texts.js";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./../contexts/authContext";
 import Navbar from "../components/Navbar";
-import MainButton from "../components/MainButton";
 import LocatorBar from "../components/LocatorBar";
 import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Manage.css";
@@ -9,6 +10,8 @@ import ManageAccess from "../components/ManageAccess.jsx";
 import PasswordManager from "../components/PasswordManager.jsx";
 
 export default function ManagePage() {
+  const { userLoggedIn } = useAuth();
+
   const [nameActiveSection, setNameActiveSection] = useState("Manage");
   const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(true);
 
@@ -16,6 +19,7 @@ export default function ManagePage() {
 
   return (
     <div className={isPrivateKeyValid ? "manage-password" : "manage-access"}>
+      {!userLoggedIn && <Navigate to={"../"} replace={true} />}
       <Navbar
         sections={homeSections}
         nameActiveSection={nameActiveSection}

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
 import Navbar from "../components/Navbar";
 import MainButton from "../components/MainButton";
@@ -7,11 +9,14 @@ import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Home.css";
 
 export default function HomePage() {
+  const { userLoggedIn } = useAuth();
+
   const [nameActiveSection, setNameActiveSection] = useState(TEXTS.home.en);
   const homeSections = TEXTS.homeSections.en;
 
   return (
     <div className="home">
+      {!userLoggedIn && <Navigate to={"../"} replace={true} />}
       <Navbar
         sections={homeSections}
         nameActiveSection={nameActiveSection}

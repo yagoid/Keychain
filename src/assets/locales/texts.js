@@ -91,6 +91,14 @@ export const TEXTS = {
       es: "¿No tienes cuenta?",
       en: "Don't have an account?"
     },
+    credentialsError: {
+      es: "Email o contraseña incorrecta",
+      en: "Email or password was not correct"
+    },
+    loginError: {
+      es: "Error al iniciar sesión",
+      en: "Failed to login"
+    },
     aboutSections: {
       es: ["Main", "Soluciones", "Servicios", "Fundadores"],
       en: ["Main", "Solutions", "Services", "Founders"]

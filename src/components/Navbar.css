@@ -92,6 +92,9 @@ a {
     margin: 10px 80px;
     color: #f4f4f4;
     transition: color 0.3s;
+    background-color: none;
+    border: none;
+    box-shadow: none;
 }
 .logout-button a:hover {
     color: #84af6d;
