@@ -135,6 +135,10 @@ export const TEXTS = {
       es: "contraseñas son comprometidas y desencriptadas por ser demasiado débiles",
       en: "passwords are compromised and decrypted daily due to their weakness"
     },
+    myPasswords: {
+      es: "Mis contraseñas",
+      en: "My passwords"
+    },
     manage: {
       es: "Administrar",
       en: "Manage"

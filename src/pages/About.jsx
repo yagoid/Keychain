@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./About.css";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
+import "./About.css";
 import hexagons1 from "./../assets/images/hexagons1.svg";
 import MainButton from "../components/MainButton";
 import MainText from "../components/MainText";
@@ -12,6 +14,8 @@ import FoundersContent from "../components/FoundersContent.jsx";
 import Footer from "../components/Footer.jsx";
 
 export default function AboutPage() {
+  const { userLoggedIn } = useAuth();
+
   const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
   const [nameActiveSection, setNameActiveSection] = useState(TEXTS.main.en);
@@ -105,6 +109,7 @@ export default function AboutPage() {
 
   return (
     <div className="about" ref={aboutRef}>
+      {userLoggedIn && <Navigate to={"../home"} replace={true} />}
       <div id="main" className="main-section" ref={mainRef}>
         <Navbar
           setActiveSection={setActiveSection}

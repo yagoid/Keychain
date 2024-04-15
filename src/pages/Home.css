@@ -1,6 +1,5 @@
 .home {
     height: 100vh;
-    animation: fadeIn 0.7s ease forwards;
 }
 
 .home-texts {
@@ -10,13 +9,14 @@
     gap: 200px;
     height: 100vh;
     margin: 0vh 10vh;
+    animation: fadeIn 0.7s ease forwards;
 }
 
 .text-and-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 120px;
+    gap: 100px;
 }
 
 .first-home-text {
@@ -39,6 +39,15 @@
 }
 .buttons:nth-child(1) {
     color: #0096D2;
+}
+
+.btn-my-passwords {
+    padding: 8px 15px;
+    background-color: #0096D2;
+    font-size: 01rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .second-home-text {

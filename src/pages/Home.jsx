@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
 import Navbar from "../components/Navbar";
@@ -29,16 +29,14 @@ export default function HomePage() {
             <span>{TEXTS.homeText.en}</span>
           </div>
           <div className="buttons">
-            <MainButton
-              text={TEXTS.manage.en}
-              color={"blue"}
-              route={"/manage"}
-            />
-            <MainButton
+            <button className="btn-my-passwords">
+              <Link to={"/manage"}>{TEXTS.myPasswords.en}</Link>
+            </button>
+            {/* <MainButton
               text={TEXTS.generator.en}
               color={"grey"}
               route={"/generator"}
-            />
+            /> */}
           </div>
         </div>
         <div className="second-home-text">

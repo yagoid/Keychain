@@ -28,7 +28,7 @@ export default function Navbar({
   };
   const handleSignOut = () => {
     doSignOut().then(() => {
-      navigate("/login");
+      navigate("/");
     });
   };
 
@@ -97,17 +97,35 @@ export default function Navbar({
                 </li>
               )
           )}
+          {isMenuOpen && (
+            <div className="nav-button-open">
+              <NavButtton
+                transmitter={transmitter}
+                handleSignOut={handleSignOut}
+              />
+            </div>
+          )}
         </ul>
-        {transmitter === TEXTS.about.en ? (
-          <div className="login-button">
-            <MainButton text={TEXTS.logIn.en} color={"blue"} route={"/login"} />
-          </div>
-        ) : (
-          <div className="logout-button" onClick={handleSignOut}>
-            <Link to="/">{TEXTS.logOut.en}</Link>
-          </div>
-        )}
+        <div className="nav-button">
+          <NavButtton transmitter={transmitter} handleSignOut={handleSignOut} />
+        </div>
       </nav>
     </>
   );
 }
+
+const NavButtton = ({ transmitter, handleSignOut }) => {
+  return (
+    <div>
+      {transmitter === TEXTS.about.en ? (
+        <div className="login-button">
+          <MainButton text={TEXTS.logIn.en} color={"blue"} route={"/login"} />
+        </div>
+      ) : (
+        <div className="logout-button" onClick={handleSignOut}>
+          <Link to="/">{TEXTS.logOut.en}</Link>
+        </div>
+      )}
+    </div>
+  );
+};
