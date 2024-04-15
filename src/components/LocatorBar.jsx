@@ -4,6 +4,7 @@ import LocatorSquareActiveGreen from "./../assets/images/locator_square_active_g
 import LocatorSquare from "./../assets/images/locator_square.svg";
 import LocatorLine from "./../assets/images/locator_line.svg";
 import "./LocatorBar.css";
+import { Link } from "react-router-dom";
 
 export default function LocationBar({
   setActiveSection,
@@ -19,13 +20,11 @@ export default function LocationBar({
 
   return (
     <div className="icon-set">
-      <a
-        href={
-          transmitter === TEXTS.home.en ? `/${section.toLowerCase()}` : null
-        }
+      <Link
+        to={transmitter === TEXTS.home.en ? `/${section.toLowerCase()}` : null}
       >
         <img
-          onClick={changeActiveSection}
+          onClick={setActiveSection ? changeActiveSection : null}
           src={
             nameActiveSection === section
               ? section === TEXTS.main.en || section === TEXTS.home.en
@@ -36,7 +35,7 @@ export default function LocationBar({
           className="locator-square"
           alt="Locator square"
         />
-      </a>
+      </Link>
       {!lastIndex && (
         <img
           src={LocatorLine}

@@ -1,48 +1,56 @@
 import React, { useState } from "react";
-import { doSignInWithEmailAndPassword } from "../services/firebase/auth"
-import { useAuth } from "./../contexts/authContext"
+import { Link, Navigate } from "react-router-dom";
+import { doSignInWithEmailAndPassword } from "../services/firebase/auth";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
 import "./Login.css";
 
 export default function LoginPage() {
-  // const { userLoggedIn } = useAuth()
+  const { userLoggedIn } = useAuth();
 
-  const [isSigningIn, setIsSigningIn] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("Username:", username);
+    console.log("Email:", email);
     console.log("Password:", password);
-    
-    if (!isSigningIn) {
-      setIsSigningIn(true)
 
-      // await doSignInWithEmailAndPassword(email, password)
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        await doSignInWithEmailAndPassword(email, password);
+        // El inicio de sesión fue exitoso, haz lo que necesites aquí, como redireccionar a otra página
+      } catch (error) {
+        // Maneja cualquier error que pueda ocurrir durante el inicio de sesión
+        console.log("Error al iniciar sesión:", error);
+      }
     }
   };
 
   return (
     <div>
-      <a href="/">
+      {userLoggedIn && <Navigate to={"../home"} replace={true} />}
+      <Link to="/">
         <img className="login-logo" src={KeychainIcon} alt="Keychain logo" />
-      </a>
+      </Link>
       <div className="login-container">
         <form className="login-form" onSubmit={handleLogin}>
           <div className="login-heading">
             <h2>{TEXTS.log.en}</h2>
             <h2>{TEXTS.in.en}</h2>
           </div>
-          <h3 className="input-heading">{TEXTS.user.en}</h3>
+          <h3 className="input-heading">{TEXTS.email.en}</h3>
           <div className="input-group">
             <input
-              type="text"
-              placeholder={TEXTS.user.en}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder={TEXTS.email.en}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="input-field"
               required
             />
@@ -59,14 +67,14 @@ export default function LoginPage() {
             />
           </div>
           <button type="submit" className="login-btn">
-            {/* <a href="/home">Ir al home</a> */}
+            {/* <Link to="/home">Ir al home</Link> */}
             {TEXTS.signIn.en}
           </button>
           <div className="question-create-account">
             <p className="question">{TEXTS.questionCreateAccount.en}</p>
-            <a href="/signup" className="crete-account">
+            <Link to="/signup" className="crete-account">
               {TEXTS.createAccount.en}
-            </a>
+            </Link>
           </div>
         </form>
       </div>

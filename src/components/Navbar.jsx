@@ -5,6 +5,7 @@ import NavbarMenu from "./../assets/images/navbar_menu.svg";
 import MainButton from "./MainButton";
 import { TEXTS } from "./../assets/locales/texts.js";
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 export default function Navbar({
   setActiveSection,
@@ -61,12 +62,12 @@ export default function Navbar({
             src={NavbarMenu}
             alt="NavBar Menu"
           />
-          <a
+          <Link
             onClick={transmitter === TEXTS.about.en ? navigateToMain : null}
-            href={transmitter === TEXTS.home.en ? "/home" : null}
+            to={transmitter === TEXTS.home.en ? "/home" : null}
           >
             <img src={KeychainIcon} className="logo" alt="keychain's logo" />
-          </a>
+          </Link>
         </div>
         <ul className={isMenuOpen ? "navbar open" : "navbar"}>
           {sections.map(
@@ -74,17 +75,17 @@ export default function Navbar({
               section != TEXTS.main.en &&
               section != TEXTS.home.en && (
                 <li key={index}>
-                  <a
+                  <Link
                     onClick={() => navigateToSection(index)}
                     className={section === nameActiveSection ? "active" : ""}
-                    href={
+                    to={
                       transmitter === TEXTS.home.en
                         ? `/${section.toLowerCase()}`
                         : null
                     }
                   >
                     {section}
-                  </a>
+                  </Link>
                 </li>
               )
           )}
@@ -95,7 +96,7 @@ export default function Navbar({
           </div>
         ) : (
           <div className="logout-button">
-            <a href="/">{TEXTS.logOut.en}</a>
+            <Link to="/">{TEXTS.logOut.en}</Link>
           </div>
         )}
       </nav>

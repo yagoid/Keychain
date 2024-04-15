@@ -39,7 +39,7 @@ export default function PasswordManager() {
     setIsBlockView(!isBlockView);
   };
 
-  // Añadir un nuevo bloque
+  // Añadir un nuevo bloque/fila
   const handleAddPassword = () => {
     setData((prevData) => [
       ...prevData,

@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import "./MainButton.css";
 
 export default function MainButton({ text, color, route }) {
   return (
-    <a
-      href={route}
+    <Link
+      to={route}
       className={
         color == "blue"
           ? "btn blue"
@@ -13,6 +14,6 @@ export default function MainButton({ text, color, route }) {
       }
     >
       {text}
-    </a>
+    </Link>
   );
 }

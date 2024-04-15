@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { doCreateUserWithEmailAndPassword } from "../services/firebase/auth";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
 import hexagons2 from "./../assets/images/hexagons2.svg";
@@ -6,25 +9,41 @@ import "./Login.css";
 import "./SignUp.css";
 
 export default function SignUpPage() {
+  const { userLoggedIn } = useAuth();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     console.log("Username:", username);
     console.log("Email:", email);
     console.log("Password:", password);
     console.log("Repeat Password:", repeatPassword);
+
+    if (!isRegistering) {
+      setIsRegistering(true);
+      try {
+        await doCreateUserWithEmailAndPassword(email, password);
+        // El inicio de sesión fue exitoso, haz lo que necesites aquí, como redireccionar a otra página
+      } catch (error) {
+        // Maneja cualquier error que pueda ocurrir durante el inicio de sesión
+        console.log("Error al registrar:", error);
+      }
+    }
   };
 
   return (
     <div>
-      <a href="/">
+      {userLoggedIn && <Navigate to={"../home"} replace={true} />}
+      <Link to="/">
         <img className="login-logo" src={KeychainIcon} alt="Keychain logo" />
-      </a>
+      </Link>
       <div className="signup-page">
         <div className="signup-container">
           <form className="login-form sign-form" onSubmit={handleLogin}>
@@ -47,7 +66,7 @@ export default function SignUpPage() {
             <h3 className="input-heading">{TEXTS.email.en}</h3>
             <div className="input-group">
               <input
-                type="text"
+                type="email"
                 placeholder={TEXTS.email.en}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -84,9 +103,9 @@ export default function SignUpPage() {
             </button>
             <div className="question-create-account">
               <p className="question">{TEXTS.questionAlreadyHaveAccount.en}</p>
-              <a href="/login" className="crete-account">
+              <Link to="/login" className="crete-account">
                 {TEXTS.logIn.en}
-              </a>
+              </Link>
             </div>
           </form>
         </div>

@@ -6,19 +6,25 @@ import LoginPage from "./pages/Login";
 import SignUpPage from "./pages/SignUp";
 import "./App.css";
 import PasswordGeneratorPage from "./pages/PasswordGenerator";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./contexts/authContext";
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   return (
-    <main>
-      {currentPath === "/" && <AboutPage />}
-      {currentPath === "/home" && <HomePage />}
-      {currentPath === "/manage" && <ManagePage />}
-      {currentPath === "/generator" && <PasswordGeneratorPage />}
-      {currentPath === "/login" && <LoginPage />}
-      {currentPath === "/signup" && <SignUpPage />}
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AboutPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/manage" element={<ManagePage />} />
+          <Route path="/generator" element={<PasswordGeneratorPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

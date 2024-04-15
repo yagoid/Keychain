@@ -112,7 +112,7 @@ export default function AboutPage() {
           nameActiveSection={nameActiveSection}
           transmitter={TEXTS.about.en}
         />
-        {/* <a href="/home">Ir al home</a> */}
+        {/* <Link to="/home">Ir al home</Link> */}
         <div className="main-content">
           <MainText />
           <MainButton text={TEXTS.start.en} color={"blue"} route={"/home"} />
