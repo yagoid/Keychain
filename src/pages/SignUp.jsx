@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { doCreateUserWithEmailAndPassword } from "../services/firebase/auth";
+import { isValidUsername, addNewUsername } from "../services/firebase/database";
 import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
@@ -9,7 +10,7 @@ import "./Login.css";
 import "./SignUp.css";
 
 export default function SignUpPage() {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, currentUser } = useAuth();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -17,24 +18,62 @@ export default function SignUpPage() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isValidUsername, setIsValiUsername] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Repeat Password:", repeatPassword);
+    // console.log("Username:", username);
+    // console.log("Email:", email);
+    // console.log("Password:", password);
+    // console.log("Repeat Password:", repeatPassword);
+
+    if (password != repeatPassword) {
+      setErrorMessage(TEXTS.repeatPasswordError.en);
+      console.log("Las contraseñas son distintas");
+      return;
+    }
 
     if (!isRegistering) {
       setIsRegistering(true);
-      try {
-        await doCreateUserWithEmailAndPassword(email, password);
-        // El inicio de sesión fue exitoso, haz lo que necesites aquí, como redireccionar a otra página
-      } catch (error) {
-        // Maneja cualquier error que pueda ocurrir durante el inicio de sesión
-        console.log("Error al registrar:", error);
+
+      if (await isValidUsername(username)) {
+        console.log("El username estça correcto");
+        try {
+          // Registrar al usuario
+          await doCreateUserWithEmailAndPassword(email, password);
+          try {
+            // Guardar el username del usuario en firestore
+            await addNewUsername(currentUser.uid, username);
+            console.log(currentUser.id);
+          } catch (error) {
+            console.log("Error al guardar el username:", error);
+            setIsRegistering(false);
+          }
+        } catch (error) {
+          setErrorMessage(TEXTS.registerError.en);
+          console.log("Error al registrar:", error);
+          setIsRegistering(false);
+        }
+      } else {
+        setErrorMessage(TEXTS.usernameNotValidError.en);
+        console.log("El username ya existe");
+        setIsRegistering(false);
       }
+    }
+  };
+
+  // Función para manejar el cambio del username
+  const handleUsernameChange = async (e) => {
+    const newUsername = e.target.value;
+    setUsername(newUsername);
+
+    if (await isValidUsername(newUsername)) {
+      setIsValiUsername(true);
+      console.log(TEXTS.usernameValid.en);
+    } else {
+      setIsValiUsername(false);
+      console.log(TEXTS.usernameNotValidError.en);
     }
   };
 
@@ -57,7 +96,7 @@ export default function SignUpPage() {
                 type="text"
                 placeholder={TEXTS.user.en}
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
                 className="input-field"
                 required
               />

@@ -99,6 +99,22 @@ export const TEXTS = {
       es: "Error al iniciar sesión",
       en: "Failed to login"
     },
+    registerError: {
+      es: "Error al registrar",
+      en: "Failed to register"
+    },
+    repeatPasswordError: {
+      es: "Las contraseñas deben ser iguales",
+      en: "Passwords must be the same"
+    },
+    usernameNotValidError: {
+      es: "El nombre de usuario ya existe",
+      en: "The username already exists"
+    },
+    usernameValid: {
+      es: "¡El nombre de usuario es válido!",
+      en: "The username is valid!"
+    },
     aboutSections: {
       es: ["Main", "Soluciones", "Servicios", "Fundadores"],
       en: ["Main", "Solutions", "Services", "Founders"]
