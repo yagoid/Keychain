@@ -1,8 +1,10 @@
 import { db } from "./firebase";
 import { 
     collection, 
+    doc,
     addDoc, 
     getDocs, 
+    setDoc,
     updateDoc, 
     arrayUnion, 
     arrayRemove, 
@@ -11,19 +13,20 @@ import {
 } from "firebase/firestore";
 
 export const addNewUsername = async (uid, username) => {
-  return addDoc(collection(db, "users", uid), {
-    username: username
+  return setDoc(doc(db, "users", uid), {
+    username: username,
+    platforms: []
   });
 };
 
 export const addNewPlatform = async (uid, platform) => {
-  return updateDoc(collection(db, "users", uid), {
+  return updateDoc(doc(db, "users", uid), {
     platforms: arrayUnion(platform)
   });
 };
 
 export const removePlatform = async (uid, platform) => {
-  return updateDoc(collection(db, "users", uid), {
+  return updateDoc(doc(db, "users", uid), {
     platforms: arrayRemove(platform)
   });
 };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { auth } from "../services/firebase/firebase";
 import { doCreateUserWithEmailAndPassword } from "../services/firebase/auth";
 import { isValidUsername, addNewUsername } from "../services/firebase/database";
 import { useAuth } from "./../contexts/authContext";
@@ -18,9 +19,9 @@ export default function SignUpPage() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isValidUsername, setIsValiUsername] = useState(false);
+  const [isCorrectUsername, setIsCorrectUsername] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     // console.log("Username:", username);
@@ -38,23 +39,26 @@ export default function SignUpPage() {
       setIsRegistering(true);
 
       if (await isValidUsername(username)) {
-        console.log("El username estça correcto");
-        try {
-          // Registrar al usuario
-          await doCreateUserWithEmailAndPassword(email, password);
-          try {
+        // Registrar al usuario
+        doCreateUserWithEmailAndPassword(email, password)
+          .then(() => {
             // Guardar el username del usuario en firestore
-            await addNewUsername(currentUser.uid, username);
-            console.log(currentUser.id);
-          } catch (error) {
-            console.log("Error al guardar el username:", error);
+            addNewUsername(auth.currentUser.uid, username)
+              .then(() => {
+                console.log("Username agregado");
+              })
+              .catch((error) => {
+                // Manejar cualquier error de registro de username
+                console.log("Error al guardar el username:", error);
+                setIsRegistering(false);
+              });
+          })
+          .catch((error) => {
+            // Manejar cualquier error de registro
+            setErrorMessage(TEXTS.registerError.en);
+            console.log("Error al registrar:", error);
             setIsRegistering(false);
-          }
-        } catch (error) {
-          setErrorMessage(TEXTS.registerError.en);
-          console.log("Error al registrar:", error);
-          setIsRegistering(false);
-        }
+          });
       } else {
         setErrorMessage(TEXTS.usernameNotValidError.en);
         console.log("El username ya existe");
@@ -69,10 +73,10 @@ export default function SignUpPage() {
     setUsername(newUsername);
 
     if (await isValidUsername(newUsername)) {
-      setIsValiUsername(true);
+      setIsCorrectUsername(true);
       console.log(TEXTS.usernameValid.en);
     } else {
-      setIsValiUsername(false);
+      setIsCorrectUsername(false);
       console.log(TEXTS.usernameNotValidError.en);
     }
   };
@@ -85,7 +89,7 @@ export default function SignUpPage() {
       </Link>
       <div className="signup-page">
         <div className="signup-container">
-          <form className="login-form sign-form" onSubmit={handleLogin}>
+          <form className="login-form sign-form" onSubmit={handleRegister}>
             <div className="signup-heading">
               <h2>{TEXTS.createAccount.enUpperCase}</h2>
             </div>
