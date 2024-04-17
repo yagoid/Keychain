@@ -6,6 +6,8 @@ import { isValidUsername, addNewUsername } from "../services/firebase/database";
 import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
+import ErrorIcon from "./../assets/images/error_icon.svg";
+import CorrectIcon from "./../assets/images/correct_icon.svg";
 import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Login.css";
 import "./SignUp.css";
@@ -104,6 +106,17 @@ export default function SignUpPage() {
                 className="input-field"
                 required
               />
+              {isCorrectUsername ? (
+              <div className="correct-container">
+                <img src={CorrectIcon} className="correct-icon" alt="Correct icon" />
+                <span className="correct-message">{TEXTS.usernameValid.en}</span>
+              </div>
+              ) : (
+                <div className="error-container"  style={{marginTop: "10px"}}>
+                  <img src={ErrorIcon} className="error-icon" alt="Error icon" />
+                <span className="error-message">{TEXTS.usernameNotValidError.en}</span>
+              </div>
+              )}
             </div>
 
             <h3 className="input-heading">{TEXTS.email.en}</h3>
@@ -141,6 +154,12 @@ export default function SignUpPage() {
                 required
               />
             </div>
+            {errorMessage != "" && (
+              <div className="error-container">
+                <img src={ErrorIcon} className="error-icon" alt="Error icon" />
+                <span className="error-message">{errorMessage}</span>
+              </div>
+            )}
             <button type="submit" className="login-btn">
               {TEXTS.signUp.en}
             </button>

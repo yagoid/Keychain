@@ -19,6 +19,7 @@
 .signup-heading h2 {
     font-size: 1.6rem;
     font-weight: 300;
+    margin-top: 0px;
 }
 
 .welcome-text {
@@ -46,6 +47,20 @@
     left: 52%;
     z-index: -1;
     height: auto;
+}
+
+.correct-container {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+.correct-message {
+   color: rgb(0, 137, 7);
+   font-size: 0.8rem;
+   font-weight: 400 !important;
+}
+.correct-icon {
+   width: 15px;
 }
 
 @media (max-width: 1509px) {
