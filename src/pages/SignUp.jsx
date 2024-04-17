@@ -22,6 +22,7 @@ export default function SignUpPage() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isCorrectUsername, setIsCorrectUsername] = useState(false);
+  const [isCorrectUsernameMessage, setIsCorrectUsernameMessage] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -76,9 +77,11 @@ export default function SignUpPage() {
 
     if (await isValidUsername(newUsername)) {
       setIsCorrectUsername(true);
+      setIsCorrectUsernameMessage(TEXTS.usernameValid.en)
       console.log(TEXTS.usernameValid.en);
     } else {
       setIsCorrectUsername(false);
+      setIsCorrectUsernameMessage(TEXTS.usernameNotValidError.en)
       console.log(TEXTS.usernameNotValidError.en);
     }
   };
@@ -106,7 +109,8 @@ export default function SignUpPage() {
                 className="input-field"
                 required
               />
-              {isCorrectUsername ? (
+              {isCorrectUsernameMessage != "" && 
+              (isCorrectUsername ? (
               <div className="correct-container">
                 <img src={CorrectIcon} className="correct-icon" alt="Correct icon" />
                 <span className="correct-message">{TEXTS.usernameValid.en}</span>
@@ -116,7 +120,7 @@ export default function SignUpPage() {
                   <img src={ErrorIcon} className="error-icon" alt="Error icon" />
                 <span className="error-message">{TEXTS.usernameNotValidError.en}</span>
               </div>
-              )}
+              ))}
             </div>
 
             <h3 className="input-heading">{TEXTS.email.en}</h3>
