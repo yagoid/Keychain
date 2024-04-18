@@ -34,7 +34,6 @@ export default function SignUpPage() {
 
     if (password != repeatPassword) {
       setErrorMessage(TEXTS.repeatPasswordError.en);
-      console.log("Las contraseñas son distintas");
       return;
     }
 
@@ -59,12 +58,10 @@ export default function SignUpPage() {
           .catch((error) => {
             // Manejar cualquier error de registro
             setErrorMessage(TEXTS.registerError.en);
-            console.log("Error al registrar:", error);
             setIsRegistering(false);
           });
       } else {
         setErrorMessage(TEXTS.usernameNotValidError.en);
-        console.log("El username ya existe");
         setIsRegistering(false);
       }
     }
@@ -77,12 +74,10 @@ export default function SignUpPage() {
 
     if (await isValidUsername(newUsername)) {
       setIsCorrectUsername(true);
-      setIsCorrectUsernameMessage(TEXTS.usernameValid.en)
-      console.log(TEXTS.usernameValid.en);
+      setIsCorrectUsernameMessage(TEXTS.usernameValid.en);
     } else {
       setIsCorrectUsername(false);
-      setIsCorrectUsernameMessage(TEXTS.usernameNotValidError.en)
-      console.log(TEXTS.usernameNotValidError.en);
+      setIsCorrectUsernameMessage(TEXTS.usernameNotValidError.en);
     }
   };
 
@@ -109,18 +104,33 @@ export default function SignUpPage() {
                 className="input-field"
                 required
               />
-              {isCorrectUsernameMessage != "" && 
-              (isCorrectUsername ? (
-              <div className="correct-container">
-                <img src={CorrectIcon} className="correct-icon" alt="Correct icon" />
-                <span className="correct-message">{TEXTS.usernameValid.en}</span>
-              </div>
-              ) : (
-                <div className="error-container"  style={{marginTop: "10px"}}>
-                  <img src={ErrorIcon} className="error-icon" alt="Error icon" />
-                <span className="error-message">{TEXTS.usernameNotValidError.en}</span>
-              </div>
-              ))}
+              {isCorrectUsernameMessage != "" &&
+                (isCorrectUsername ? (
+                  <div className="correct-container">
+                    <img
+                      src={CorrectIcon}
+                      className="correct-icon"
+                      alt="Correct icon"
+                    />
+                    <span className="correct-message">
+                      {TEXTS.usernameValid.en}
+                    </span>
+                  </div>
+                ) : (
+                  <div
+                    className="error-container"
+                    style={{ marginTop: "10px" }}
+                  >
+                    <img
+                      src={ErrorIcon}
+                      className="error-icon"
+                      alt="Error icon"
+                    />
+                    <span className="error-message">
+                      {TEXTS.usernameNotValidError.en}
+                    </span>
+                  </div>
+                ))}
             </div>
 
             <h3 className="input-heading">{TEXTS.email.en}</h3>

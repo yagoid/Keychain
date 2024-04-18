@@ -32,7 +32,7 @@ export const removePlatform = async (uid, platform) => {
 };
 
 export const getPlatforms = async (uid) => {
-  return getDoc(collection(db, "users", uid));
+  return getDoc(doc(db, "users", uid));
 };
 
 export const isValidUsername = async (username) => {

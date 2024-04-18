@@ -215,6 +215,10 @@ export const TEXTS = {
       es: "Cancelar",
       en: "Cancel"
     },
+    enterNewKey: {
+      es: "Nueva llave:",
+      en: "New Key:"
+    },
     generator: {
       es: "Generador",
       en: "Generator"

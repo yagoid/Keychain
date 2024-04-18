@@ -5,9 +5,11 @@ import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
 import chainLine from "./../assets/images/chain_line_blocks.svg";
 import "./PasswordManager.css";
 import "./Switch.css";
+import NewPasswordPupup from "./NewPasswordPopup.jsx";
 
 export default function PasswordManager() {
   const [isBlockView, setIsBlockView] = useState(true);
+  const [isOpenNewPasswordPopup, setIsOpenNewPasswordPopup] = useState(false);
   const [data, setData] = useState([
     {
       // fila/bloque 1
@@ -41,16 +43,18 @@ export default function PasswordManager() {
 
   // Añadir un nuevo bloque/fila
   const handleAddPassword = () => {
-    setData((prevData) => [
-      ...prevData,
-      {
-        platform: "Linkedin",
-        id: data.length + 1,
-        key: "********",
-        timestamp: "2024-02-12 17:35:47",
-        proofOfWork: "154",
-      },
-    ]);
+    setIsOpenNewPasswordPopup(true);
+
+    // setData((prevData) => [
+    //   ...prevData,
+    //   {
+    //     platform: "Linkedin",
+    //     id: data.length + 1,
+    //     key: "********",
+    //     timestamp: "2024-02-12 17:35:47",
+    //     proofOfWork: "154",
+    //   },
+    // ]);
   };
 
   // Guardar los cambios editados en la variable data
@@ -83,6 +87,10 @@ export default function PasswordManager() {
     };
   }, []);
 
+  const handleClosePopup = () => {
+    setIsOpenNewPasswordPopup(false);
+  };
+
   return (
     <div className="password-manager">
       <h1>{TEXTS.myKeys.en}</h1>
@@ -105,6 +113,9 @@ export default function PasswordManager() {
         <span className="slider"></span>
       </label>
       <span className="text-switch">{TEXTS.blockView.en}</span>
+      {isOpenNewPasswordPopup && (
+        <NewPasswordPupup onClose={handleClosePopup} />
+      )}
     </div>
   );
 }

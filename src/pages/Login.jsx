@@ -30,11 +30,9 @@ export default function LoginPage() {
         if (error.code === "auth/invalid-credential") {
           // Email o contraseña incorrecta
           setErrorMessage(TEXTS.credentialsError.en);
-          console.log(TEXTS.credentialsError.en);
         } else {
           // Otro tipo de error durante el inicio de sesión
           setErrorMessage(TEXTS.loginError.en);
-          console.log(TEXTS.loginError.en);
         }
         setIsSigningIn(false);
       }
