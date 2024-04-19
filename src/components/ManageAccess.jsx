@@ -1,16 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { privateKeyExists } from "../services/firebase/database";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
+import CreatePrivateKey from "./CreatePrivateKey.jsx";
 import "./ManageAccess.css";
 
 export default function ManageAccess() {
-  const [privateKey, setPrivateKey] = useState("");
+  const { currentUser } = useAuth();
 
-  const handleLogin = (e) => {
+  const [privateKey, setPrivateKey] = useState("");
+  const [isOpenNewPasswordPopup, setIsOpenNewPasswordPopup] = useState(false);
+
+  const handleKeyVerify = (e) => {
     e.preventDefault();
     // Aquí puedes realizar la lógica de autenticación, por ejemplo, enviar los datos a un servidor
     console.log("PrivateKey:", privateKey);
     // También podrías redirigir al usuario a otra página si el inicio de sesión es exitoso
   };
+
+  const handleClosePopup = () => {
+    setIsOpenNewPasswordPopup(false);
+  };
+
+  useEffect(() => {
+    privateKeyExists(currentUser.uid)
+      .then((exists) => {
+        if (!exists) {
+          setIsOpenNewPasswordPopup(true);
+        }
+      })
+      .catch((error) => {
+        console.error(
+          "Error al verificar la existencia de la clave privada:",
+          error
+        );
+      });
+  }, []);
 
   return (
     <div className="manage-access-section">
@@ -32,6 +57,9 @@ export default function ManageAccess() {
           {TEXTS.enter.en}
         </button>
       </div>
+      {isOpenNewPasswordPopup && (
+        <CreatePrivateKey onClose={handleClosePopup} />
+      )}
     </div>
   );
 }

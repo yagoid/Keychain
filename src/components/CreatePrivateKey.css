@@ -1,0 +1,84 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.popup-content-privatekey {
+    background-color: #1c1c1c;
+    max-width: 30%;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content-privatekey h2 {
+    margin-bottom: 30px;
+    margin-top: 0px;
+    font-weight: 600;
+    color: #f4f4f4;
+}
+
+.popup-content-privatekey input {
+    display: block;
+    margin-bottom: 10px;
+    width: 98%;
+    padding: 8px;
+    padding-right: 0px;
+    border: none;
+    border-radius: 4px;
+}
+
+.info-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.info-message {
+    color: #f4f4f4;
+    font-size: 0.8rem;
+    font-weight: 400 !important;
+}
+.info-icon {
+    width: 18px;
+}
+
+.new-block-button-group {
+    display: flex;
+    justify-content: space-between;
+}
+.popup-content-privatekey button {
+    padding: 8px 16px;
+    margin-top: 20px;
+    background-color: #1c1c1c;
+    color: #f4f4f4;
+    font-weight: 500;
+    border: 1px solid rgba(0, 150, 210, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
+.popup-content-privatekey button:hover {
+    background-color: rgba(0, 150, 210, 0.2);
+}
+
+@media (max-width: 1200px) {
+    .popup-content-privatekey {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 560px) {
+    .popup-content-privatekey {
+        max-width: 65%;
+        padding: 20px;
+    }
+}

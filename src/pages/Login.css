@@ -100,7 +100,7 @@
   gap: 5px;
 }
 .error-message {
-  color: rgba(255, 0, 0, 0.555);
+  color: #a70000;
   font-size: 0.8rem;
   font-weight: 400 !important;
 }

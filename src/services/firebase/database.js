@@ -4,6 +4,7 @@ import {
     doc,
     addDoc, 
     getDocs, 
+    getDoc,
     setDoc,
     updateDoc, 
     arrayUnion, 
@@ -15,7 +16,8 @@ import {
 export const addNewUsername = async (uid, username) => {
   return setDoc(doc(db, "users", uid), {
     username: username,
-    platforms: []
+    platforms: [],
+    private_key: false
   });
 };
 
@@ -32,7 +34,22 @@ export const removePlatform = async (uid, platform) => {
 };
 
 export const getPlatforms = async (uid) => {
-  return getDoc(doc(db, "users", uid));
+    return getDoc(doc(db, "users", uid));
+};
+
+export const privateKeyExists = async (uid) => {
+    try {
+      const privateKey = doc(db, "users", uid);
+      const docSnap = await getDoc(privateKey);
+      if (docSnap.exists()) {
+        return docSnap.data().private_key
+      } else {
+        console.log("No such uid!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      throw new Error("Error al verificar la existencia de la clave privada");
+    }
 };
 
 export const isValidUsername = async (username) => {

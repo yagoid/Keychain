@@ -8,7 +8,8 @@ export default function NewPasswordPupup({ onClose }) {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     // Aquí puedes hacer lo que quieras con el texto y la contraseña
     console.log("Texto:", platform);
     console.log("Contraseña:", password);
@@ -17,7 +18,8 @@ export default function NewPasswordPupup({ onClose }) {
     onClose();
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e) => {
+    e.preventDefault();
     // Cerrar el popup
     onClose();
   };

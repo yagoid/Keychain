@@ -37,10 +37,6 @@ export default function PasswordManager() {
     },
   ]);
 
-  const toggleSwitch = () => {
-    setIsBlockView(!isBlockView);
-  };
-
   // Añadir un nuevo bloque/fila
   const handleAddPassword = () => {
     setIsOpenNewPasswordPopup(true);
@@ -70,6 +66,14 @@ export default function PasswordManager() {
     setData(updatedData);
   };
 
+  const toggleSwitch = () => {
+    setIsBlockView(!isBlockView);
+  };
+
+  const handleClosePopup = () => {
+    setIsOpenNewPasswordPopup(false);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 970) {
@@ -86,10 +90,6 @@ export default function PasswordManager() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const handleClosePopup = () => {
-    setIsOpenNewPasswordPopup(false);
-  };
 
   return (
     <div className="password-manager">

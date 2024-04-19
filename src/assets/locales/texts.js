@@ -159,6 +159,18 @@ export const TEXTS = {
       es: "Administrar",
       en: "Manage"
     },
+    privateKey: {
+      es: "Clave privada",
+      en: "Private Key"
+    },
+    createPrivateKey: {
+      es: "Crear clave privada",
+      en: "Create private key"
+    },
+    createPrivateKeyInfo: {
+      es: "Esta clave privada sirve para cifrar y descifrar todas sus contraseñas, guardala en un sitio seguro. Si la pierde, perderá el acceso a todas las contraseñas que regustre",
+      en: "This private key is used to encrypt and decrypt all your passwords, keep it in a secure place. If you lose it, you will lose access to all passwords you save."
+    },
     managePasswords: {
       es: "Gestión de Contraseñas",
       en: "Manage Passwords"

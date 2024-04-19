@@ -13,7 +13,7 @@ export default function ManagePage() {
   const { userLoggedIn } = useAuth();
 
   const [nameActiveSection, setNameActiveSection] = useState("Manage");
-  const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(true);
+  const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(false);
 
   const homeSections = TEXTS.homeSections.en;
 
