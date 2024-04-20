@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TEXTS } from "../assets/locales/texts.js";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./../contexts/authContext";
@@ -17,6 +17,16 @@ export default function ManagePage() {
 
   const homeSections = TEXTS.homeSections.en;
 
+  useEffect(() => {
+    // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
+    const storedPrivateKey = sessionStorage.getItem("privateKey");
+    if (storedPrivateKey) {
+      setIsPrivateKeyValid(true);
+    }
+
+    console.log(storedPrivateKey);
+  }, []);
+
   return (
     <div className={isPrivateKeyValid ? "manage-password" : "manage-access"}>
       {!userLoggedIn && <Navigate to={"../"} replace={true} />}
@@ -31,7 +41,7 @@ export default function ManagePage() {
         </div>
       ) : (
         <div className="access-section">
-          <ManageAccess />
+          <ManageAccess setIsPrivateKeyValid={setIsPrivateKeyValid} />
         </div>
       )}
       <section className="locator-bar">

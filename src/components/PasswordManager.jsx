@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { getPlatforms } from "../services/firebase/database";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
 import visibleIcon from "./../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
@@ -8,6 +10,10 @@ import "./Switch.css";
 import NewPasswordPupup from "./NewPasswordPopup.jsx";
 
 export default function PasswordManager() {
+  const { currentUser } = useAuth();
+
+  const [privateKey, setPrivateKey] = useState("");
+  const [platforms, setPlatforms] = useState([]);
   const [isBlockView, setIsBlockView] = useState(true);
   const [isOpenNewPasswordPopup, setIsOpenNewPasswordPopup] = useState(false);
   const [data, setData] = useState([
@@ -38,7 +44,7 @@ export default function PasswordManager() {
   ]);
 
   // Añadir un nuevo bloque/fila
-  const handleAddPassword = () => {
+  const handleOpenAddPasswordPopUp = () => {
     setIsOpenNewPasswordPopup(true);
 
     // setData((prevData) => [
@@ -74,21 +80,41 @@ export default function PasswordManager() {
     setIsOpenNewPasswordPopup(false);
   };
 
+  // La vista se cambia automáticamente a vista de bloque
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 970) {
         setIsBlockView(true);
       }
     };
-
     handleResize();
-
     // Agregamos un listener para el evento de cambio de tamaño de la ventana
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+  }, []);
+
+  // Consultar las plataformas registradas
+  useEffect(() => {
+    getPlatforms(currentUser.uid)
+      .then((platforms) => {
+        // Guardar las plataformas
+        setPlatforms(platforms);
+      })
+      .catch((error) => {
+        // Manejar cualquier error de consulta
+        console.log("Error al guardar las platafromas:", error);
+      });
+  }, []);
+
+  // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
+  useEffect(() => {
+    const storedPrivateKey = sessionStorage.getItem("privateKey");
+    if (storedPrivateKey) {
+      setPrivateKey(storedPrivateKey);
+    }
   }, []);
 
   return (
@@ -98,7 +124,7 @@ export default function PasswordManager() {
         {isBlockView ? (
           <PasswordManagerBlocks
             data={data}
-            handleAddPassword={handleAddPassword}
+            handleOpenAddPasswordPopUp={handleOpenAddPasswordPopUp}
             handleSaveChanges={handleSaveChanges}
           />
         ) : (
@@ -114,7 +140,10 @@ export default function PasswordManager() {
       </label>
       <span className="text-switch">{TEXTS.blockView.en}</span>
       {isOpenNewPasswordPopup && (
-        <NewPasswordPupup onClose={handleClosePopup} />
+        <NewPasswordPupup
+          onClose={handleClosePopup}
+          setPlatforms={setPlatforms}
+        />
       )}
     </div>
   );
@@ -122,7 +151,7 @@ export default function PasswordManager() {
 
 const PasswordManagerBlocks = ({
   data,
-  handleAddPassword,
+  handleOpenAddPasswordPopUp,
   handleSaveChanges,
 }) => {
   return (
@@ -141,7 +170,7 @@ const PasswordManagerBlocks = ({
           </div>
         ))}
       </div>
-      <button onClick={handleAddPassword} className="btn-add-password">
+      <button onClick={handleOpenAddPasswordPopUp} className="btn-add-password">
         {TEXTS.addPassword.en}
       </button>
     </section>
@@ -214,7 +243,7 @@ const PasswordBlock = ({ block, saveChanges }) => {
           {editableTexts ? (
             <input
               className="input-modify-key"
-              type="text"
+              type={visiblePassword ? "text" : "password"}
               value={key}
               onChange={(e) => handleKeyChange(e.target.value)}
               required

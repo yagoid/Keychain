@@ -1,21 +1,42 @@
 import React, { useState } from "react";
+import { addNewPlatform, platformExists } from "../services/firebase/database";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
 import ErrorIcon from "./../assets/images/error_icon.svg";
 import "./NewPasswordPopup.css";
 
-export default function NewPasswordPupup({ onClose }) {
+export default function NewPasswordPupup({ onClose, setPlatforms }) {
+  const { currentUser } = useAuth();
+
   const [platform, setPlatform] = useState("");
   const [password, setPassword] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSaveBlock = async (e) => {
     e.preventDefault();
-    // Aquí puedes hacer lo que quieras con el texto y la contraseña
-    console.log("Texto:", platform);
-    console.log("Contraseña:", password);
-
-    // Cerrar el popup
-    onClose();
+    // Se comprueba que la plataforma existe y después se añade a la base de datos
+    if (!isSaving) {
+      if (!(await platformExists(currentUser.uid, platform))) {
+        addNewPlatform(currentUser.uid, platform)
+          .then(() => {
+            console.log("Contraseña añadida!");
+            setPlatforms(platform);
+            // Cerrar el popup
+            onClose();
+          })
+          .catch((error) => {
+            // Manejar cualquier error de registro de username
+            console.log("Error al guardar el nuevo bloque:", error);
+            setErrorMessage(TEXTS.errorNewBlock.en);
+            setIsSaving(false);
+          });
+      } else {
+        console.log("La plataforma ya existe");
+        setErrorMessage(TEXTS.errorPlatformExists.en);
+        setIsSaving(false);
+      }
+    }
   };
 
   const handleCancel = (e) => {
@@ -26,7 +47,7 @@ export default function NewPasswordPupup({ onClose }) {
 
   return (
     <div className="popup-overlay">
-      <form className="popup-content" onSubmit={handleSubmit}>
+      <form className="popup-content" onSubmit={handleSaveBlock}>
         <h2>{TEXTS.enterNewKey.en}</h2>
         <input
           type="text"

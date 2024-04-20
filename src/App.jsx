@@ -1,4 +1,3 @@
-import { useState } from "react";
 import AboutPage from "./pages/About";
 import ManagePage from "./pages/Manage";
 import HomePage from "./pages/Home";

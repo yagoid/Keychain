@@ -33,8 +33,25 @@ export const removePlatform = async (uid, platform) => {
   });
 };
 
+export const changePrivateKeyState = async (uid) => {
+  return updateDoc(doc(db, "users", uid), {
+    private_key: true
+  });
+};
+
 export const getPlatforms = async (uid) => {
-    return getDoc(doc(db, "users", uid));
+  try {
+    const platformsDoc = doc(db, "users", uid);
+    const docSnap = await getDoc(platformsDoc);
+    if (docSnap.exists()) {
+      return docSnap.data().platforms
+    } else {
+      console.log("No such data!");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw new Error("Error al consultar las plataformas");
+  }
 };
 
 export const privateKeyExists = async (uid) => {
@@ -44,12 +61,31 @@ export const privateKeyExists = async (uid) => {
       if (docSnap.exists()) {
         return docSnap.data().private_key
       } else {
-        console.log("No such uid!");
+        console.log("No such data!");
       }
     } catch (error) {
       console.error("Error:", error);
       throw new Error("Error al verificar la existencia de la clave privada");
     }
+};
+
+export const platformExists = async (uid, platform) => {
+  try {
+    const platformsDoc = doc(db, "users", uid);
+    const docSnap = await getDoc(platformsDoc);
+    if (docSnap.exists()) {
+      if (docSnap.data().platforms.includes(platform)) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      console.log("No such data!");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw new Error("Error al verificar la existencia de la plataforma");
+  }
 };
 
 export const isValidUsername = async (username) => {

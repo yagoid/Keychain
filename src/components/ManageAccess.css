@@ -15,7 +15,11 @@
 }
 
 .input-group-private-key {
-    width: 40%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
 }
 
 .access-btn {

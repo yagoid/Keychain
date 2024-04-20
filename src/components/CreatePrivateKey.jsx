@@ -1,17 +1,40 @@
 import React, { useState } from "react";
+import { changePrivateKeyState } from "../services/firebase/database";
+import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
 import InfoIcon from "./../assets/images/info_icon.svg";
 import ErrorIcon from "./../assets/images/error_icon.svg";
+import visibleIcon from "./../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
 import "./CreatePrivateKey.css";
 
-export default function CreatePrivateKey({ onClose }) {
-  const [privateKey, setPrivateKey] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
+  const { currentUser } = useAuth();
 
-  const handleCreatePrivateKey = (e) => {
+  const [privateKey, setPrivateKey] = useState("");
+  const [showPrivateKey, setShowPrivateKey] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleCreatePrivateKey = async (e) => {
     e.preventDefault();
-    // Aquí puedes hacer lo que quieras con el texto y la contraseña
-    console.log("Contraseña:", privateKey);
+
+    if (!isSaving) {
+      setIsSaving(true);
+
+      changePrivateKeyState(currentUser.uid)
+        .then(() => {
+          console.log("Estado cambiado");
+          // Guardar la clave privada en sessionStorage
+          sessionStorage.setItem("privateKey", privateKey);
+          setIsPrivateKeyValid(true);
+        })
+        .catch((error) => {
+          // Manejar cualquier error de registro de username
+          console.log("Error al guardar el estado:", error);
+          setIsSaving(false);
+        });
+    }
 
     // Cerrar el popup
     onClose();
@@ -24,13 +47,21 @@ export default function CreatePrivateKey({ onClose }) {
         onSubmit={handleCreatePrivateKey}
       >
         <h2>{TEXTS.createPrivateKey.en}</h2>
-        <input
-          type="password"
-          placeholder={TEXTS.privateKey.en}
-          value={privateKey}
-          onChange={(e) => setPrivateKey(e.target.value)}
-          required
-        />
+        <div className="show-password-container">
+          <input
+            type={showPrivateKey ? "text" : "password"}
+            placeholder={TEXTS.privateKey.en}
+            value={privateKey}
+            onChange={(e) => setPrivateKey(e.target.value)}
+            required
+          />
+          <img
+            src={!showPrivateKey ? visibleIcon : notVisibleIcon}
+            onClick={() => setShowPrivateKey(!showPrivateKey)}
+            className="eye_icon"
+            alt={!showPrivateKey ? "Eye visible icon" : "Eye not visible icon"}
+          />
+        </div>
         <div className="info-container">
           <img src={InfoIcon} className="info-icon" alt="Info icon" />
           <span className="info-message">{TEXTS.createPrivateKeyInfo.en}</span>

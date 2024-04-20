@@ -231,6 +231,18 @@ export const TEXTS = {
       es: "Nueva llave:",
       en: "New Key:"
     },
+    errorNewBlock: {
+      es: "Error al guardar la nueva contraseña. Pruebe más tarde",
+      en: "Error saving new password. Try later"
+    },
+    errorPlatformExists: {
+      es: "La plataforma ya existe",
+      en: "The platform already exists"
+    },
+    errorSecurePassword: {
+      es: "La contraseña es insegura",
+      en: "The password is insecure"
+    },
     generator: {
       es: "Generador",
       en: "Generator"
