@@ -74,6 +74,10 @@
   .main-content {
     margin-top: 10vh;
   }
+
+  .locator-bar {
+    left: 3%;
+  }
 }
 
 @keyframes fadeIn {

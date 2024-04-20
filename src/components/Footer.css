@@ -43,5 +43,12 @@ footer span {
     .footer-content {
         justify-content: space-between;
         gap: 0;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 350px) {
+    .footer-content {
+        font-size: 0.7rem;
     }
 }

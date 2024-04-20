@@ -71,6 +71,7 @@
 
 .icon-tittle {
     display: flex;
+    align-items: center;
     gap: 10px;
     margin: 5px 5px;
 }
@@ -118,7 +119,7 @@
 
     .solutions-content p {
         font-size: 1rem;
-        margin-top: 5px;
+        margin-top: 15px;
     }
 
     .solutions-content > :nth-child(1) {
@@ -142,12 +143,20 @@
 
 @media (max-width: 420px) {
     .solutions-content {
-        margin-left: 2vh;
+        padding-left: 2vh;
+        margin-right: 2vh;
     }
 
     .solutions-content p {
         font-size: 1rem;
         margin-top: 5px;
+    }
+    
+    .icon-tittle * {
+        margin: 0;
+    }
+    .icon-paragraph {
+        padding-left: 20px;
     }
 
     .solutions-paragraph {

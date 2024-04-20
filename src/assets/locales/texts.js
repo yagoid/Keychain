@@ -83,6 +83,18 @@ export const TEXTS = {
       es: "Registrarse",
       en: "Sign up"
     },
+    privacyPolicyAccepted: {
+      es: "Acepto la política de privacidad",
+      en: "I accept the Privacy Policy"
+    },
+    privacyPolicySignup: {
+      es: "Registrándose, aceptas nuestra",
+      en: "By signing up, you agree to our"
+    },
+    close: {
+      es: "Cerrar",
+      en: "Close"
+    },
     questionAlreadyHaveAccount: {
       es: "¿Ya tienes una cuenta?",
       en: "Already have an account?"

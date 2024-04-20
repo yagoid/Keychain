@@ -16,16 +16,16 @@
     width: 250px;
 }
 
-.signup-heading h2 {
-    font-size: 1.6rem;
-    font-weight: 300;
-    margin-top: 0px;
-}
-
 .welcome-text {
     display: flex;
     flex-direction: column;
     margin-bottom: 300px;
+}
+
+.signup-heading h2 {
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-top: 0px;
 }
   
 .welcome-text span {
@@ -61,6 +61,25 @@
 }
 .correct-icon {
    width: 15px;
+}
+
+.privacy-policy-agree-text {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 0.8rem;
+    font-weight: 300;
+    opacity: 0.9;
+    bottom: 0;
+    margin-bottom: 10px;
+}
+.privacy-policy-agree-text span {
+    margin-left: 3px;
+}
+.privacy-policy-agree-text span:hover {
+    text-decoration: underline;
 }
 
 @media (max-width: 1509px) {
@@ -106,5 +125,32 @@
 
     .login-form {
         padding: 30px 40px;
+    }
+}
+
+@media (max-width: 400px) {
+    .login-logo {
+        position: relative;
       }
+
+    .signup-page {
+        padding-top: 0px;
+    }
+
+    .login-form {
+        padding: 40px 0px;
+        box-shadow: none;
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .welcome-text {
+        margin-bottom: 5px;
+    }
+
+    .privacy-policy-agree-text {
+        position: relative;
+        font-size: 0.7rem;
+        bottom: 1;
+        margin-bottom: 10px;
+    }
 }

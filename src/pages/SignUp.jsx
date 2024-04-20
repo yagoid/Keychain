@@ -194,6 +194,18 @@ export default function SignUpPage() {
           <span>{TEXTS.welcome.en}</span>
           <span> {TEXTS.keychain.en}</span>
         </div>
+        <span className="privacy-policy-agree-text">
+          {TEXTS.privacyPolicySignup.en}
+          <span>
+            <Link
+              to="https://disco-holly-d3f.notion.site/Pol-tica-de-privacidad-d0029853470a410695e0f871652cf316?pvs=4"
+              target="_blank"
+              style={{ color: "#84af6d" }}
+            >
+              {TEXTS.privacyPolicy.en}
+            </Link>
+          </span>
+        </span>
       </div>
     </div>
   );
