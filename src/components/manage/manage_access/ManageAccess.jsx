@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { privateKeyExists } from "../services/firebase/database";
-import { useAuth } from "./../contexts/authContext";
-import { TEXTS } from "../assets/locales/texts.js";
-import CreatePrivateKey from "./CreatePrivateKey.jsx";
-import visibleIcon from "./../assets/images/visible_icon.svg";
-import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
+import { privateKeyExists } from "./../../../services/firebase/database.js";
+import { useAuth } from "./../../../contexts/authContext/index.jsx";
+import { TEXTS } from "./../../../assets/locales/texts.js";
+import CreatePrivateKey from "../create_private_key/CreatePrivateKey.jsx";
+import visibleIcon from "./../../../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
 import "./ManageAccess.css";
 
 export default function ManageAccess({ setIsPrivateKeyValid }) {

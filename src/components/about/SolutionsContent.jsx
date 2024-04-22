@@ -1,7 +1,7 @@
-import { TEXTS } from "./../assets/locales/texts.js";
-import SecureIcon from "./../assets/images/secure_icon.svg";
-import GearIcon from "./../assets/images/gear_icon.svg";
-import FlowIcon from "./../assets/images/flow_icon.svg";
+import { TEXTS } from "./../../assets/locales/texts.js";
+import SecureIcon from "./../../assets/images/secure_icon.svg";
+import GearIcon from "./../../assets/images/gear_icon.svg";
+import FlowIcon from "./../../assets/images/flow_icon.svg";
 import "./SolutionsContent.css";
 
 const SolutionsParagraph = ({ tittle, text, icon }) => {

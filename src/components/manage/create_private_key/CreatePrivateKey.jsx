@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { changePrivateKeyState } from "../services/firebase/database";
-import { useAuth } from "./../contexts/authContext";
-import { TEXTS } from "../assets/locales/texts.js";
-import InfoIcon from "./../assets/images/info_icon.svg";
-import ErrorIcon from "./../assets/images/error_icon.svg";
-import visibleIcon from "./../assets/images/visible_icon.svg";
-import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
+import { changePrivateKeyState } from "../../../services/firebase/database.js";
+import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { TEXTS } from "../../../assets/locales/texts.js";
+import InfoIcon from "./../../../assets/images/info_icon.svg";
+import ErrorIcon from "./../../../assets/images/error_icon.svg";
+import visibleIcon from "./../../../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
 import "./CreatePrivateKey.css";
 
 export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {

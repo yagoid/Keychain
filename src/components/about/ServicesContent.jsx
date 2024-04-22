@@ -1,6 +1,6 @@
-import { TEXTS } from "./../assets/locales/texts.js";
-import BlockIcon from "./../assets/images/block_icon.svg";
-import BlockchainImage from "./../assets/images/blockchain_image1.svg";
+import { TEXTS } from "./../../assets/locales/texts.js";
+import BlockIcon from "./../../assets/images/block_icon.svg";
+import BlockchainImage from "./../../assets/images/blockchain_image1.svg";
 import "./ServicesContent.css";
 
 const ServicesParagraph = ({ tittle, text, icon }) => {

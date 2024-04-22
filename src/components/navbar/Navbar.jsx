@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "./../contexts/authContext";
-import { doSignOut } from "../services/firebase/auth";
-import { TEXTS } from "./../assets/locales/texts.js";
-import KeychainIcon from "./../assets/images/keychain.svg";
-import NavbarMenu from "./../assets/images/navbar_menu.svg";
-import MainButton from "./MainButton";
+import { useAuth } from "./../../contexts/authContext/index.jsx";
+import { doSignOut } from "../../services/firebase/auth.js";
+import { TEXTS } from "../../assets/locales/texts.js";
+import KeychainIcon from "./../../assets/images/keychain.svg";
+import NavbarMenu from "./../../assets/images/navbar_menu.svg";
+import MainButton from "../buttons/MainButton.jsx";
 import "./Navbar.css";
 
 export default function Navbar({

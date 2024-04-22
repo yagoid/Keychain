@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getPlatforms } from "../services/firebase/database";
-import { useAuth } from "./../contexts/authContext";
-import { TEXTS } from "../assets/locales/texts.js";
-import visibleIcon from "./../assets/images/visible_icon.svg";
-import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
-import chainLine from "./../assets/images/chain_line_blocks.svg";
+import { getPlatforms } from "../../../services/firebase/database.js";
+import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { TEXTS } from "../../../assets/locales/texts.js";
+import visibleIcon from "./../../../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
+import chainLine from "./../../../assets/images/chain_line_blocks.svg";
+import NewPasswordPupup from "../new_password/NewPasswordPopup.jsx";
 import "./PasswordManager.css";
-import "./Switch.css";
-import NewPasswordPupup from "./NewPasswordPopup.jsx";
+import "./../../buttons/Switch.css";
 
 export default function PasswordManager() {
   const { currentUser } = useAuth();

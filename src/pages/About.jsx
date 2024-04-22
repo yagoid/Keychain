@@ -4,14 +4,14 @@ import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import "./About.css";
 import hexagons1 from "./../assets/images/hexagons1.svg";
-import MainButton from "../components/MainButton";
-import MainText from "../components/MainText";
-import Navbar from "../components/Navbar";
-import LocatorBar from "../components/LocatorBar";
-import SolutionsContent from "../components/SolutionsContent.jsx";
-import ServicesContent from "../components/ServicesContent.jsx";
-import FoundersContent from "../components/FoundersContent.jsx";
-import Footer from "../components/Footer.jsx";
+import MainButton from "../components/buttons/MainButton.jsx";
+import MainText from "../components/texts/MainText.jsx";
+import Navbar from "../components/navbar/Navbar";
+import LocatorBar from "../components/locator_bar/LocatorBar.jsx";
+import SolutionsContent from "../components/about/SolutionsContent.jsx";
+import ServicesContent from "../components/about/ServicesContent.jsx";
+import FoundersContent from "../components/about/FoundersContent.jsx";
+import Footer from "../components/footer/Footer.jsx";
 
 export default function AboutPage() {
   const { userLoggedIn } = useAuth();

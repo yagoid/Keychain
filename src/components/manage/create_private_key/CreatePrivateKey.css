@@ -34,7 +34,7 @@
 }
 .popup-content-privatekey input {
     display: block;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
     width: 98%;
     padding: 8px;
     padding-right: 0px;

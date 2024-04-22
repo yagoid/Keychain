@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { addNewPlatform, platformExists } from "../services/firebase/database";
-import { useAuth } from "./../contexts/authContext";
-import { TEXTS } from "../assets/locales/texts.js";
-import ErrorIcon from "./../assets/images/error_icon.svg";
+import {
+  addNewPlatform,
+  platformExists,
+} from "../../../services/firebase/database.js";
+import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { TEXTS } from "../../../assets/locales/texts.js";
+import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import "./NewPasswordPopup.css";
 
 export default function NewPasswordPupup({ onClose, setPlatforms }) {

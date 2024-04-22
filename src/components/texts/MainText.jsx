@@ -1,4 +1,4 @@
-import { TEXTS } from "./../assets/locales/texts.js";
+import { TEXTS } from "../../assets/locales/texts.js";
 import "./MainText.css";
 
 export default function MainText() {

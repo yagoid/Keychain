@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { TEXTS } from "../assets/locales/texts.js";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./../contexts/authContext";
-import Navbar from "../components/Navbar";
-import LocatorBar from "../components/LocatorBar";
+import Navbar from "../components/navbar/Navbar";
+import LocatorBar from "../components/locator_bar/LocatorBar.jsx";
 import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Manage.css";
-import ManageAccess from "../components/ManageAccess.jsx";
-import PasswordManager from "../components/PasswordManager.jsx";
+import ManageAccess from "../components/manage/manage_access/ManageAccess.jsx";
+import PasswordManager from "../components/manage/password_manager/PasswordManager.jsx";
 
 export default function ManagePage() {
   const { userLoggedIn } = useAuth();

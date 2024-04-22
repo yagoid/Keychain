@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { TEXTS } from "./../assets/locales/texts.js";
+import { TEXTS } from "../../assets/locales/texts.js";
 import "./Footer.css";
 
 export default function Footer() {

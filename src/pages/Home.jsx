@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "../assets/locales/texts.js";
-import Navbar from "../components/Navbar";
-import MainButton from "../components/MainButton";
-import LocatorBar from "../components/LocatorBar";
+import Navbar from "../components/navbar/Navbar";
+import LocatorBar from "../components/locator_bar/LocatorBar.jsx";
 import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Home.css";
 
