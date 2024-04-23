@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-export function useFetch(endpoint) {
+export function useFetch() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [controller, setController] = useState(null);
 
-    const url = "http://localhost:5000/" + endpoint
-    console.log(url)
-
-    useEffect(() => {
+    const fetchData = async (endpoint) => {
+        const url = "http://localhost:5000/" + endpoint
         const abortController = new AbortController();
         setController(abortController)
         setLoading(true);
@@ -25,9 +23,7 @@ export function useFetch(endpoint) {
                 }
             })
             .finally(() => setLoading(false));
-
-        return () => abortController.abort();
-    }, []);
+    }
 
     const handleCancelRequest = () => {
         if (controller) {
@@ -36,5 +32,5 @@ export function useFetch(endpoint) {
         }
     }
 
-    return { data, loading, error, handleCancelRequest };
+    return { data, loading, error, fetchData };
 }

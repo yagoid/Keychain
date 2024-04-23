@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { privateKeyExists } from "./../../../services/firebase/database.js";
 import { useAuth } from "./../../../contexts/authContext/index.jsx";
 import { useFetch } from "./../../../hooks/useFetch";
+import { usePost } from "./../../../hooks/usePost";
 import { TEXTS } from "./../../../assets/locales/texts.js";
 import CreatePrivateKey from "../create_private_key/CreatePrivateKey.jsx";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
@@ -10,7 +11,18 @@ import "./ManageAccess.css";
 
 export default function ManageAccess({ setIsPrivateKeyValid }) {
   const { currentUser } = useAuth();
-  const { data, loading, error } = useFetch("get_chain");
+  // const { data, loading, error, fetchData } = useFetch();
+  // const { response, postloading, posterror, postData } = usePost();
+
+  // const handleButtonClick = () => {
+  //   fetchData("get_chain");
+  // postData("add_data", {
+  //   user: "Alonso",
+  //   platform: "Canvas",
+  //   key: "123456",
+  //   salt: "salt123",
+  // });
+  // };
 
   const [privateKey, setPrivateKey] = useState("");
   const [showPrivateKey, setShowPrivateKey] = useState(false);
