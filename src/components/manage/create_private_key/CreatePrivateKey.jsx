@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { changePrivateKeyState } from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { usePost } from "./../../../hooks/usePost";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import InfoIcon from "./../../../assets/images/info_icon.svg";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
@@ -10,6 +11,7 @@ import "./CreatePrivateKey.css";
 
 export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
   const { currentUser } = useAuth();
+  const { postResponse, postLoading, postError, postData } = usePost();
 
   const [privateKey, setPrivateKey] = useState("");
   const [showPrivateKey, setShowPrivateKey] = useState(false);
@@ -25,6 +27,8 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
       changePrivateKeyState(currentUser.uid)
         .then(() => {
           console.log("Estado cambiado");
+          // Añadir el nuevo usuario a la blockchain
+          // addUserInBlockchian();
           // Guardar la clave privada en sessionStorage
           sessionStorage.setItem("privateKey", privateKey);
           setIsPrivateKeyValid(true);
@@ -38,6 +42,14 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
 
     // Cerrar el popup
     onClose();
+  };
+
+  const addUserInBlockchian = () => {
+    postData("add_user", {
+      user: currentUser.uid,
+      encrypted_data: "yago",
+      salt: "salt123",
+    });
   };
 
   return (
