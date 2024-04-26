@@ -33,9 +33,9 @@ export const removePlatform = async (uid, platform) => {
   });
 };
 
-export const changePrivateKeyState = async (uid) => {
+export const changePrivateKeyState = async (uid, state) => {
   return updateDoc(doc(db, "users", uid), {
-    private_key: true
+    private_key: state
   });
 };
 
@@ -51,6 +51,21 @@ export const getPlatforms = async (uid) => {
   } catch (error) {
     console.error("Error:", error);
     throw new Error("Error al consultar las plataformas");
+  }
+};
+
+export const getUsername = async (uid) => {
+  try {
+    const usersDoc = doc(db, "users", uid);
+    const docSnap = await getDoc(usersDoc);
+    if (docSnap.exists()) {
+      return docSnap.data().username
+    } else {
+      console.log("No such user!");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw new Error("Error al consultar el nombre de usuario");
   }
 };
 

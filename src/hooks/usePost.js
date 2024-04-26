@@ -5,7 +5,7 @@ export function usePost() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const postData = async (endpoint, data) => {
+    const postData = (endpoint, data) => {
         const url = "http://localhost:5000/" + endpoint
         setLoading(true);
 

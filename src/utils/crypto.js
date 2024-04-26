@@ -1,16 +1,15 @@
 import CryptoJS from "crypto-js";
 
-export const generateDerivedKey = (privateKey) => {
-    var salt = CryptoJS.lib.WordArray.random(128 / 8);
-    return CryptoJS.PBKDF2(privateKey, salt, { keySize: 512 / 32, iterations: 1000 });
+export const generateDerivedKey = (privateKey, salt) => {
+    return CryptoJS.PBKDF2(privateKey, salt, { keySize: 512 / 32, iterations: 1000 }).toString(CryptoJS.enc.Hex);
 };
 
-export const encryptPrivateKey = (password, derivedKey) => {
-    return CryptoJS.AES.encrypt(password, derivedKey).toString();
+export const encryptPrivateKey = (messageToEncrypt, key) => {
+    return CryptoJS.AES.encrypt(messageToEncrypt, key).toString();
 };
 
-export const decryptPrivateKey = (encryptedPassword, derivedKey) => {
-    const bytes = CryptoJS.AES.decrypt(encryptedPassword, derivedKey);
+export const decryptPrivateKey = (encryptedMessage, key) => {
+    const bytes = CryptoJS.AES.decrypt(encryptedMessage, key);
     return bytes.toString(CryptoJS.enc.Utf8);
 };
 
