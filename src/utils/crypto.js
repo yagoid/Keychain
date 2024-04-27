@@ -1,15 +1,23 @@
 import CryptoJS from "crypto-js";
 
 export const generateDerivedKey = (privateKey, salt) => {
-    return CryptoJS.PBKDF2(privateKey, salt, { keySize: 512 / 32, iterations: 1000 }).toString(CryptoJS.enc.Hex);
+    return CryptoJS.PBKDF2(privateKey, salt, { keySize: 512 / 32, iterations: 1000 });
 };
 
-export const encryptPrivateKey = (messageToEncrypt, key) => {
-    return CryptoJS.AES.encrypt(messageToEncrypt, key).toString();
+export const encryptMessage = (messageToEncrypt, key, iv) => {
+    return CryptoJS.AES.encrypt(messageToEncrypt, key, {
+        iv: iv,
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+    });
 };
 
-export const decryptPrivateKey = (encryptedMessage, key) => {
-    const bytes = CryptoJS.AES.decrypt(encryptedMessage, key);
+export const decryptMessage = (encryptedMessage, key, iv) => {
+    const bytes = CryptoJS.AES.decrypt(encryptedMessage, key, {
+        iv: iv,
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+    });
     return bytes.toString(CryptoJS.enc.Utf8);
 };
 

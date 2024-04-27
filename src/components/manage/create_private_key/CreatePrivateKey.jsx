@@ -7,8 +7,8 @@ import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { usePost } from "./../../../hooks/usePost";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import {
-  encryptPrivateKey,
-  decryptPrivateKey,
+  encryptMessage,
+  decryptMessage,
   generateDerivedKey,
   hashWithSHA3,
 } from "../../../utils/crypto";
@@ -53,9 +53,6 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
           console.log("Estado cambiado");
           // Añadir el nuevo usuario a la blockchain
           addUserInBlockchian();
-          // Guardar la clave privada en sessionStorage
-          sessionStorage.setItem("privateKey", privateKey);
-          setIsPrivateKeyValid(true);
         })
         .catch((error) => {
           // Manejar cualquier error de registro de username
@@ -68,58 +65,48 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
     onClose();
   };
 
-  const addUserInBlockchian = () => {
+  const addUserInBlockchian = async () => {
     // Cifrar los datos antes de enviarlos
     const salt = CryptoJS.lib.WordArray.random(128 / 8);
-
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
     const kdfPrivateKey = generateDerivedKey(privateKey, salt);
     const hashUsername = hashWithSHA3(username);
     const hashUidUser = hashWithSHA3(currentUser.uid);
 
-    console.log("KDF: ", generateDerivedKey(privateKey, salt));
-    console.log("Encriptar: ", encryptPrivateKey(hashUsername, kdfPrivateKey));
-    console.log(
-      "Desencriptar: ",
-      decryptPrivateKey(
-        encryptPrivateKey(hashUsername, kdfPrivateKey),
-        kdfPrivateKey
-      )
-    );
-    console.log("SHA-3: ", hashWithSHA3(currentUser.uid));
+    const encryptedMessage = encryptMessage(hashUsername, kdfPrivateKey, iv);
+    // const encryptedHex = CryptoJS.enc.Base64.parse(encryptedMessage.toString());
+
+    // console.log("KDF: ", kdfPrivateKey);
+    // console.log("Encriptado: ", encryptedMessage);
 
     // Enviar los datos a la blockchain
-    postData("add_user", {
-      uid_user: kdfPrivateKey,
-      encrypted_data: hashUsername,
-      salt: salt,
-    });
-    // try {
-    //   postData("add_user", {
-    //     user: kdfPrivateKey,
-    //     encrypted_data: hashUsername,
-    //     salt: hashUidUser,
-    //   });
-    // } catch (error) {
-    //   console.log("Error al enviar datos a la blockchian", error);
+    try {
+      postData("add_user", {
+        uid_user: hashUidUser,
+        encrypted_data: encryptedMessage.toString(),
+        salt: salt.toString()
+      });
+      // Guardar la clave privada en sessionStorage
+      sessionStorage.setItem("privateKey", privateKey);
+      setIsPrivateKeyValid(true);
+    } catch (error) {
+      console.log("Error al enviar datos a la blockchian", error);
 
-    //   changePrivateKeyState(currentUser.uid, false)
-    //     .then(() => {
-    //       console.log("Estado cambiado");
-    //       // Eliminar un dato del sessionStorage
-    //       sessionStorage.removeItem("privateKey");
-    //       setIsPrivateKeyValid(false);
-    //     })
-    //     .catch((error) => {
-    //       // Manejar cualquier error de registro de username
-    //       console.log("Error al guardar el estado:", error);
-    //       setIsSaving(false);
-    //     });
-    // }
+      changePrivateKeyState(currentUser.uid, false)
+        .then(() => {
+          console.log("Estado de private key revertido");
+        })
+        .catch((error) => {
+          // Manejar cualquier error de registro de username
+          console.log("Error al guardar el estado:", error);
+          setIsSaving(false);
+        });
+    }
   };
 
   return (
     <div className="popup-overlay">
-      <form className="popup-content-privatekey" onSubmit={addUserInBlockchian}>
+      <form className="popup-content-privatekey" onSubmit={handleCreatePrivateKey}>
         <h2>{TEXTS.createPrivateKey.en}</h2>
         <div className="show-password-container">
           <input
