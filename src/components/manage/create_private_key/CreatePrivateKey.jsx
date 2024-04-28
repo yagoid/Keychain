@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  changePrivateKeyState,
-  getUsername,
-} from "../../../services/firebase/database.js";
+import { changePrivateKeyState, getUsername } from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
-import { usePost } from "./../../../hooks/usePost";
+import { postData } from "./../../../services/blockchain/api";
 import { TEXTS } from "../../../assets/locales/texts.js";
-import {
-  encryptMessage,
-  decryptMessage,
-  generateDerivedKey,
-  hashWithSHA3,
-} from "../../../utils/crypto";
+import { encryptMessage, generateDerivedKey,hashWithSHA3 } from "../../../utils/crypto";
 import CryptoJS from "crypto-js";
 import InfoIcon from "./../../../assets/images/info_icon.svg";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
@@ -21,7 +13,6 @@ import "./CreatePrivateKey.css";
 
 export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
   const { currentUser } = useAuth();
-  const { postResponse, postLoading, postError, postData } = usePost();
 
   const [privateKey, setPrivateKey] = useState("");
   const [username, setUsername] = useState("");
@@ -60,12 +51,9 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
           setIsSaving(false);
         });
     }
-
-    // Cerrar el popup
-    onClose();
   };
 
-  const addUserInBlockchian = async () => {
+  const addUserInBlockchian = () => {
     // Cifrar los datos antes de enviarlos
     const salt = CryptoJS.lib.WordArray.random(128 / 8);
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
@@ -80,28 +68,34 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
     // console.log("Encriptado: ", encryptedMessage);
 
     // Enviar los datos a la blockchain
-    try {
-      postData("add_user", {
-        uid_user: hashUidUser,
-        encrypted_data: encryptedMessage.toString(),
-        salt: salt.toString()
-      });
-      // Guardar la clave privada en sessionStorage
-      sessionStorage.setItem("privateKey", privateKey);
-      setIsPrivateKeyValid(true);
-    } catch (error) {
-      console.log("Error al enviar datos a la blockchian", error);
+    postData("add_user", {
+      uid_user: hashUidUser,
+      encrypted_data: encryptedMessage.toString(),
+      salt: salt.toString()
+      })
+      .then((response) => {response.json()})
+      .then((data) => {
+        console.log(data)
+        // Guardar la clave privada en sessionStorage
+        sessionStorage.setItem("privateKey", privateKey);
+        setIsPrivateKeyValid(true);
 
-      changePrivateKeyState(currentUser.uid, false)
-        .then(() => {
-          console.log("Estado de private key revertido");
-        })
-        .catch((error) => {
-          // Manejar cualquier error de registro de username
-          console.log("Error al guardar el estado:", error);
-          setIsSaving(false);
-        });
-    }
+        // Cerrar el popup
+        onClose();
+      })
+      .catch((error) => {
+        console.log("Error al enviar datos a la blockchian", error);
+
+        changePrivateKeyState(currentUser.uid, false)
+          .then(() => {
+            console.log("Estado de private key revertido");
+          })
+          .catch((error) => {
+            // Manejar cualquier error de registro de username
+            console.log("Error al guardar el estado:", error);
+          })
+      })
+      .finally(() => setIsSaving(false));
   };
 
   return (

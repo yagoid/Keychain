@@ -20,6 +20,7 @@ export function usePost() {
             .then((data) => setResponse(data))
             .catch((error) => {
                 setError(error)
+                console.log(error)
             })
             .finally(() => setLoading(false));
     }
