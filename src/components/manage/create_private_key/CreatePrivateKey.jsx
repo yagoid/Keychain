@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { changePrivateKeyState, getUsername } from "../../../services/firebase/database.js";
+import {
+  changePrivateKeyState,
+  getUsername,
+} from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { postData } from "./../../../services/blockchain/api";
 import { TEXTS } from "../../../assets/locales/texts.js";
-import { encryptMessage, generateDerivedKey,hashWithSHA3 } from "../../../utils/crypto";
+import {
+  encryptMessage,
+  generateDerivedKey,
+  hashWithSHA3,
+} from "../../../utils/crypto";
 import CryptoJS from "crypto-js";
 import InfoIcon from "./../../../assets/images/info_icon.svg";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
@@ -71,11 +78,14 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
     postData("add_user", {
       uid_user: hashUidUser,
       encrypted_data: encryptedMessage.toString(),
-      salt: salt.toString()
+      salt: salt.toString(),
+      iv: iv.toString(),
+    })
+      .then((response) => {
+        response.json();
       })
-      .then((response) => {response.json()})
       .then((data) => {
-        console.log(data)
+        console.log(data);
         // Guardar la clave privada en sessionStorage
         sessionStorage.setItem("privateKey", privateKey);
         setIsPrivateKeyValid(true);
@@ -85,6 +95,7 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
       })
       .catch((error) => {
         console.log("Error al enviar datos a la blockchian", error);
+        setErrorMessage(TEXTS.errorCreatePrivateKey.en);
 
         changePrivateKeyState(currentUser.uid, false)
           .then(() => {
@@ -93,14 +104,17 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
           .catch((error) => {
             // Manejar cualquier error de registro de username
             console.log("Error al guardar el estado:", error);
-          })
+          });
       })
       .finally(() => setIsSaving(false));
   };
 
   return (
     <div className="popup-overlay">
-      <form className="popup-content-privatekey" onSubmit={handleCreatePrivateKey}>
+      <form
+        className="popup-content-privatekey"
+        onSubmit={handleCreatePrivateKey}
+      >
         <h2>{TEXTS.createPrivateKey.en}</h2>
         <div className="show-password-container">
           <input
@@ -117,16 +131,16 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
             alt={!showPrivateKey ? "Eye visible icon" : "Eye not visible icon"}
           />
         </div>
-        <div className="info-container">
-          <img src={InfoIcon} className="info-icon" alt="Info icon" />
-          <span className="info-message">{TEXTS.createPrivateKeyInfo.en}</span>
-        </div>
         {errorMessage != "" && (
-          <div className="error-container">
+          <div className="error-container" style={{ marginTop: "20px" }}>
             <img src={ErrorIcon} className="error-icon" alt="Error icon" />
             <span className="error-message">{errorMessage}</span>
           </div>
         )}
+        <div className="info-container">
+          <img src={InfoIcon} className="info-icon" alt="Info icon" />
+          <span className="info-message">{TEXTS.createPrivateKeyInfo.en}</span>
+        </div>
         <div className="new-block-button-group">
           <button type="submit">{TEXTS.save.en}</button>
         </div>

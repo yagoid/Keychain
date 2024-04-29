@@ -183,6 +183,10 @@ export const TEXTS = {
       es: "Esta clave privada sirve para cifrar y descifrar todas sus contraseñas, guardala en un sitio seguro. Si la pierde, perderá el acceso a todas las contraseñas que regustre",
       en: "This private key is used to encrypt and decrypt all your passwords, keep it in a secure place. If you lose it, you will lose access to all passwords you save."
     },
+    errorCreatePrivateKey: {
+      es: "Error al crear la clave privada. Compruebe la conexión a internet o intentelo más tarde",
+      en: "Error creating private key. Check your internet connection or try again later"
+    },
     managePasswords: {
       es: "Gestión de Contraseñas",
       en: "Manage Passwords"

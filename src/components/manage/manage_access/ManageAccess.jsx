@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { privateKeyExists } from "./../../../services/firebase/database.js";
+import {
+  privateKeyExists,
+  getUsername,
+} from "./../../../services/firebase/database.js";
 import { useAuth } from "./../../../contexts/authContext/index.jsx";
 import { useFetch } from "./../../../hooks/useFetch";
-import { usePost } from "./../../../hooks/usePost";
+import { fetchData } from "./../../../services/blockchain/api";
+import {
+  encryptMessage,
+  generateDerivedKey,
+  hashWithSHA3,
+} from "../../../utils/crypto";
 import { TEXTS } from "./../../../assets/locales/texts.js";
 import CreatePrivateKey from "../create_private_key/CreatePrivateKey.jsx";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
@@ -25,22 +33,25 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
   // };
 
   const [privateKey, setPrivateKey] = useState("");
+  const [username, setUsername] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [isChecking, setIsChecking] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [isOpenNewPasswordPopup, setIsOpenNewPasswordPopup] = useState(false);
 
-  const handleKeyVerify = (e) => {
-    e.preventDefault();
-    // Aquí puedes realizar la lógica de autenticación, por ejemplo, enviar los datos a un servidor
-    console.log("PrivateKey:", privateKey);
-
-    // Guardar la clave privada en sessionStorage
-    sessionStorage.setItem("privateKey", privateKey);
-    setIsPrivateKeyValid(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsOpenNewPasswordPopup(false);
-  };
+  // Consultar el nombre de usuario
+  useEffect(() => {
+    getUsername(currentUser.uid)
+      .then((name) => {
+        // Guardar el username
+        setUsername(name);
+      })
+      .catch((error) => {
+        // Manejar cualquier error de consulta
+        console.log("Error consultando el nombre de usuario", error);
+      });
+  }, []);
 
   // Comprobar si el usuario tiene registrada una clave privada
   useEffect(() => {
@@ -54,16 +65,57 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
           const storedPrivateKey = sessionStorage.getItem("privateKey");
           if (storedPrivateKey) {
             setPrivateKey(storedPrivateKey);
+          } else {
+            getUserData();
           }
         }
       })
       .catch((error) => {
-        console.error(
+        console.log(
           "Error al verificar la existencia de la clave privada:",
           error
         );
       });
   }, []);
+
+  const getUserData = () => {
+    const hashUidUser = hashWithSHA3(currentUser.uid);
+    fetchData(`get_user?uid_user=${hashUidUser}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setUserData(data.data);
+      })
+      .catch((error) => {
+        if (error === "AbortError") {
+          console.log("Request cancelled");
+        } else {
+          console.log("Error al recibir los datos del usuario", error);
+          // setErrorMessage(TEXTS.errorCreatePrivateKey.en);
+        }
+      })
+      .finally(() => setIsChecking(false));
+  };
+
+  // Comprobar si la clave privada es correcta
+  const handleKeyVerify = (e) => {
+    e.preventDefault();
+    // Aquí puedes realizar la lógica de autenticación, por ejemplo, enviar los datos a un servidor
+    console.log("PrivateKey:", privateKey);
+
+    if (!isChecking && userData) {
+      const hashUidUser = hashWithSHA3(currentUser.uid);
+
+      // Guardar la clave privada en sessionStorage
+      sessionStorage.setItem("privateKey", privateKey);
+      setIsPrivateKeyValid(true);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setIsOpenNewPasswordPopup(false);
+  };
 
   return (
     <div className="manage-access-section">

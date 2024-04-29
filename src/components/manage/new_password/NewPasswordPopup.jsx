@@ -3,6 +3,7 @@ import {
   addNewPlatform,
   platformExists,
 } from "../../../services/firebase/database.js";
+import { postData } from "./../../../services/blockchain/api";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
@@ -40,6 +41,45 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
         setIsSaving(false);
       }
     }
+  };
+
+  const addPasswordInBlockchian = () => {
+    // Cifrar los datos antes de enviarlos
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const salt = "asdf";
+    const privateKey = sessionStorage.getItem("privateKey");
+    const kdfPrivateKey = generateDerivedKey(privateKey, salt);
+    const encryptedPassword = encryptMessage(password, kdfPrivateKey, iv);
+    const hashUsername = hashWithSHA3(currentUser.uid);
+    const hashPlatform = hashWithSHA3(platform);
+
+    // const encryptedHex = CryptoJS.enc.Base64.parse(encryptedMessage.toString());
+
+    // console.log("KDF: ", kdfPrivateKey);
+    // console.log("Encriptado: ", encryptedMessage);
+
+    // Enviar los datos a la blockchain
+    postData("add_data", {
+      user: hashUsername,
+      platform: hashPlatform,
+      key: encryptedPassword.toString(),
+      iv: iv.toString(),
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        console.log("contraseña creada!");
+
+        // Cerrar el popup
+        onClose();
+      })
+      .catch((error) => {
+        console.log("Error al enviar datos a la blockchian", error);
+        setErrorMessage(TEXTS.errorCreatePrivateKey.en);
+      })
+      .finally(() => setIsSaving(false));
   };
 
   const handleCancel = (e) => {
