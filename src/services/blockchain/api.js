@@ -17,11 +17,4 @@ export const fetchData = async (endpoint) => {
     const abortController = new AbortController();
 
     return fetch(url, { signal: abortController.signal })
-        .catch((error) => {
-            if (error === "AbortError") {
-                console.log("Request cancelled")
-            } else {
-                setError(error)
-            }
-        })
 };

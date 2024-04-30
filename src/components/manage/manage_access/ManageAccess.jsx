@@ -11,6 +11,7 @@ import {
   generateDerivedKey,
   hashWithSHA3,
 } from "../../../utils/crypto";
+import CryptoJS from "crypto-js";
 import { TEXTS } from "./../../../assets/locales/texts.js";
 import CreatePrivateKey from "../create_private_key/CreatePrivateKey.jsx";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
@@ -85,7 +86,11 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
         return response.json();
       })
       .then((data) => {
-        setUserData(data.data);
+        if (data.data) {
+          setUserData(data.data);
+        } else {
+          console.log(data);
+        }
       })
       .catch((error) => {
         if (error === "AbortError") {
@@ -101,15 +106,31 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
   // Comprobar si la clave privada es correcta
   const handleKeyVerify = (e) => {
     e.preventDefault();
-    // Aquí puedes realizar la lógica de autenticación, por ejemplo, enviar los datos a un servidor
+
     console.log("PrivateKey:", privateKey);
 
     if (!isChecking && userData) {
-      const hashUidUser = hashWithSHA3(currentUser.uid);
+      const salt = CryptoJS.enc.Hex.parse(userData.salt);
+      const iv = CryptoJS.enc.Hex.parse(userData.iv);
+      const encryptedData = userData.encrypted_data;
 
-      // Guardar la clave privada en sessionStorage
-      sessionStorage.setItem("privateKey", privateKey);
-      setIsPrivateKeyValid(true);
+      const kdfPrivateKey = generateDerivedKey(privateKey, salt);
+      const hashUsername = hashWithSHA3(username);
+      const encryptedMessage = encryptMessage(
+        hashUsername,
+        kdfPrivateKey,
+        iv
+      ).toString();
+
+      if (encryptedData === encryptedMessage) {
+        // Guardar la clave privada en sessionStorage
+        // sessionStorage.setItem("privateKey", privateKey);
+        // setIsPrivateKeyValid(true);
+      } else {
+        setErrorMessage(TEXTS.errorWrongPrivateKey.en);
+      }
+
+      setIsChecking(false);
     }
   };
 

@@ -247,6 +247,10 @@ export const TEXTS = {
       es: "Nueva llave:",
       en: "New Key:"
     },
+    errorWrongPrivateKey: {
+      es: "La clave privada es incorrecta",
+      en: "The private key is incorrect"
+    },
     errorNewBlock: {
       es: "Error al guardar la nueva contraseña. Pruebe más tarde",
       en: "Error saving new password. Try later"
