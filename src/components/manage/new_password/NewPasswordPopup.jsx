@@ -4,13 +4,21 @@ import {
   platformExists,
 } from "../../../services/firebase/database.js";
 import { postData } from "./../../../services/blockchain/api";
-import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { useAuth } from "../../../contexts/authContext/index";
+import { useKey } from "./../../../contexts/keyContext/keyContext";
+import {
+  decryptMessage,
+  encryptMessage,
+  hashWithSHA3,
+} from "../../../utils/crypto";
+import CryptoJS from "crypto-js";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import "./NewPasswordPopup.css";
 
 export default function NewPasswordPupup({ onClose, setPlatforms }) {
   const { currentUser } = useAuth();
+  const { contextPrivateKey } = useKey();
 
   const [platform, setPlatform] = useState("");
   const [password, setPassword] = useState("");
@@ -24,10 +32,8 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
       if (!(await platformExists(currentUser.uid, platform))) {
         addNewPlatform(currentUser.uid, platform)
           .then(() => {
-            console.log("Contraseña añadida!");
-            setPlatforms(platform);
-            // Cerrar el popup
-            onClose();
+            console.log("Contraseña añadida a firebase");
+            addPasswordInBlockchian();
           })
           .catch((error) => {
             // Manejar cualquier error de registro de username
@@ -44,42 +50,59 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
   };
 
   const addPasswordInBlockchian = () => {
-    // Cifrar los datos antes de enviarlos
-    const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const salt = "asdf";
-    const privateKey = sessionStorage.getItem("privateKey");
-    const kdfPrivateKey = generateDerivedKey(privateKey, salt);
-    const encryptedPassword = encryptMessage(password, kdfPrivateKey, iv);
-    const hashUsername = hashWithSHA3(currentUser.uid);
-    const hashPlatform = hashWithSHA3(platform);
+    // Verificar si hay una clave privada guardada en sessionStorage
+    const storedPrivateKey = sessionStorage.getItem("privateKey");
+    if (storedPrivateKey || contextPrivateKey != "") {
+      // Cifrar los datos antes de enviarlos
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const hashUsername = hashWithSHA3(currentUser.uid);
+      const hashPlatform = hashWithSHA3(platform);
 
-    // const encryptedHex = CryptoJS.enc.Base64.parse(encryptedMessage.toString());
+      // Encriptar la clave privada para guardarla
+      const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
 
-    // console.log("KDF: ", kdfPrivateKey);
-    // console.log("Encriptado: ", encryptedMessage);
+      // Desencriptar la clave privada
+      const decryptedPrivateKey = decryptMessage(
+        contextPrivateKey,
+        defaultEncryptionKey,
+        CryptoJS.enc.Hex.parse("iv")
+      );
 
-    // Enviar los datos a la blockchain
-    postData("add_data", {
-      user: hashUsername,
-      platform: hashPlatform,
-      key: encryptedPassword.toString(),
-      iv: iv.toString(),
-    })
-      .then((response) => {
-        response.json();
+      // Encriptar la contraseña
+      const encryptedMessage = encryptMessage(
+        password,
+        CryptoJS.enc.Hex.parse(decryptedPrivateKey),
+        iv
+      );
+
+      // Enviar los datos a la blockchain
+      postData("add_data", {
+        user: hashUsername,
+        platform: hashPlatform,
+        key: encryptedMessage,
+        iv: iv.toString(),
       })
-      .then((data) => {
-        console.log(data);
-        console.log("contraseña creada!");
+        .then((response) => {
+          response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          console.log("contraseña creada!");
 
-        // Cerrar el popup
-        onClose();
-      })
-      .catch((error) => {
-        console.log("Error al enviar datos a la blockchian", error);
-        setErrorMessage(TEXTS.errorCreatePrivateKey.en);
-      })
-      .finally(() => setIsSaving(false));
+          // setPlatforms(platform);
+          setPlatforms((prevPlatforms) => [...prevPlatforms, platform]);
+
+          // Cerrar el popup
+          onClose();
+        })
+        .catch((error) => {
+          console.log("Error al enviar datos a la blockchian", error);
+          setErrorMessage(TEXTS.errorCreatePrivateKey.en);
+        })
+        .finally(() => {
+          setIsSaving(false);
+        });
+    }
   };
 
   const handleCancel = (e) => {

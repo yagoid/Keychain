@@ -3,23 +3,26 @@ import {
   privateKeyExists,
   getUsername,
 } from "./../../../services/firebase/database.js";
-import { useAuth } from "./../../../contexts/authContext/index.jsx";
-import { useFetch } from "./../../../hooks/useFetch";
+import { useAuth } from "./../../../contexts/authContext/index";
+import { useKey } from "./../../../contexts/keyContext/keyContext";
 import { fetchData } from "./../../../services/blockchain/api";
 import {
   encryptMessage,
   generateDerivedKey,
   hashWithSHA3,
+  generateEncryptionKey,
 } from "../../../utils/crypto";
 import CryptoJS from "crypto-js";
 import { TEXTS } from "./../../../assets/locales/texts.js";
 import CreatePrivateKey from "../create_private_key/CreatePrivateKey.jsx";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
+import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import "./ManageAccess.css";
 
 export default function ManageAccess({ setIsPrivateKeyValid }) {
   const { currentUser } = useAuth();
+  const { contextPrivateKey, setContextPrivateKey } = useKey();
   // const { data, loading, error, fetchData } = useFetch();
   // const { response, postloading, posterror, postData } = usePost();
 
@@ -64,7 +67,7 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
         } else {
           // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
           const storedPrivateKey = sessionStorage.getItem("privateKey");
-          if (storedPrivateKey) {
+          if (storedPrivateKey || contextPrivateKey != "") {
             setPrivateKey(storedPrivateKey);
           } else {
             getUserData();
@@ -107,8 +110,6 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
   const handleKeyVerify = (e) => {
     e.preventDefault();
 
-    console.log("PrivateKey:", privateKey);
-
     if (!isChecking && userData) {
       const salt = CryptoJS.enc.Hex.parse(userData.salt);
       const iv = CryptoJS.enc.Hex.parse(userData.iv);
@@ -116,20 +117,29 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
 
       const kdfPrivateKey = generateDerivedKey(privateKey, salt);
       const hashUsername = hashWithSHA3(username);
-      const encryptedMessage = encryptMessage(
-        hashUsername,
-        kdfPrivateKey,
-        iv
-      ).toString();
+      const encryptedMessage = encryptMessage(hashUsername, kdfPrivateKey, iv);
 
       if (encryptedData === encryptedMessage) {
-        // Guardar la clave privada en sessionStorage
-        // sessionStorage.setItem("privateKey", privateKey);
-        // setIsPrivateKeyValid(true);
-      } else {
-        setErrorMessage(TEXTS.errorWrongPrivateKey.en);
-      }
+        // Encriptar la clave privada para guardarla
+        const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
+        const encryptedMessage = encryptMessage(
+          kdfPrivateKey.toString(),
+          // "yago",
+          defaultEncryptionKey,
+          // "yago",
+          CryptoJS.enc.Hex.parse("iv")
+        );
 
+        // Guardar la clave privada en sessionStorage y en el contexto
+        // sessionStorage.setItem("privateKey", encryptedMessage);
+        setContextPrivateKey(encryptedMessage);
+
+        setIsPrivateKeyValid(true);
+      } else {
+        // La clave privada es errónea
+        setErrorMessage(TEXTS.errorWrongPrivateKey.en);
+        console.log(TEXTS.errorWrongPrivateKey.es);
+      }
       setIsChecking(false);
     }
   };
@@ -160,6 +170,12 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
             alt={!showPrivateKey ? "Eye visible icon" : "Eye not visible icon"}
           />
         </div>
+        {errorMessage != "" && (
+          <div className="error-container" style={{ marginTop: "20px" }}>
+            <img src={ErrorIcon} className="error-icon" alt="Error icon" />
+            <span className="error-message">{errorMessage}</span>
+          </div>
+        )}
         <button type="submit" className="access-btn">
           {TEXTS.enter.en}
         </button>

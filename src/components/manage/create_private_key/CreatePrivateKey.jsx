@@ -4,6 +4,7 @@ import {
   getUsername,
 } from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { useKey } from "./../../../contexts/keyContext/keyContext";
 import { postData } from "./../../../services/blockchain/api";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import {
@@ -20,6 +21,7 @@ import "./CreatePrivateKey.css";
 
 export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
   const { currentUser } = useAuth();
+  const { setContextPrivateKey } = useKey();
 
   const [privateKey, setPrivateKey] = useState("");
   const [username, setUsername] = useState("");
@@ -77,7 +79,7 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
     // Enviar los datos a la blockchain
     postData("add_user", {
       uid_user: hashUidUser,
-      encrypted_data: encryptedMessage.toString(),
+      encrypted_data: encryptedMessage,
       salt: salt.toString(),
       iv: iv.toString(),
     })
@@ -86,8 +88,17 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
       })
       .then((data) => {
         console.log(data);
-        // Guardar la clave privada en sessionStorage
-        sessionStorage.setItem("privateKey", privateKey);
+
+        // Encriptar la clave privada para guardarla
+        const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
+        const encryptedMessage = encryptMessage(
+          kdfPrivateKey.toString(),
+          defaultEncryptionKey,
+          CryptoJS.enc.Hex.parse("iv")
+        );
+        // Guardar la clave privada en sessionStorage y el contexto
+        // sessionStorage.setItem("privateKey", privateKey);
+        setContextPrivateKey(encryptedMessage);
         setIsPrivateKeyValid(true);
 
         // Cerrar el popup
@@ -103,7 +114,10 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
           })
           .catch((error) => {
             // Manejar cualquier error de registro de username
-            console.log("Error al guardar el estado:", error);
+            console.log(
+              "Error al revertir el estado de la private key:",
+              error
+            );
           });
       })
       .finally(() => setIsSaving(false));

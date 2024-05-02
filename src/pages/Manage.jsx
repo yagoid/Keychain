@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TEXTS } from "../assets/locales/texts.js";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./../contexts/authContext";
+import { useKey } from "./../contexts/keyContext/keyContext";
 import Navbar from "../components/navbar/Navbar";
 import LocatorBar from "../components/locator_bar/LocatorBar.jsx";
 import hexagons2 from "./../assets/images/hexagons2.svg";
@@ -11,6 +12,7 @@ import PasswordManager from "../components/manage/password_manager/PasswordManag
 
 export default function ManagePage() {
   const { userLoggedIn } = useAuth();
+  const { contextPrivateKey } = useKey();
 
   const [nameActiveSection, setNameActiveSection] = useState("Manage");
   const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(false);
@@ -20,11 +22,9 @@ export default function ManagePage() {
   useEffect(() => {
     // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
     const storedPrivateKey = sessionStorage.getItem("privateKey");
-    if (storedPrivateKey) {
+    if (storedPrivateKey || contextPrivateKey != "") {
       setIsPrivateKeyValid(true);
     }
-
-    console.log(storedPrivateKey);
   }, []);
 
   return (

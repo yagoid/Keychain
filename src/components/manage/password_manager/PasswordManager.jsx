@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getPlatforms } from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
+import { useKey } from "./../../../contexts/keyContext/keyContext";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
@@ -11,6 +12,7 @@ import "./../../buttons/Switch.css";
 
 export default function PasswordManager() {
   const { currentUser } = useAuth();
+  const { contextPrivateKey } = useKey();
 
   const [privateKey, setPrivateKey] = useState("");
   const [platforms, setPlatforms] = useState([]);
@@ -42,6 +44,43 @@ export default function PasswordManager() {
       proofOfWork: "1476",
     },
   ]);
+
+  // La vista se cambia automáticamente a vista de bloque
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 970) {
+        setIsBlockView(true);
+      }
+    };
+    handleResize();
+    // Agregamos un listener para el evento de cambio de tamaño de la ventana
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Consultar las plataformas registradas
+  useEffect(() => {
+    getPlatforms(currentUser.uid)
+      .then((platforms) => {
+        // Guardar las plataformas
+        setPlatforms(platforms);
+      })
+      .catch((error) => {
+        // Manejar cualquier error de consulta
+        console.log("Error al guardar las platafromas:", error);
+      });
+  }, []);
+
+  // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
+  useEffect(() => {
+    const storedPrivateKey = sessionStorage.getItem("privateKey");
+    if (storedPrivateKey || contextPrivateKey != "") {
+      setPrivateKey(storedPrivateKey);
+    }
+  }, []);
 
   // Añadir un nuevo bloque/fila
   const handleOpenAddPasswordPopUp = () => {
@@ -79,43 +118,6 @@ export default function PasswordManager() {
   const handleClosePopup = () => {
     setIsOpenNewPasswordPopup(false);
   };
-
-  // La vista se cambia automáticamente a vista de bloque
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 970) {
-        setIsBlockView(true);
-      }
-    };
-    handleResize();
-    // Agregamos un listener para el evento de cambio de tamaño de la ventana
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // Consultar las plataformas registradas
-  useEffect(() => {
-    getPlatforms(currentUser.uid)
-      .then((platforms) => {
-        // Guardar las plataformas
-        setPlatforms(platforms);
-      })
-      .catch((error) => {
-        // Manejar cualquier error de consulta
-        console.log("Error al guardar las platafromas:", error);
-      });
-  }, []);
-
-  // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
-  useEffect(() => {
-    const storedPrivateKey = sessionStorage.getItem("privateKey");
-    if (storedPrivateKey) {
-      setPrivateKey(storedPrivateKey);
-    }
-  }, []);
 
   return (
     <div className="password-manager">
