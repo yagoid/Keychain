@@ -16,11 +16,24 @@ export default function PasswordGeneratorPage() {
   const homeSections = TEXTS.homeSections.en;
 
   const handleGeneratePassword = () => {
-    console.log("Generando");
+    generateRandomPassword();
   };
 
   const handleCopyPassword = () => {
-    console.log("Copiando");
+    navigator.clipboard
+      .writeText(passwordGenerated)
+      .then(() => {
+        console.log("Contraseña copiada al portapapeles");
+      })
+      .catch((err) => {
+        console.error("Error al copiar al portapapeles: ", err);
+      });
+  };
+
+  const generateRandomPassword = () => {
+    var randomstring = Math.random().toString(36).slice(-12);
+
+    setPasswordGenerated(randomstring);
   };
 
   return (

@@ -203,6 +203,10 @@ export const TEXTS = {
       es: "Acceder",
       en: "Enter"
     },
+    errorVerifyPrivateKey: {
+      es: "Error al verificar la clave privada. Compruebe la conexión a internet o intentelo más tarde",
+      en: "Error verifying private key. Check your internet connection or try again later"
+    },
     myKeys: {
       es: "Mis Claves",
       en: "My Keys"

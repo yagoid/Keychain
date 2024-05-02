@@ -140,6 +140,8 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
         console.log(TEXTS.errorWrongPrivateKey.es);
       }
       setIsChecking(false);
+    } else {
+      setErrorMessage(TEXTS.errorVerifyPrivateKey.en);
     }
   };
 

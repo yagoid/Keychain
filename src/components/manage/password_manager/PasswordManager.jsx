@@ -504,7 +504,7 @@ const PasswordRow = ({ row, saveChanges }) => {
         {editableTexts ? (
           <input
             className="input-modify-key"
-            type="text"
+            type={visiblePassword ? "text" : "password"}
             value={key}
             onChange={(e) => handleKeyChange(e.target.value)}
           />

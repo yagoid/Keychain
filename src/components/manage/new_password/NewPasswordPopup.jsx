@@ -13,6 +13,8 @@ import {
 } from "../../../utils/crypto";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import CryptoJS from "crypto-js";
+import visibleIcon from "./../../../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import "./NewPasswordPopup.css";
 
@@ -26,11 +28,19 @@ export default function NewPasswordPupup({
 
   const [platform, setPlatform] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSaveBlock = async (e) => {
     e.preventDefault();
+
+    if (password != repeatPassword) {
+      setErrorMessage(TEXTS.repeatPasswordError.en);
+      return;
+    }
+
     // Se comprueba que la plataforma existe y después se añade a la base de datos
     if (!isSaving) {
       setIsSaving(true);
@@ -125,11 +135,26 @@ export default function NewPasswordPupup({
           onChange={(e) => setPlatform(e.target.value)}
           required
         />
+        <div className="input-group-password">
+          <input
+            type={showPrivateKey ? "text" : "password"}
+            placeholder={TEXTS.password.en}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <img
+            src={!showPrivateKey ? visibleIcon : notVisibleIcon}
+            onClick={() => setShowPrivateKey(!showPrivateKey)}
+            className="eye_icon"
+            alt={!showPrivateKey ? "Eye visible icon" : "Eye not visible icon"}
+          />
+        </div>
         <input
-          type="password"
-          placeholder={TEXTS.password.en}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type={showPrivateKey ? "text" : "password"}
+          placeholder={TEXTS.repeatPassword.en}
+          value={repeatPassword}
+          onChange={(e) => setRepeatPassword(e.target.value)}
           required
         />
         {errorMessage != "" && (

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "./../../contexts/authContext/index.jsx";
 import { doSignOut } from "../../services/firebase/auth.js";
 import { TEXTS } from "../../assets/locales/texts.js";
 import KeychainIcon from "./../../assets/images/keychain.svg";
@@ -21,7 +20,9 @@ export default function Navbar({
   const navigate = useNavigate();
 
   const navigateToSection = (index) => {
-    setActiveSection(index);
+    if (setActiveSection) {
+      setActiveSection(index);
+    }
   };
   const navigateToMain = () => {
     setActiveSection(0);
