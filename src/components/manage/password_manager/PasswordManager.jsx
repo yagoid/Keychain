@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { getPlatforms } from "../../../services/firebase/database.js";
+import {
+  getPlatforms,
+  removePlatform,
+  addNewPlatform,
+} from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { useKey } from "./../../../contexts/keyContext/keyContext";
+import { fetchData } from "./../../../services/blockchain/api";
+import { postData } from "./../../../services/blockchain/api";
+import {
+  decryptMessage,
+  hashWithSHA3,
+  encryptMessage,
+} from "../../../utils/crypto";
 import { TEXTS } from "../../../assets/locales/texts.js";
+import CryptoJS from "crypto-js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
 import chainLine from "./../../../assets/images/chain_line_blocks.svg";
@@ -17,33 +29,9 @@ export default function PasswordManager() {
   const [privateKey, setPrivateKey] = useState("");
   const [platforms, setPlatforms] = useState([]);
   const [isBlockView, setIsBlockView] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [isOpenNewPasswordPopup, setIsOpenNewPasswordPopup] = useState(false);
-  const [data, setData] = useState([
-    {
-      // fila/bloque 1
-      id: 1,
-      platform: "Instagram",
-      key: "********",
-      timestamp: "2024-02-12 17:35:47",
-      proofOfWork: "533",
-    },
-    {
-      // fila/bloque 2
-      id: 2,
-      platform: "Twitter",
-      key: "********",
-      timestamp: "2024-02-12 17:35:47",
-      proofOfWork: "22",
-    },
-    {
-      // fila/bloque 3
-      id: 3,
-      platform: "Binance",
-      key: "********",
-      timestamp: "2024-02-12 17:35:47",
-      proofOfWork: "1476",
-    },
-  ]);
+  const [dataPasswords, setDataPasswords] = useState([]);
 
   // La vista se cambia automáticamente a vista de bloque
   useEffect(() => {
@@ -61,54 +49,180 @@ export default function PasswordManager() {
     };
   }, []);
 
-  // Consultar las plataformas registradas
-  useEffect(() => {
-    getPlatforms(currentUser.uid)
-      .then((platforms) => {
-        // Guardar las plataformas
-        setPlatforms(platforms);
-      })
-      .catch((error) => {
-        // Manejar cualquier error de consulta
-        console.log("Error al guardar las platafromas:", error);
-      });
-  }, []);
-
   // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
   useEffect(() => {
     const storedPrivateKey = sessionStorage.getItem("privateKey");
     if (storedPrivateKey || contextPrivateKey != "") {
-      setPrivateKey(storedPrivateKey);
+      // Encriptar la clave privada para guardarla
+      const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
+
+      // Desencriptar la clave privada
+      const decryptedPrivateKey = decryptMessage(
+        contextPrivateKey,
+        defaultEncryptionKey,
+        CryptoJS.enc.Hex.parse("iv")
+      );
+
+      setPrivateKey(decryptedPrivateKey);
     }
   }, []);
+
+  // Consultar las plataformas registradas
+  useEffect(() => {
+    consultPlatforms();
+  }, []);
+
+  const consultPlatforms = () => {
+    getPlatforms(currentUser.uid)
+      .then((platforms) => {
+        // Guardar las plataformas
+        setPlatforms(platforms);
+        getDataPassword(platforms);
+      })
+      .catch((error) => {
+        // Manejar cualquier error de consulta
+        console.log("Error al guardar la platafroma en firebase:", error);
+      });
+  };
+
+  // Recorrer las contraseñas de firebase para conseguir sus datos
+  const getDataPassword = (platforms) => {
+    const hashUidUser = hashWithSHA3(currentUser.uid);
+    setDataPasswords([]);
+    var hashPlatform = "";
+
+    // Crar la llave de encriptación/dersencriptación por defecto para conseguir el private key
+    const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
+    // Desencriptar la clave privada
+    const decryptedPrivateKey = decryptMessage(
+      contextPrivateKey,
+      defaultEncryptionKey,
+      CryptoJS.enc.Hex.parse("iv")
+    );
+
+    for (const platform of platforms) {
+      hashPlatform = hashWithSHA3(platform);
+      fetchData(`get_data?user=${hashUidUser}&platform=${hashPlatform}`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // console.log(data.data.data[0].key);
+          // Desencriptar la contraseña
+          const decryptedPassword = decryptMessage(
+            data.data.data[0].key,
+            CryptoJS.enc.Hex.parse(decryptedPrivateKey),
+            CryptoJS.enc.Hex.parse(data.data.data[0].iv)
+          );
+
+          // Añadir los datos de la contraseña
+          setDataPasswords((prevData) => [
+            ...prevData,
+            {
+              platform: platform,
+              id: data.length + 1,
+              key: decryptedPassword, // data.data.data[0].key
+              timestamp: data.data.timestamp,
+              proofOfWork: data.data.proof,
+            },
+          ]);
+        })
+        .catch((error) => {
+          if (error === "AbortError") {
+            console.log("Request cancelled");
+          } else {
+            console.log("Error al recibir los datos de las contraseñas", error);
+            // setErrorMessage(TEXTS.errorCreatePrivateKey.en);
+          }
+        });
+    }
+  };
 
   // Añadir un nuevo bloque/fila
   const handleOpenAddPasswordPopUp = () => {
     setIsOpenNewPasswordPopup(true);
-
-    // setData((prevData) => [
-    //   ...prevData,
-    //   {
-    //     platform: "Linkedin",
-    //     id: data.length + 1,
-    //     key: "********",
-    //     timestamp: "2024-02-12 17:35:47",
-    //     proofOfWork: "154",
-    //   },
-    // ]);
   };
 
   // Guardar los cambios editados en la variable data
-  const handleSaveChanges = (id, platform, key) => {
-    // Encuentra el objeto correspondiente por su id
-    const updatedData = data.map((block) => {
-      if (block.id === id) {
-        return { ...block, platform: platform, key: key };
-      }
-      return block;
-    });
+  const handleSaveChanges = (oldPlatform, newPlatform, newKey) => {
+    if (!isSaving) {
+      setIsSaving(true);
+      // Eliminar plataforma
+      removePlatform(currentUser.uid, oldPlatform)
+        .then(() => {
+          // Añadir la nueva plataforma
+          addNewPlatform(currentUser.uid, newPlatform)
+            .then(() => {
+              // Guardar los cambios en blockchian
+              changePasswordInBlockchian(newPlatform, newKey);
+            })
+            .catch((error) => {
+              // Manejar cualquier error de registro de username
+              console.log("Error al guardar el nuevo bloque:", error);
+              setErrorMessage(TEXTS.errorNewBlock.en);
+              setIsSaving(false);
+            });
+        })
+        .catch((error) => {
+          // Manejar cualquier error de consulta
+          console.log("Error al modificar la platafroma en firebase:", error);
+          setIsSaving(false);
+        });
+    }
+  };
 
-    setData(updatedData);
+  const changePasswordInBlockchian = (newPlatform, key) => {
+    // Cifrar los datos antes de enviarlos
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const hashUidUser = hashWithSHA3(currentUser.uid);
+    const hashPlatform = hashWithSHA3(newPlatform);
+
+    // Crear la llave de encriptación/dersencriptación por defecto para conseguir el private key
+    const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
+    // Desencriptar la clave privada
+    const decryptedPrivateKey = decryptMessage(
+      contextPrivateKey,
+      defaultEncryptionKey,
+      CryptoJS.enc.Hex.parse("iv")
+    );
+
+    // Encriptar la contraseña con la clave privada
+    const encryptedMessage = encryptMessage(
+      key,
+      CryptoJS.enc.Hex.parse(decryptedPrivateKey),
+      iv
+    );
+
+    // Enviar los datos a la blockchain
+    postData("add_data", {
+      user: hashUidUser,
+      platform: hashPlatform,
+      key: encryptedMessage,
+      iv: iv.toString(),
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        // Encuentra el objeto correspondiente por su id
+        // const updatedData = dataPasswords.map((block) => {
+        //   if (block.id === id) {
+        //     return { ...block, platform: platform, key: key };
+        //   }
+        //   return block;
+        // });
+        // setDataPasswords(updatedData);
+
+        // setPlatforms(platform);
+        // setPlatforms((prevPlatforms) => [...prevPlatforms, platform]);
+        consultPlatforms();
+      })
+      .catch((error) => {
+        console.log("Error al enviar datos a la blockchian", error);
+        setErrorMessage(TEXTS.errorCreatePrivateKey.en);
+      })
+      .finally(() => setIsSaving(false));
   };
 
   const toggleSwitch = () => {
@@ -125,13 +239,13 @@ export default function PasswordManager() {
       <div className="password-manager-container">
         {isBlockView ? (
           <PasswordManagerBlocks
-            data={data}
+            dataPasswords={dataPasswords}
             handleOpenAddPasswordPopUp={handleOpenAddPasswordPopUp}
             handleSaveChanges={handleSaveChanges}
           />
         ) : (
           <PasswordManagerTable
-            data={data}
+            dataPasswords={dataPasswords}
             handleSaveChanges={handleSaveChanges}
           />
         )}
@@ -145,6 +259,7 @@ export default function PasswordManager() {
         <NewPasswordPupup
           onClose={handleClosePopup}
           setPlatforms={setPlatforms}
+          consultPlatforms={consultPlatforms}
         />
       )}
     </div>
@@ -152,20 +267,22 @@ export default function PasswordManager() {
 }
 
 const PasswordManagerBlocks = ({
-  data,
+  dataPasswords,
   handleOpenAddPasswordPopUp,
   handleSaveChanges,
 }) => {
   return (
     <section className="password-manager-block">
       <div className="blocks">
-        {data.map((block, index) => (
+        {dataPasswords.map((block, index) => (
           <div className="blocks-lines" key={index}>
             <PasswordBlock block={block} saveChanges={handleSaveChanges} />
             <img
               src={chainLine}
               className={
-                index == data.length - 1 ? "invisible" : "chian_line_icon"
+                index == dataPasswords.length - 1
+                  ? "invisible"
+                  : "chian_line_icon"
               }
               alt="Chain line"
             />
@@ -208,8 +325,7 @@ const PasswordBlock = ({ block, saveChanges }) => {
     setEditableTexts(!editableTexts);
 
     if (editableTexts) {
-      console.log("Guardando...");
-      saveChanges(block.id, platform, key);
+      saveChanges(block.platform, platform, key);
     }
   };
   // Cancelar edición
@@ -293,7 +409,7 @@ const PasswordBlock = ({ block, saveChanges }) => {
   );
 };
 
-const PasswordManagerTable = ({ data, handleSaveChanges }) => {
+const PasswordManagerTable = ({ dataPasswords, handleSaveChanges }) => {
   return (
     <div className="table-vertical-scroll">
       <table className="password-manager-table">
@@ -314,7 +430,7 @@ const PasswordManagerTable = ({ data, handleSaveChanges }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {dataPasswords.map((row, index) => (
             <PasswordRow
               key={index}
               row={row}
@@ -356,8 +472,7 @@ const PasswordRow = ({ row, saveChanges }) => {
     setEditableTexts(!editableTexts);
 
     if (editableTexts) {
-      console.log("Guardando...");
-      saveChanges(row.id, platform, key);
+      saveChanges(row.platform, platform, key);
     }
   };
   // Cancelar edición

@@ -11,12 +11,16 @@ import {
   encryptMessage,
   hashWithSHA3,
 } from "../../../utils/crypto";
-import CryptoJS from "crypto-js";
 import { TEXTS } from "../../../assets/locales/texts.js";
+import CryptoJS from "crypto-js";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import "./NewPasswordPopup.css";
 
-export default function NewPasswordPupup({ onClose, setPlatforms }) {
+export default function NewPasswordPupup({
+  onClose,
+  setPlatforms,
+  consultPlatforms,
+}) {
   const { currentUser } = useAuth();
   const { contextPrivateKey } = useKey();
 
@@ -29,10 +33,11 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
     e.preventDefault();
     // Se comprueba que la plataforma existe y después se añade a la base de datos
     if (!isSaving) {
+      setIsSaving(true);
       if (!(await platformExists(currentUser.uid, platform))) {
         addNewPlatform(currentUser.uid, platform)
           .then(() => {
-            console.log("Contraseña añadida a firebase");
+            console.log("Plataforma añadida a firebase");
             addPasswordInBlockchian();
           })
           .catch((error) => {
@@ -55,12 +60,11 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
     if (storedPrivateKey || contextPrivateKey != "") {
       // Cifrar los datos antes de enviarlos
       const iv = CryptoJS.lib.WordArray.random(128 / 8);
-      const hashUsername = hashWithSHA3(currentUser.uid);
+      const hashUidUser = hashWithSHA3(currentUser.uid);
       const hashPlatform = hashWithSHA3(platform);
 
-      // Encriptar la clave privada para guardarla
+      // Cerar la llave de encriptación/dersencriptación por defecto para conseguir el private key
       const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
-
       // Desencriptar la clave privada
       const decryptedPrivateKey = decryptMessage(
         contextPrivateKey,
@@ -77,7 +81,7 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
 
       // Enviar los datos a la blockchain
       postData("add_data", {
-        user: hashUsername,
+        user: hashUidUser,
         platform: hashPlatform,
         key: encryptedMessage,
         iv: iv.toString(),
@@ -91,6 +95,7 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
 
           // setPlatforms(platform);
           setPlatforms((prevPlatforms) => [...prevPlatforms, platform]);
+          consultPlatforms();
 
           // Cerrar el popup
           onClose();
@@ -99,9 +104,7 @@ export default function NewPasswordPupup({ onClose, setPlatforms }) {
           console.log("Error al enviar datos a la blockchian", error);
           setErrorMessage(TEXTS.errorCreatePrivateKey.en);
         })
-        .finally(() => {
-          setIsSaving(false);
-        });
+        .finally(() => setIsSaving(false));
     }
   };
 

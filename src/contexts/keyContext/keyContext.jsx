@@ -1,5 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import { encryptMessage, decryptMessage } from "../../utils/crypto";
+// import { useAuth } from "../authContext/index.jsx";
+import {
+  encryptMessage,
+  decryptMessage,
+  // hashWithSHA3,
+} from "../../utils/crypto";
 import CryptoJS from "crypto-js";
 
 const KeyContext = React.createContext();
@@ -9,15 +14,36 @@ export function useKey() {
 }
 
 export function KeyProvider({ children }) {
+  // const { currentUser } = useAuth();
   const [encryptionKey, setEncryptionKey] = useState("");
   const [contextPrivateKey, setContextPrivateKey] = useState("");
 
   useEffect(() => {
     const storedPrivateKey = sessionStorage.getItem("privateKey");
     if (storedPrivateKey || contextPrivateKey != "") {
-      console.log("privateKey...", contextPrivateKey);
+      // console.log("EncryptedPrivateKey:", contextPrivateKey);
+      // Crar la llave de encriptación/dersencriptación por defecto para conseguir el private key
+      // const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
+      // // Desencriptar la clave privada
+      // const decryptedPrivateKey = decryptMessage(
+      //   contextPrivateKey,
+      //   defaultEncryptionKey,
+      //   CryptoJS.enc.Hex.parse("iv")
+      // );
+      // console.log("PrivateKey:", decryptedPrivateKey);
     }
   }, [contextPrivateKey]);
+
+  // Evita que la página se actualice inmediatamente
+  useEffect(() => {
+    const handleBeforeUnload = async (event) => {
+      event.preventDefault();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // useEffect(() => {
   //   const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
@@ -58,7 +84,7 @@ export function KeyProvider({ children }) {
       //   sessionStorage.setItem("privateKey", encryptedMessage);
       //   console.log("encriptada:", encryptedMessage);
 
-      setDefaultEncryptedPrivateKey(encryptedMessage);
+      // setDefaultEncryptedPrivateKey(encryptedMessage);
     }
   }
 

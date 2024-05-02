@@ -10,7 +10,6 @@ import {
   encryptMessage,
   generateDerivedKey,
   hashWithSHA3,
-  generateEncryptionKey,
 } from "../../../utils/crypto";
 import CryptoJS from "crypto-js";
 import { TEXTS } from "./../../../assets/locales/texts.js";
