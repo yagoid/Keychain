@@ -5,6 +5,8 @@ import { useAuth } from "./../contexts/authContext";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
 import ErrorIcon from "./../assets/images/error_icon.svg";
+import visibleIcon from "./../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
 import "./Login.css";
 
 export default function LoginPage() {
@@ -12,6 +14,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -63,15 +66,25 @@ export default function LoginPage() {
             />
           </div>
           <h3 className="input-heading">{TEXTS.password.en}</h3>
-          <div className="input-group">
-            <input
-              type="password"
-              placeholder={TEXTS.password.en}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
-              required
-            />
+          <div className="input-group-password-register">
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder={TEXTS.password.en}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
+                required
+              />
+            </div>
+            <img
+                src={!showPassword ? visibleIcon : notVisibleIcon}
+                onClick={() => setShowPassword(!showPassword)}
+                className="eye_icon"
+                alt={
+                  !showPassword ? "Eye visible icon" : "Eye not visible icon"
+                }
+              />
           </div>
           {errorMessage != "" && (
             <div className="error-container" style={{ marginTop: "20px" }}>
