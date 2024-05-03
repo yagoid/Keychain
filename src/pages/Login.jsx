@@ -74,7 +74,7 @@ export default function LoginPage() {
             />
           </div>
           {errorMessage != "" && (
-            <div className="error-container">
+            <div className="error-container" style={{ marginTop: "20px" }}>
               <img src={ErrorIcon} className="error-icon" alt="Error icon" />
               <span className="error-message">{errorMessage}</span>
             </div>

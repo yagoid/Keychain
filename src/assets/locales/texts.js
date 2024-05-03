@@ -127,6 +127,34 @@ export const TEXTS = {
       es: "¡El nombre de usuario es válido!",
       en: "The username is valid!"
     },
+    passwordMustContain: {
+      es: "La contraseña debe contener al menos ",
+      en: "The password must contain at least "
+    },
+    characters: {
+      es: " caracteres",
+      en: " characters"
+    },
+    capitalLetter: {
+      es: " letra mayúscula",
+      en: " capital letter"
+    },
+    lowercaseLetter: {
+      es: " letra minúscula",
+      en: "lowercase letter"
+    },
+    digit: {
+      es: " dígito",
+      en: " digit"
+    },
+    specialCharacter: {
+      es: " carácter especial",
+      en: " special character"
+    },
+    passwordIsSecure: {
+      es: " La contraseña es segura",
+      en: " The password is secure"
+    },
     aboutSections: {
       es: ["Main", "Soluciones", "Servicios", "Fundadores"],
       en: ["Main", "Solutions", "Services", "Founders"]

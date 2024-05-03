@@ -11,6 +11,7 @@ import {
   encryptMessage,
   hashWithSHA3,
 } from "../../../utils/crypto";
+import { checkPasswordStrength } from "./../../../utils/passwordSecurity";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import CryptoJS from "crypto-js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
@@ -35,6 +36,12 @@ export default function NewPasswordPupup({
 
   const handleSaveBlock = async (e) => {
     e.preventDefault();
+
+    const checkedPasswordStrength = checkPasswordStrength(password);
+    if (checkedPasswordStrength != true) {
+      setErrorMessage(checkedPasswordStrength);
+      return;
+    }
 
     if (password != repeatPassword) {
       setErrorMessage(TEXTS.repeatPasswordError.en);

@@ -4,10 +4,13 @@ import { auth } from "../services/firebase/firebase";
 import { doCreateUserWithEmailAndPassword } from "../services/firebase/auth";
 import { isValidUsername, addNewUsername } from "../services/firebase/database";
 import { useAuth } from "./../contexts/authContext";
+import { checkPasswordStrength } from "./../utils/passwordSecurity";
 import { TEXTS } from "./../assets/locales/texts.js";
 import KeychainIcon from "./../assets/images/keychain.svg";
 import ErrorIcon from "./../assets/images/error_icon.svg";
 import CorrectIcon from "./../assets/images/correct_icon.svg";
+import visibleIcon from "./../assets/images/visible_icon.svg";
+import notVisibleIcon from "./../assets/images/not_visible_icon.svg";
 import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Login.css";
 import "./SignUp.css";
@@ -19,6 +22,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isCorrectUsername, setIsCorrectUsername] = useState(false);
@@ -31,6 +35,12 @@ export default function SignUpPage() {
     // console.log("Email:", email);
     // console.log("Password:", password);
     // console.log("Repeat Password:", repeatPassword);
+
+    const checkedPasswordStrength = checkPasswordStrength(password);
+    if (checkedPasswordStrength != true) {
+      setErrorMessage(checkedPasswordStrength);
+      return;
+    }
 
     if (password != repeatPassword) {
       setErrorMessage(TEXTS.repeatPasswordError.en);
@@ -146,21 +156,31 @@ export default function SignUpPage() {
             </div>
 
             <h3 className="input-heading">{TEXTS.password.en}</h3>
-            <div className="input-group">
-              <input
-                type="password"
-                placeholder={TEXTS.password.en}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-field"
-                required
+            <div className="input-group-password-register">
+              <div className="input-group">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder={TEXTS.password.en}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input-field"
+                  required
+                />
+              </div>
+              <img
+                src={!showPassword ? visibleIcon : notVisibleIcon}
+                onClick={() => setShowPassword(!showPassword)}
+                className="eye_icon"
+                alt={
+                  !showPassword ? "Eye visible icon" : "Eye not visible icon"
+                }
               />
             </div>
 
             <h3 className="input-heading">{TEXTS.repeatPassword.en}</h3>
             <div className="input-group">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder={TEXTS.repeatPassword.en}
                 value={repeatPassword}
                 onChange={(e) => setRepeatPassword(e.target.value)}
@@ -169,7 +189,7 @@ export default function SignUpPage() {
               />
             </div>
             {errorMessage != "" && (
-              <div className="error-container">
+              <div className="error-container" style={{ marginTop: "20px" }}>
                 <img src={ErrorIcon} className="error-icon" alt="Error icon" />
                 <span className="error-message">{errorMessage}</span>
               </div>

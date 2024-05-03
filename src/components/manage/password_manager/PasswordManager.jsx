@@ -13,11 +13,13 @@ import {
   hashWithSHA3,
   encryptMessage,
 } from "../../../utils/crypto";
+import { checkPasswordStrength } from "./../../../utils/passwordSecurity";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import CryptoJS from "crypto-js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
 import chainLine from "./../../../assets/images/chain_line_blocks.svg";
+import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import NewPasswordPupup from "../new_password/NewPasswordPopup.jsx";
 import "./PasswordManager.css";
 import "./../../buttons/Switch.css";
@@ -26,7 +28,6 @@ export default function PasswordManager() {
   const { currentUser } = useAuth();
   const { contextPrivateKey } = useKey();
 
-  const [privateKey, setPrivateKey] = useState("");
   const [platforms, setPlatforms] = useState([]);
   const [isBlockView, setIsBlockView] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -49,8 +50,7 @@ export default function PasswordManager() {
     };
   }, []);
 
-  // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
-  useEffect(() => {
+  const decryptPrivateKey = () => {
     const storedPrivateKey = sessionStorage.getItem("privateKey");
     if (storedPrivateKey || contextPrivateKey != "") {
       // Encriptar la clave privada para guardarla
@@ -63,9 +63,9 @@ export default function PasswordManager() {
         CryptoJS.enc.Hex.parse("iv")
       );
 
-      setPrivateKey(decryptedPrivateKey);
+      return decryptedPrivateKey;
     }
-  }, []);
+  };
 
   // Consultar las plataformas registradas
   useEffect(() => {
@@ -91,14 +91,7 @@ export default function PasswordManager() {
     setDataPasswords([]);
     var hashPlatform = "";
 
-    // Crar la llave de encriptación/dersencriptación por defecto para conseguir el private key
-    const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
-    // Desencriptar la clave privada
-    const decryptedPrivateKey = decryptMessage(
-      contextPrivateKey,
-      defaultEncryptionKey,
-      CryptoJS.enc.Hex.parse("iv")
-    );
+    const decryptedPrivateKey = decryptPrivateKey();
 
     for (const platform of platforms) {
       hashPlatform = hashWithSHA3(platform);
@@ -177,14 +170,7 @@ export default function PasswordManager() {
     const hashUidUser = hashWithSHA3(currentUser.uid);
     const hashPlatform = hashWithSHA3(newPlatform);
 
-    // Crear la llave de encriptación/dersencriptación por defecto para conseguir el private key
-    const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
-    // Desencriptar la clave privada
-    const decryptedPrivateKey = decryptMessage(
-      contextPrivateKey,
-      defaultEncryptionKey,
-      CryptoJS.enc.Hex.parse("iv")
-    );
+    const decryptedPrivateKey = decryptPrivateKey();
 
     // Encriptar la contraseña con la clave privada
     const encryptedMessage = encryptMessage(
@@ -297,10 +283,11 @@ const PasswordManagerBlocks = ({
 };
 
 const PasswordBlock = ({ block, saveChanges }) => {
-  const [visiblePassword, setVisiblePassword] = useState(false);
-  const [editableTexts, setEditableTexts] = useState(false);
   const [platform, setPlatform] = useState(block.platform);
   const [key, setKey] = useState(block.key);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [visiblePassword, setVisiblePassword] = useState(false);
+  const [editableTexts, setEditableTexts] = useState(false);
 
   // Cambiar el texto cuando se editan los inputs
   const handlePlatformChange = (text) => {
@@ -312,6 +299,8 @@ const PasswordBlock = ({ block, saveChanges }) => {
 
   // Guardar los cambios editados
   const handleModifyText = () => {
+    setErrorMessage("");
+
     // La contraseña y la plataforma no pueden estar vacías
     if (editableTexts && (key == "" || platform == "")) {
       return;
@@ -321,12 +310,20 @@ const PasswordBlock = ({ block, saveChanges }) => {
       setEditableTexts(!editableTexts);
       return;
     }
+    // La contraseña debe ser segura
+    const checkedPasswordStrength = checkPasswordStrength(key);
+    if (checkedPasswordStrength != true) {
+      setErrorMessage(checkedPasswordStrength);
+      return;
+    }
 
     setEditableTexts(!editableTexts);
 
     if (editableTexts) {
       saveChanges(block.platform, platform, key);
     }
+
+    setErrorMessage("");
   };
   // Cancelar edición
   const handleCancelModifyText = () => {
@@ -334,6 +331,7 @@ const PasswordBlock = ({ block, saveChanges }) => {
 
     setPlatform(block.platform);
     setKey(block.key);
+    setErrorMessage("");
   };
 
   return (
@@ -366,8 +364,10 @@ const PasswordBlock = ({ block, saveChanges }) => {
               onChange={(e) => handleKeyChange(e.target.value)}
               required
             />
-          ) : (
+          ) : visiblePassword ? (
             <span className="text-block-section">{key}</span>
+          ) : (
+            <span className="text-block-section">{key.replace(/./g, "*")}</span>
           )}
           <img
             src={!visiblePassword ? visibleIcon : notVisibleIcon}
@@ -376,6 +376,12 @@ const PasswordBlock = ({ block, saveChanges }) => {
             alt={!visiblePassword ? "Eye visible icon" : "Eye not visible icon"}
           />
         </div>
+        {errorMessage != "" && (
+          <div className="error-block-container">
+            <img src={ErrorIcon} className="error-icon" alt="Error icon" />
+            <span className="error-block-message">{errorMessage}</span>
+          </div>
+        )}
       </div>
       {/* Timestamp */}
       <div className="block-section">
@@ -508,8 +514,10 @@ const PasswordRow = ({ row, saveChanges }) => {
             value={key}
             onChange={(e) => handleKeyChange(e.target.value)}
           />
-        ) : (
+        ) : visiblePassword ? (
           key
+        ) : (
+          key.replace(/./g, "*")
         )}
       </td>
       {/* Columna 3 */}
@@ -522,7 +530,7 @@ const PasswordRow = ({ row, saveChanges }) => {
         />
       </td>
       {/* Columna 4 */}
-      <td>
+      {/* <td>
         <button
           className="btn-modify-password"
           onClick={() => handleModifyText()}
@@ -538,7 +546,7 @@ const PasswordRow = ({ row, saveChanges }) => {
             {TEXTS.cancel.en}
           </button>
         )}
-      </td>
+      </td> */}
     </tr>
   );
 };

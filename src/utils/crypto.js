@@ -1,4 +1,4 @@
-import CryptoJS, { format } from "crypto-js";
+import CryptoJS from "crypto-js";
 
 export const generateDerivedKey = (privateKey, salt) => {
     return CryptoJS.PBKDF2(privateKey, salt, { keySize: 512 / 32, iterations: 1000 });
