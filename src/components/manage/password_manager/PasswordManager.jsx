@@ -13,7 +13,6 @@ import {
   hashWithSHA3,
   encryptMessage,
 } from "../../../utils/crypto";
-import { checkPasswordStrength } from "./../../../utils/passwordSecurity";
 import { TEXTS } from "../../../assets/locales/texts.js";
 import CryptoJS from "crypto-js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
@@ -308,12 +307,6 @@ const PasswordBlock = ({ block, saveChanges }) => {
     // No se guarda si no hay cambios
     if (editableTexts && key == block.key && platform == block.platform) {
       setEditableTexts(!editableTexts);
-      return;
-    }
-    // La contraseña debe ser segura
-    const checkedPasswordStrength = checkPasswordStrength(key);
-    if (checkedPasswordStrength != true) {
-      setErrorMessage(checkedPasswordStrength);
       return;
     }
 

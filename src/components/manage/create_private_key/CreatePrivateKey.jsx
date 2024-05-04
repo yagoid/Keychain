@@ -6,12 +6,13 @@ import {
 import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { useKey } from "./../../../contexts/keyContext/keyContext";
 import { postData } from "./../../../services/blockchain/api";
-import { TEXTS } from "../../../assets/locales/texts.js";
 import {
   encryptMessage,
   generateDerivedKey,
   hashWithSHA3,
 } from "../../../utils/crypto";
+import { checkPasswordStrength } from "../../../utils/passwordSecurity";
+import { TEXTS } from "../../../assets/locales/texts.js";
 import CryptoJS from "crypto-js";
 import InfoIcon from "./../../../assets/images/info_icon.svg";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
@@ -44,6 +45,12 @@ export default function CreatePrivateKey({ onClose, setIsPrivateKeyValid }) {
 
   const handleCreatePrivateKey = async (e) => {
     e.preventDefault();
+
+    const checkedPasswordStrength = checkPasswordStrength(privateKey);
+    if (checkedPasswordStrength != true) {
+      setErrorMessage(checkedPasswordStrength);
+      return;
+    }
 
     if (!isSaving) {
       setIsSaving(true);
