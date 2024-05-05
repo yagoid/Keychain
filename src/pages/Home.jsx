@@ -28,9 +28,9 @@ export default function HomePage() {
             <span>{TEXTS.homeText.en}</span>
           </div>
           <div className="buttons">
-            <button className="btn-my-passwords">
-              <Link to={"/manage"}>{TEXTS.myPasswords.en}</Link>
-            </button>
+            <Link className="btn-my-passwords" to={"/manage"}>
+              {TEXTS.myPasswords.en}
+            </Link>
             {/* <MainButton
               text={TEXTS.generator.en}
               color={"grey"}
