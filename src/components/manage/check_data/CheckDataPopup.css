@@ -1,0 +1,50 @@
+.data-container {
+  background-color: #1c1c1c;
+  max-width: 50%;
+  max-height: 80vh;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.header-data-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}
+
+.body-data-container {
+  overflow-y: auto;
+  max-height: 60vh;
+  opacity: 0.8;
+}
+
+.close_icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.blockchain-data-tittle {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+@media (max-width: 1200px) {
+  .data-container {
+    padding: 20px;
+    max-width: 70%;
+    max-height: 70%;
+  }
+
+  .blockchain-data-tittle {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .blockchain-data-tittle {
+    font-size: 1rem;
+  }
+}

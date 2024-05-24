@@ -247,6 +247,10 @@ export const TEXTS = {
       es: "Añadir Contraseña",
       en: "Add Password"
     },
+    checkDataOnBlockchain: {
+      es: "Ver mis datos en la blockchain",
+      en: "Check my data on Blockchain"
+    },
     changeView: {
       es: "Cambiar vista",
       en: "Change view"
@@ -294,6 +298,10 @@ export const TEXTS = {
     errorSecurePassword: {
       es: "La contraseña es insegura",
       en: "The password is insecure"
+    },
+    myBlockchainData: {
+      es: "Mis contraseñas guardadas en la blockchain",
+      en: "My passwords saved on the blockchain"
     },
     generator: {
       es: "Generador",

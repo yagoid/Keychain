@@ -22,6 +22,7 @@ import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import NewPasswordPupup from "../new_password/NewPasswordPopup.jsx";
 import "./PasswordManager.css";
 import "./../../buttons/Switch.css";
+import CheckDataPupup from "../check_data/CheckDataPopup.jsx";
 
 export default function PasswordManager() {
   const { currentUser } = useAuth();
@@ -31,7 +32,9 @@ export default function PasswordManager() {
   const [isBlockView, setIsBlockView] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isOpenNewPasswordPopup, setIsOpenNewPasswordPopup] = useState(false);
+  const [isOpenCheckDataPopup, setIsOpenCheckDataPopup] = useState(false);
   const [dataPasswords, setDataPasswords] = useState([]);
+  const [blockchainUserData, setBlockchainUserData] = useState([]);
 
   // La vista se cambia automáticamente a vista de bloque
   useEffect(() => {
@@ -88,6 +91,7 @@ export default function PasswordManager() {
   const getDataPassword = (platforms) => {
     const hashUidUser = hashWithSHA3(currentUser.uid);
     setDataPasswords([]);
+    setBlockchainUserData([]);
     var hashPlatform = "";
 
     const decryptedPrivateKey = decryptPrivateKey();
@@ -118,6 +122,12 @@ export default function PasswordManager() {
               proofOfWork: data.data.proof,
             },
           ]);
+
+          // Añadir los datos de la blockchain
+          setBlockchainUserData((prevData) => [
+            ...prevData,
+            JSON.stringify(data.data, null, 2),
+          ]);
         })
         .catch((error) => {
           if (error === "AbortError") {
@@ -130,9 +140,14 @@ export default function PasswordManager() {
     }
   };
 
-  // Añadir un nuevo bloque/fila
+  // Abrir el popup para añadir un nuevo bloque/fila
   const handleOpenAddPasswordPopUp = () => {
     setIsOpenNewPasswordPopup(true);
+  };
+
+  // Añadir el popup para consultar los datos en la blockchain
+  const handleCheckDataOnBlockchainPopUp = () => {
+    setIsOpenCheckDataPopup(true);
   };
 
   // Guardar los cambios editados en la variable data
@@ -216,6 +231,7 @@ export default function PasswordManager() {
 
   const handleClosePopup = () => {
     setIsOpenNewPasswordPopup(false);
+    setIsOpenCheckDataPopup(false);
   };
 
   return (
@@ -226,6 +242,7 @@ export default function PasswordManager() {
           <PasswordManagerBlocks
             dataPasswords={dataPasswords}
             handleOpenAddPasswordPopUp={handleOpenAddPasswordPopUp}
+            handleCheckDataOnBlockchainPopUp={handleCheckDataOnBlockchainPopUp}
             handleSaveChanges={handleSaveChanges}
           />
         ) : (
@@ -234,6 +251,23 @@ export default function PasswordManager() {
             handleSaveChanges={handleSaveChanges}
           />
         )}
+        <div className="password-buttons">
+          <button
+            onClick={handleOpenAddPasswordPopUp}
+            className="btn-add-password"
+            style={{ marginTop: "10px" }}
+          >
+            {TEXTS.addPassword.en}
+          </button>
+          {dataPasswords.length != 0 && (
+            <button
+              onClick={handleCheckDataOnBlockchainPopUp}
+              className="btn-check-data-on-blockchain"
+            >
+              {TEXTS.checkDataOnBlockchain.en}
+            </button>
+          )}
+        </div>
       </div>
       <label className="toggle-switch">
         <input type="checkbox" checked={isBlockView} onChange={toggleSwitch} />
@@ -247,15 +281,17 @@ export default function PasswordManager() {
           consultPlatforms={consultPlatforms}
         />
       )}
+      {isOpenCheckDataPopup && (
+        <CheckDataPupup
+          onClose={handleClosePopup}
+          blockchainUserData={blockchainUserData}
+        />
+      )}
     </div>
   );
 }
 
-const PasswordManagerBlocks = ({
-  dataPasswords,
-  handleOpenAddPasswordPopUp,
-  handleSaveChanges,
-}) => {
+const PasswordManagerBlocks = ({ dataPasswords, handleSaveChanges }) => {
   return (
     <section className="password-manager-block">
       <div className="blocks">
@@ -274,9 +310,6 @@ const PasswordManagerBlocks = ({
           </div>
         ))}
       </div>
-      <button onClick={handleOpenAddPasswordPopUp} className="btn-add-password">
-        {TEXTS.addPassword.en}
-      </button>
     </section>
   );
 };

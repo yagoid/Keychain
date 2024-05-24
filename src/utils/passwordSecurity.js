@@ -6,7 +6,7 @@ export const  checkPasswordStrength = (password) => {
     const minLowercase = 1;
     const minDigits = 1;
     const minSpecialChars = 1;
-    const specialChars = '!@#$%^&*()-_=+';
+    const specialChars = '!@#$%^&*()-_=+;';
   
     // Verificar longitud mínima
     if (password.length < minLength) {

@@ -96,7 +96,6 @@
 
 @media (max-width: 1470px) {
     .solutions-content {
-        margin-left: 5vh;
         margin-right: 5vh;
         gap: 50px;
     }
@@ -132,7 +131,6 @@
 
 @media (max-width: 700px) {  
     .solutions-tittle {
-      margin-left: 5vh;
       font-size: 0.7rem;
     }
     
@@ -142,11 +140,6 @@
   }
 
 @media (max-width: 420px) {
-    .solutions-content {
-        padding-left: 2vh;
-        margin-right: 2vh;
-    }
-
     .solutions-content p {
         font-size: 1rem;
         margin-top: 5px;
