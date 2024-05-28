@@ -3,6 +3,7 @@ import {
   getPlatforms,
   removePlatform,
   addNewPlatform,
+  platformExists,
 } from "../../../services/firebase/database.js";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { useKey } from "./../../../contexts/keyContext/keyContext";
@@ -244,6 +245,7 @@ export default function PasswordManager() {
             handleOpenAddPasswordPopUp={handleOpenAddPasswordPopUp}
             handleCheckDataOnBlockchainPopUp={handleCheckDataOnBlockchainPopUp}
             handleSaveChanges={handleSaveChanges}
+            currentUser={currentUser}
           />
         ) : (
           <PasswordManagerTable
@@ -291,13 +293,21 @@ export default function PasswordManager() {
   );
 }
 
-const PasswordManagerBlocks = ({ dataPasswords, handleSaveChanges }) => {
+const PasswordManagerBlocks = ({
+  dataPasswords,
+  handleSaveChanges,
+  currentUser,
+}) => {
   return (
     <section className="password-manager-block">
       <div className="blocks">
         {dataPasswords.map((block, index) => (
           <div className="blocks-lines" key={index}>
-            <PasswordBlock block={block} saveChanges={handleSaveChanges} />
+            <PasswordBlock
+              block={block}
+              saveChanges={handleSaveChanges}
+              currentUser={currentUser}
+            />
             <img
               src={chainLine}
               className={
@@ -314,7 +324,7 @@ const PasswordManagerBlocks = ({ dataPasswords, handleSaveChanges }) => {
   );
 };
 
-const PasswordBlock = ({ block, saveChanges }) => {
+const PasswordBlock = ({ block, saveChanges, currentUser }) => {
   const [platform, setPlatform] = useState(block.platform);
   const [key, setKey] = useState(block.key);
   const [errorMessage, setErrorMessage] = useState("");
@@ -322,7 +332,7 @@ const PasswordBlock = ({ block, saveChanges }) => {
   const [editableTexts, setEditableTexts] = useState(false);
 
   // Cambiar el texto cuando se editan los inputs
-  const handlePlatformChange = (text) => {
+  const handlePlatformChange = async (text) => {
     setPlatform(text);
   };
   const handleKeyChange = (text) => {
@@ -330,7 +340,7 @@ const PasswordBlock = ({ block, saveChanges }) => {
   };
 
   // Guardar los cambios editados
-  const handleModifyText = () => {
+  const handleModifyText = async (e) => {
     setErrorMessage("");
 
     // La contraseña y la plataforma no pueden estar vacías
@@ -343,13 +353,23 @@ const PasswordBlock = ({ block, saveChanges }) => {
       return;
     }
 
-    setEditableTexts(!editableTexts);
+    // setEditableTexts(!editableTexts);
 
     if (editableTexts) {
-      saveChanges(block.platform, platform, key);
+      if (
+        platform == block.platform ||
+        !(await platformExists(currentUser.uid, platform))
+      ) {
+        saveChanges(block.platform, platform, key);
+        setEditableTexts(!editableTexts);
+        setErrorMessage("");
+      } else {
+        console.log("La plataforma ya existe");
+        setErrorMessage(TEXTS.errorPlatformExists.en);
+      }
+    } else {
+      setEditableTexts(!editableTexts);
     }
-
-    setErrorMessage("");
   };
   // Cancelar edición
   const handleCancelModifyText = () => {

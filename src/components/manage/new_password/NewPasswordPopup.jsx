@@ -57,7 +57,6 @@ export default function NewPasswordPupup({
             setIsSaving(false);
           });
       } else {
-        console.log("La plataforma ya existe");
         setErrorMessage(TEXTS.errorPlatformExists.en);
         setIsSaving(false);
       }
