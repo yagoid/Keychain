@@ -18,6 +18,7 @@ import { TEXTS } from "../../../assets/locales/texts.js";
 import CryptoJS from "crypto-js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
+import trashIcon from "./../../../assets/images/trash_icon.svg";
 import chainLine from "./../../../assets/images/chain_line_blocks.svg";
 import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import NewPasswordPupup from "../new_password/NewPasswordPopup.jsx";
@@ -242,10 +243,9 @@ export default function PasswordManager() {
         {isBlockView ? (
           <PasswordManagerBlocks
             dataPasswords={dataPasswords}
-            handleOpenAddPasswordPopUp={handleOpenAddPasswordPopUp}
-            handleCheckDataOnBlockchainPopUp={handleCheckDataOnBlockchainPopUp}
             handleSaveChanges={handleSaveChanges}
             currentUser={currentUser}
+            consultPlatforms={consultPlatforms}
           />
         ) : (
           <PasswordManagerTable
@@ -297,6 +297,7 @@ const PasswordManagerBlocks = ({
   dataPasswords,
   handleSaveChanges,
   currentUser,
+  consultPlatforms,
 }) => {
   return (
     <section className="password-manager-block">
@@ -307,6 +308,7 @@ const PasswordManagerBlocks = ({
               block={block}
               saveChanges={handleSaveChanges}
               currentUser={currentUser}
+              consultPlatforms={consultPlatforms}
             />
             <img
               src={chainLine}
@@ -324,7 +326,12 @@ const PasswordManagerBlocks = ({
   );
 };
 
-const PasswordBlock = ({ block, saveChanges, currentUser }) => {
+const PasswordBlock = ({
+  block,
+  saveChanges,
+  currentUser,
+  consultPlatforms,
+}) => {
   const [platform, setPlatform] = useState(block.platform);
   const [key, setKey] = useState(block.key);
   const [errorMessage, setErrorMessage] = useState("");
@@ -364,13 +371,30 @@ const PasswordBlock = ({ block, saveChanges, currentUser }) => {
         setEditableTexts(!editableTexts);
         setErrorMessage("");
       } else {
-        console.log("La plataforma ya existe");
         setErrorMessage(TEXTS.errorPlatformExists.en);
       }
     } else {
       setEditableTexts(!editableTexts);
     }
   };
+
+  // Eliminar una contraseña
+  const handleDelatePassword = () => {
+    if (editableTexts) {
+      // Eliminar plataforma
+      removePlatform(currentUser.uid, block.platform)
+        .then(() => {
+          consultPlatforms();
+          setEditableTexts(!editableTexts);
+        })
+        .catch((error) => {
+          // Manejar cualquier error de consulta
+          console.log("Error al eliminar la platafroma en firebase:", error);
+          setEditableTexts(!editableTexts);
+        });
+    }
+  };
+
   // Cancelar edición
   const handleCancelModifyText = () => {
     setEditableTexts(!editableTexts);
@@ -455,6 +479,14 @@ const PasswordBlock = ({ block, saveChanges, currentUser }) => {
           >
             {TEXTS.cancel.en}
           </button>
+        )}
+        {editableTexts && (
+          <img
+            src={trashIcon}
+            onClick={() => handleDelatePassword()}
+            className="trash_icon"
+            alt="trash_icon"
+          />
         )}
       </div>
     </div>

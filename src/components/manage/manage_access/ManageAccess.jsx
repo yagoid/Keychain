@@ -90,8 +90,6 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
       .then((data) => {
         if (data.data) {
           setUserData(data.data);
-        } else {
-          console.log(data);
         }
       })
       .catch((error) => {
@@ -123,9 +121,7 @@ export default function ManageAccess({ setIsPrivateKeyValid }) {
         const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
         const encryptedMessage = encryptMessage(
           kdfPrivateKey.toString(),
-          // "yago",
           defaultEncryptionKey,
-          // "yago",
           CryptoJS.enc.Hex.parse("iv")
         );
 
