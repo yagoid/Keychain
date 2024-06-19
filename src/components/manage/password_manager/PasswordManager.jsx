@@ -80,7 +80,7 @@ export default function PasswordManager() {
     getPlatforms(currentUser.uid)
       .then((platforms) => {
         // Guardar las plataformas
-        setPlatforms(platforms);
+        // setPlatforms(platforms);
         getDataPassword(platforms);
       })
       .catch((error) => {
@@ -114,16 +114,22 @@ export default function PasswordManager() {
           );
 
           // Añadir los datos de la contraseña
-          setDataPasswords((prevData) => [
-            ...prevData,
-            {
-              platform: platform,
-              id: data.length + 1,
-              key: decryptedPassword, // data.data.data[0].key
-              timestamp: data.data.timestamp,
-              proofOfWork: data.data.proof,
-            },
-          ]);
+          setDataPasswords((prevData) => {
+            // Comprobar si la plataforma ya existe en la lista
+            if (!prevData.some((item) => item.platform === platform)) {
+              return [
+                ...prevData,
+                {
+                  platform: platform,
+                  id: prevData.length + 1,
+                  key: decryptedPassword, // data.data.data[0].key
+                  timestamp: data.data.timestamp,
+                  proofOfWork: data.data.proof,
+                },
+              ];
+            }
+            return prevData;
+          });
 
           // Añadir los datos de la blockchain
           setBlockchainUserData((prevData) => [
