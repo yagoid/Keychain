@@ -1,6 +1,8 @@
 # Utiliza una imagen oficial de Node.js como imagen base para la fase de compilación
 FROM node:20-alpine AS build
 
+ENV NODE_ENV=production
+
 # Establece el directorio de trabajo
 WORKDIR /app
 
