@@ -1,6 +1,7 @@
 
 export const postData = async (endpoint, data) => {
-    const url = "http://localhost:5000/" + endpoint
+    const url = "http://blockchain:5000/" + endpoint
+    // const url = "http://localhost:5000/" + endpoint
 
     return fetch(url, { 
             method: 'POST',
@@ -12,7 +13,8 @@ export const postData = async (endpoint, data) => {
 };
 
 export const fetchData = async (endpoint) => {
-    const url = "http://localhost:5000/" + endpoint
+    const url = "http://blockchain:5000/" + endpoint
+    // const url = "http://localhost:5000/" + endpoint
 
     const abortController = new AbortController();
 
