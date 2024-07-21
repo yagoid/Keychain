@@ -1,13 +1,14 @@
 # Utiliza una imagen oficial de Node.js como imagen base para la fase de compilación
 FROM node:20-alpine AS build
 
-ENV NODE_ENV=production npm i
-
 # Establece el directorio de trabajo
 WORKDIR /app
 
 # Copia los archivos package.json y package-lock.json
 COPY package*.json ./
+
+# Instala las dependencias
+RUN npm i
 
 # Copia el resto de la aplicación
 COPY . .
