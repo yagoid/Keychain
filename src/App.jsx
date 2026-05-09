@@ -13,7 +13,7 @@ function App() {
   return (
     <AuthProvider>
       <KeyProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/keychain">
           <Routes>
             <Route path="/" element={<AboutPage />} />
             <Route path="/home" element={<HomePage />} />
