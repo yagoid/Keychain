@@ -1,49 +1,49 @@
-.texts {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 50px;
-  }
-  
-  .texts span {
-    font-size: 85px;
-  }
-  
-  .texts span:nth-child(1) {
-    padding-left: 100px;
-  }
-  .texts span:nth-child(2) {
-    color: #0096D2;
-  }
-  .texts span:nth-child(3) {
-    padding-left: 50px;
-  }
-  
-@media (max-width: 850px) {
-  .texts {
-    position: relative;
-    align-items: center;
-  }
-
-  .texts span {
-    font-size: 60px;
-    align-items: left;
-  }
-
-  .texts span:nth-child(1) {
-    padding-left: 0px;
-  }
-  .texts span:nth-child(2) {
-    padding-left: 0px;
-  }
-  .texts span:nth-child(3) {
-    padding-left: 0px;
-    padding-right: 100px;
-  }
+/* Hero heading — Trust · Decentralize · Enjoy */
+.main-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 0;
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
 }
 
-@media (max-width: 576px) {
-  .texts span {
-    font-size: 40px;
-    align-items: left;
-  }
+.main-text__line {
+  font-size: clamp(48px, 9vw, 132px);
+  line-height: 0.98;
+  display: block;
+}
+
+.main-text__line--1 {
+  color: var(--bone);
+  font-weight: 300;
+}
+
+/* "Decentralize." — cyan + caret animation */
+.main-text__line--2 {
+  color: var(--plasma);
+  font-weight: 500;
+  position: relative;
+  display: inline-block;
+}
+.main-text__line--2::after {
+  content: "";
+  position: absolute;
+  right: -14px;
+  top: 8%;
+  width: 2px;
+  height: 78%;
+  background: var(--plasma);
+  animation: caret 1.05s steps(1, end) infinite;
+}
+
+.main-text__line--3 {
+  color: var(--bone);
+  font-weight: 300;
+}
+
+@media (max-width: 760px) {
+  .main-text__line--2::after { display: none; }
 }

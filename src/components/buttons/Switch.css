@@ -36,7 +36,7 @@
 }
 
 input:checked + .slider {
-    background-color: #0096D2; /* Color del interruptor cuando está activado */
+    background-color: var(--plasma);
 }
 
 input:checked + .slider:before {

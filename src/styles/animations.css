@@ -1,0 +1,101 @@
+/* ============================================================
+   KEYCHAIN — Keyframes
+   ============================================================ */
+
+@keyframes pb-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pb-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pb-scar-slide {
+  from { transform: scaleX(0); transform-origin: left center; }
+  to   { transform: scaleX(1); transform-origin: left center; }
+}
+
+@keyframes pb-plasma-pulse {
+  0%, 100% { opacity: 0.55; box-shadow: 0 0 0 0 var(--plasma-glow); }
+  50%      { opacity: 1;    box-shadow: 0 0 18px 2px var(--plasma-glow); }
+}
+
+@keyframes pb-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    opacity: 1;
+    text-shadow:
+      -0.5px 0 var(--plasma-dp),
+      0.5px 0 var(--plasma);
+  }
+  20%, 24%, 55% {
+    opacity: 0.55;
+    text-shadow: none;
+  }
+}
+
+@keyframes pb-scan {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(200%); }
+}
+
+@keyframes pb-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pb-snap-in {
+  0%   { transform: translate(6px, 6px); opacity: 0; }
+  60%  { transform: translate(-2px, -2px); opacity: 1; }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes pb-spark {
+  0%   { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--sx, 30px), var(--sy, -30px)) scale(0.2); opacity: 0; }
+}
+
+@keyframes pb-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* From design reference — live chrome animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.55; transform: scale(0.85); }
+}
+
+@keyframes caret {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes hs-fall {
+  from { transform: translateY(-50%); }
+  to   { transform: translateY(0%); }
+}
+
+@keyframes chain-flow {
+  0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.7); }
+  50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.2); }
+}
+
+@keyframes slice-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+@keyframes ribbon {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

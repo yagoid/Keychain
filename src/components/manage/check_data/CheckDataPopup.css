@@ -1,50 +1,59 @@
-.data-container {
-  background-color: #1c1c1c;
-  max-width: 50%;
-  max-height: 80vh;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.cd { width: min(720px, 100%); }
+.cd__coord {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--plasma);
+  display: block;
+  margin-bottom: 4px;
 }
-
-.header-data-container {
+.cd__note {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  color: var(--bone-mute);
+  line-height: 1.55;
+  margin: 0 0 var(--s-5);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--ash);
+}
+.cd__list { display: flex; flex-direction: column; gap: var(--s-5); }
+.cd__item {
+  border: 1px solid var(--ash);
+  background: var(--graphite);
+  box-shadow: var(--shadow-block);
+}
+.cd__item-head {
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
   align-items: center;
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--ash);
 }
-
-.body-data-container {
+.cd__item-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--plasma);
+}
+.cd__item-tag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ember);
+}
+.cd__pre {
+  margin: 0;
+  padding: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  color: var(--bone);
+  background: var(--obsidian);
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.5;
+  max-height: 320px;
   overflow-y: auto;
-  max-height: 60vh;
-  opacity: 0.8;
-}
-
-.close_icon {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-.blockchain-data-tittle {
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-@media (max-width: 1200px) {
-  .data-container {
-    padding: 20px;
-    max-width: 70%;
-    max-height: 70%;
-  }
-
-  .blockchain-data-tittle {
-    font-size: 1.2rem;
-  }
-}
-
-@media (max-width: 900px) {
-  .blockchain-data-tittle {
-    font-size: 1rem;
-  }
 }

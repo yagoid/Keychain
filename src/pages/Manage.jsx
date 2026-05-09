@@ -5,7 +5,6 @@ import { useAuth } from "./../contexts/authContext";
 import { useKey } from "./../contexts/keyContext/keyContext";
 import Navbar from "../components/navbar/Navbar";
 import LocatorBar from "../components/locator_bar/LocatorBar.jsx";
-import hexagons2 from "./../assets/images/hexagons2.svg";
 import "./Manage.css";
 import ManageAccess from "../components/manage/manage_access/ManageAccess.jsx";
 import PasswordManager from "../components/manage/password_manager/PasswordManager.jsx";
@@ -14,13 +13,12 @@ export default function ManagePage() {
   const { userLoggedIn } = useAuth();
   const { contextPrivateKey } = useKey();
 
-  const [nameActiveSection, setNameActiveSection] = useState("Manage");
+  const [nameActiveSection] = useState("Manage");
   const [isPrivateKeyValid, setIsPrivateKeyValid] = useState(false);
 
   const homeSections = TEXTS.homeSections.en;
 
   useEffect(() => {
-    // Verificar si hay una clave privada guardada en sessionStorage al cargar el componente
     const storedPrivateKey = sessionStorage.getItem("privateKey");
     if (storedPrivateKey || contextPrivateKey != "") {
       setIsPrivateKeyValid(true);
@@ -28,39 +26,34 @@ export default function ManagePage() {
   }, []);
 
   return (
-    <div className={isPrivateKeyValid ? "manage-password" : "manage-access"}>
+    <div className="vault">
       {!userLoggedIn && <Navigate to={"../"} replace={true} />}
       <Navbar
         sections={homeSections}
         nameActiveSection={nameActiveSection}
         transmitter={TEXTS.home.en}
       />
-      {isPrivateKeyValid ? (
-        <div className="password-manager-section">
-          <PasswordManager />
-        </div>
-      ) : (
-        <div className="access-section">
-          <ManageAccess setIsPrivateKeyValid={setIsPrivateKeyValid} />
-        </div>
-      )}
-      <section className="locator-bar">
+
+      <aside className="vault__locator" aria-label="Sections">
         {homeSections.map((section, index) => (
           <LocatorBar
             key={index}
             section={section}
             nameActiveSection={nameActiveSection}
             index={index}
-            lastIndex={index == homeSections.length - 1 ? true : false}
+            lastIndex={index == homeSections.length - 1}
             transmitter={TEXTS.home.en}
-          ></LocatorBar>
+          />
         ))}
-      </section>
-      <img
-        src={hexagons2}
-        className="hexagons2-background-managepage"
-        alt="Background of hexagons"
-      />
+      </aside>
+
+      <main className="vault__main">
+        {isPrivateKeyValid ? (
+          <PasswordManager />
+        ) : (
+          <ManageAccess setIsPrivateKeyValid={setIsPrivateKeyValid} />
+        )}
+      </main>
     </div>
   );
 }

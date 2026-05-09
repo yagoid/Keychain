@@ -1,50 +1,40 @@
 import { TEXTS } from "../../assets/locales/texts.js";
-import LocatorSquareActive from "./../../assets/images/locator_square_active.svg";
-import LocatorSquareActiveGreen from "./../../assets/images/locator_square_active_green.svg";
-import LocatorSquare from "./../../assets/images/locator_square.svg";
-import LocatorLine from "./../../assets/images/locator_line.svg";
-import "./LocatorBar.css";
 import { Link } from "react-router-dom";
+import "./LocatorBar.css";
 
-export default function LocationBar({
+export default function LocatorBar({
   setActiveSection,
   section,
   nameActiveSection,
   index,
-  lastIndex,
   transmitter,
 }) {
-  const changeActiveSection = () => {
-    setActiveSection(index);
+  const isActive = nameActiveSection === section;
+  const label = String(index).padStart(2, "0");
+
+  const handleClick = () => {
+    if (setActiveSection) setActiveSection(index);
   };
 
-  return (
-    <div className="icon-set">
-      <Link
-        to={transmitter === TEXTS.home.en ? `/${section.toLowerCase()}` : null}
-      >
-        <img
-          onClick={setActiveSection ? changeActiveSection : null}
-          src={
-            nameActiveSection === section
-              ? section === TEXTS.main.en || section === TEXTS.home.en
-                ? LocatorSquareActive
-                : LocatorSquareActiveGreen
-              : LocatorSquare
-          }
-          className="locator-square"
-          alt="Locator square"
-        />
-      </Link>
-      {!lastIndex && (
-        <img
-          src={LocatorLine}
-          className={
-            index === 0 ? "locator-line invisible-line" : "locator-line"
-          }
-          alt="Locator square"
-        />
-      )}
-    </div>
+  const inner = (
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-label={`Go to section ${section}`}
+      className={`pb-loc__item ${isActive ? "pb-loc__item--active" : ""}`}
+    >
+      <span className="pb-loc__num">{label}</span>
+      <span className="pb-loc__dot" aria-hidden="true" />
+    </button>
   );
+
+  if (transmitter === TEXTS.home.en) {
+    return (
+      <Link to={`/${section.toLowerCase()}`} className="pb-loc__link">
+        {inner}
+      </Link>
+    );
+  }
+
+  return inner;
 }

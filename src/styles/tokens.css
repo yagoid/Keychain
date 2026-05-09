@@ -1,0 +1,90 @@
+/* ============================================================
+   KEYCHAIN — Design Tokens
+   Deep-navy · Manrope · Cyan + Matrix-green palette
+   ============================================================ */
+
+:root,
+[data-theme="plasma"] {
+  /* surfaces — deep navy, inspired by the design reference */
+  --obsidian:    #06090c;
+  --carbon:      #06090c;
+  --graphite:    #0a0e12;
+  --ash:         #0f1820;
+  --ash-soft:    #1a2a3a;
+
+  /* text */
+  --bone:        #e9eef3;
+  --bone-dim:    #9aa6b2;
+  --bone-mute:   #5b6772;
+
+  /* signature — cyan (#1cb0e6) + matrix green secondary */
+  --plasma:      #1cb0e6;
+  --plasma-dp:   #1499c5;
+  --plasma-bri:  #3dc5f5;
+  --plasma-glow: rgba(28, 176, 230, 0.22);
+  --plasma-haze: rgba(28, 176, 230, 0.06);
+
+  /* rare accents */
+  --ember:       #4adb84;       /* matrix green — "alive / anchored" */
+  --scar:        #FF4D4D;       /* error */
+  --scar-glow:   rgba(255, 77, 77, 0.18);
+
+  /* typography */
+  --font-display: 'Manrope', system-ui, sans-serif;
+  --font-body:    'Manrope', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'Cascadia Mono', Menlo, monospace;
+
+  /* fluid scale */
+  --fs-mono-xs:   0.6875rem;   /* 11 */
+  --fs-mono-sm:   0.75rem;     /* 12 */
+  --fs-mono:      0.875rem;    /* 14 */
+  --fs-body:      1rem;        /* 16 */
+  --fs-body-lg:   1.125rem;    /* 18 */
+  --fs-h4:        1.5rem;      /* 24 */
+  --fs-h3:        2rem;        /* 32 */
+  --fs-h2:        clamp(2.5rem, 4vw, 3.75rem);
+  --fs-h1:        clamp(3.5rem, 9vw, 8.25rem);
+  --fs-monolith:  clamp(5rem, 18vw, 16rem);
+
+  /* spacing — 4-base */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 144px;
+
+  /* shadows */
+  --shadow-block:        0 1px 0 rgba(255,255,255,0.02), 0 12px 40px rgba(0,0,0,0.55);
+  --shadow-block-deep:   0 1px 0 rgba(255,255,255,0.03), 0 22px 60px rgba(0,0,0,0.65);
+  --shadow-plasma:       0 0 0 1px var(--plasma-dp), 0 12px 40px rgba(28, 176, 230, 0.18);
+  --shadow-plasma-deep:  0 0 0 1px var(--plasma), 0 18px 60px rgba(28, 176, 230, 0.28);
+  --shadow-scar:         0 0 0 1px var(--scar), 0 8px 24px var(--scar-glow);
+  --glow-plasma:         0 0 24px var(--plasma-glow), 0 0 1px var(--plasma);
+
+  /* lines */
+  --line:        1px solid var(--ash);
+  --line-strong: 2px solid var(--ash-soft);
+  --line-plasma: 2px solid var(--plasma);
+
+  /* motion */
+  --ease-snap: cubic-bezier(.2, .9, .1, 1);
+  --ease-out:  cubic-bezier(.22, 1, .36, 1);
+  --d-fast:    130ms;
+  --d-mid:     220ms;
+  --d-slow:    420ms;
+
+  /* radius */
+  --r-0:    0;
+  --r-1:    2px;
+  --r-2:    4px;
+  --r-3:    6px;
+  --r-4:    10px;
+  --r-pill: 999px;
+
+  color-scheme: dark;
+}

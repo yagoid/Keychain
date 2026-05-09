@@ -19,12 +19,9 @@ import CryptoJS from "crypto-js";
 import visibleIcon from "./../../../assets/images/visible_icon.svg";
 import notVisibleIcon from "./../../../assets/images/not_visible_icon.svg";
 import trashIcon from "./../../../assets/images/trash_icon.svg";
-import chainLine from "./../../../assets/images/chain_line_blocks.svg";
-import ErrorIcon from "./../../../assets/images/error_icon.svg";
 import NewPasswordPupup from "../new_password/NewPasswordPopup.jsx";
-import "./PasswordManager.css";
-import "./../../buttons/Switch.css";
 import CheckDataPupup from "../check_data/CheckDataPopup.jsx";
+import "./PasswordManager.css";
 
 export default function PasswordManager() {
   const { currentUser } = useAuth();
@@ -38,40 +35,28 @@ export default function PasswordManager() {
   const [dataPasswords, setDataPasswords] = useState([]);
   const [blockchainUserData, setBlockchainUserData] = useState([]);
 
-  // La vista se cambia automáticamente a vista de bloque
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 970) {
-        setIsBlockView(true);
-      }
+      if (window.innerWidth < 970) setIsBlockView(true);
     };
     handleResize();
-    // Agregamos un listener para el evento de cambio de tamaño de la ventana
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const decryptPrivateKey = () => {
     const storedPrivateKey = sessionStorage.getItem("privateKey");
     if (storedPrivateKey || contextPrivateKey != "") {
-      // Encriptar la clave privada para guardarla
       const defaultEncryptionKey = hashWithSHA3(currentUser.uid);
-
-      // Desencriptar la clave privada
       const decryptedPrivateKey = decryptMessage(
         contextPrivateKey,
         defaultEncryptionKey,
         CryptoJS.enc.Hex.parse("iv")
       );
-
       return decryptedPrivateKey;
     }
   };
 
-  // Consultar las plataformas registradas
   useEffect(() => {
     consultPlatforms();
   }, []);
@@ -79,17 +64,13 @@ export default function PasswordManager() {
   const consultPlatforms = () => {
     getPlatforms(currentUser.uid)
       .then((platforms) => {
-        // Guardar las plataformas
-        // setPlatforms(platforms);
         getDataPassword(platforms);
       })
       .catch((error) => {
-        // Manejar cualquier error de consulta
         console.log("Error al guardar la platafroma en firebase:", error);
       });
   };
 
-  // Recorrer las contraseñas de firebase para conseguir sus datos
   const getDataPassword = (platforms) => {
     const hashUidUser = hashWithSHA3(currentUser.uid);
     setDataPasswords([]);
@@ -101,28 +82,22 @@ export default function PasswordManager() {
     for (const platform of platforms) {
       hashPlatform = hashWithSHA3(platform);
       fetchData(`get_data?user=${hashUidUser}&platform=${hashPlatform}`)
-        .then((response) => {
-          return response.json();
-        })
+        .then((response) => response.json())
         .then((data) => {
-          // console.log(data.data.data[0].key);
-          // Desencriptar la contraseña
           const decryptedPassword = decryptMessage(
             data.data.data[0].key,
             CryptoJS.enc.Hex.parse(decryptedPrivateKey),
             CryptoJS.enc.Hex.parse(data.data.data[0].iv)
           );
 
-          // Añadir los datos de la contraseña
           setDataPasswords((prevData) => {
-            // Comprobar si la plataforma ya existe en la lista
             if (!prevData.some((item) => item.platform === platform)) {
               return [
                 ...prevData,
                 {
                   platform: platform,
                   id: prevData.length + 1,
-                  key: decryptedPassword, // data.data.data[0].key
+                  key: decryptedPassword,
                   timestamp: data.data.timestamp,
                   proofOfWork: data.data.proof,
                 },
@@ -131,7 +106,6 @@ export default function PasswordManager() {
             return prevData;
           });
 
-          // Añadir los datos de la blockchain
           setBlockchainUserData((prevData) => [
             ...prevData,
             JSON.stringify(data.data, null, 2),
@@ -142,44 +116,29 @@ export default function PasswordManager() {
             console.log("Request cancelled");
           } else {
             console.log("Error al recibir los datos de las contraseñas", error);
-            // setErrorMessage(TEXTS.errorCreatePrivateKey.en);
           }
         });
     }
   };
 
-  // Abrir el popup para añadir un nuevo bloque/fila
-  const handleOpenAddPasswordPopUp = () => {
-    setIsOpenNewPasswordPopup(true);
-  };
+  const handleOpenAddPasswordPopUp = () => setIsOpenNewPasswordPopup(true);
+  const handleCheckDataOnBlockchainPopUp = () => setIsOpenCheckDataPopup(true);
 
-  // Añadir el popup para consultar los datos en la blockchain
-  const handleCheckDataOnBlockchainPopUp = () => {
-    setIsOpenCheckDataPopup(true);
-  };
-
-  // Guardar los cambios editados en la variable data
   const handleSaveChanges = (oldPlatform, newPlatform, newKey) => {
     if (!isSaving) {
       setIsSaving(true);
-      // Eliminar plataforma
       removePlatform(currentUser.uid, oldPlatform)
         .then(() => {
-          // Añadir la nueva plataforma
           addNewPlatform(currentUser.uid, newPlatform)
             .then(() => {
-              // Guardar los cambios en blockchian
               changePasswordInBlockchian(newPlatform, newKey);
             })
             .catch((error) => {
-              // Manejar cualquier error de registro de username
               console.log("Error al guardar el nuevo bloque:", error);
-              setErrorMessage(TEXTS.errorNewBlock.en);
               setIsSaving(false);
             });
         })
         .catch((error) => {
-          // Manejar cualquier error de consulta
           console.log("Error al modificar la platafroma en firebase:", error);
           setIsSaving(false);
         });
@@ -187,54 +146,33 @@ export default function PasswordManager() {
   };
 
   const changePasswordInBlockchian = (newPlatform, key) => {
-    // Cifrar los datos antes de enviarlos
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
     const hashUidUser = hashWithSHA3(currentUser.uid);
     const hashPlatform = hashWithSHA3(newPlatform);
 
     const decryptedPrivateKey = decryptPrivateKey();
 
-    // Encriptar la contraseña con la clave privada
     const encryptedMessage = encryptMessage(
       key,
       CryptoJS.enc.Hex.parse(decryptedPrivateKey),
       iv
     );
 
-    // Enviar los datos a la blockchain
     postData("add_data", {
       user: hashUidUser,
       platform: hashPlatform,
       key: encryptedMessage,
       iv: iv.toString(),
     })
-      .then((response) => {
-        response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        // Encuentra el objeto correspondiente por su id
-        // const updatedData = dataPasswords.map((block) => {
-        //   if (block.id === id) {
-        //     return { ...block, platform: platform, key: key };
-        //   }
-        //   return block;
-        // });
-        // setDataPasswords(updatedData);
-
-        // setPlatforms(platform);
-        // setPlatforms((prevPlatforms) => [...prevPlatforms, platform]);
         consultPlatforms();
       })
       .catch((error) => {
         console.log("Error al enviar datos a la blockchian", error);
-        setErrorMessage(TEXTS.errorCreatePrivateKey.en);
       })
       .finally(() => setIsSaving(false));
-  };
-
-  const toggleSwitch = () => {
-    setIsBlockView(!isBlockView);
   };
 
   const handleClosePopup = () => {
@@ -242,46 +180,91 @@ export default function PasswordManager() {
     setIsOpenCheckDataPopup(false);
   };
 
+  const count = dataPasswords.length;
+
   return (
-    <div className="password-manager">
-      <h1>{TEXTS.myKeys.en}</h1>
-      <div className="password-manager-container">
-        {isBlockView ? (
-          <PasswordManagerBlocks
-            dataPasswords={dataPasswords}
-            handleSaveChanges={handleSaveChanges}
-            currentUser={currentUser}
-            consultPlatforms={consultPlatforms}
-          />
-        ) : (
-          <PasswordManagerTable
-            dataPasswords={dataPasswords}
-            handleSaveChanges={handleSaveChanges}
-          />
-        )}
-        <div className="password-buttons">
-          <button
-            onClick={handleOpenAddPasswordPopUp}
-            className="btn-add-password"
-            style={{ marginTop: "10px" }}
-          >
-            {TEXTS.addPassword.en}
-          </button>
-          {dataPasswords.length != 0 && (
-            <button
-              onClick={handleCheckDataOnBlockchainPopUp}
-              className="btn-check-data-on-blockchain"
-            >
-              {TEXTS.checkDataOnBlockchain.en}
-            </button>
-          )}
+    <div className="pm">
+      {/* HEAD ============================================ */}
+      <header className="pm__head">
+        <div className="pm__head-meta">
+          <span className="pb-tag">// LEDGER · MY KEYS</span>
+          <span className="pm__head-coord">// VAULT :: 0xA1 :: BLOCK {String(count).padStart(4, "0")}</span>
         </div>
-      </div>
-      <label className="toggle-switch">
-        <input type="checkbox" checked={isBlockView} onChange={toggleSwitch} />
-        <span className="slider"></span>
-      </label>
-      <span className="text-switch">{TEXTS.blockView.en}</span>
+        <h1 className="pm__title">
+          {TEXTS.myKeys.en}
+          <span className="pm__title-count">[{String(count).padStart(2, "0")}]</span>
+        </h1>
+        <p className="pm__sub">
+          Each credential lives as an encrypted block on the chain.
+          Modifying one anchors a new block; nothing is overwritten.
+        </p>
+
+        <div className="pm__toolbar">
+          <div
+            className="pb-segmented"
+            role="tablist"
+            aria-label="View mode"
+          >
+            <button
+              type="button"
+              className={`pb-segmented__option ${isBlockView ? "pb-segmented__option--active" : ""}`}
+              onClick={() => setIsBlockView(true)}
+              role="tab"
+              aria-selected={isBlockView}
+            >
+              <span aria-hidden="true">▦</span> CHAIN
+            </button>
+            <button
+              type="button"
+              className={`pb-segmented__option ${!isBlockView ? "pb-segmented__option--active" : ""}`}
+              onClick={() => setIsBlockView(false)}
+              role="tab"
+              aria-selected={!isBlockView}
+            >
+              <span aria-hidden="true">≡</span> LEDGER
+            </button>
+          </div>
+
+          <div className="pm__toolbar-actions">
+            {dataPasswords.length !== 0 && (
+              <button
+                type="button"
+                className="main-btn main-btn--ghost"
+                onClick={handleCheckDataOnBlockchainPopUp}
+              >
+                <span className="main-btn__text">CHAIN PROOF</span>
+                <span className="main-btn__arrow">↗</span>
+              </button>
+            )}
+            <button
+              type="button"
+              className="main-btn main-btn--plasma"
+              onClick={handleOpenAddPasswordPopUp}
+            >
+              <span className="main-btn__text">+ {TEXTS.addPassword.en.toUpperCase()}</span>
+              <span className="main-btn__arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* BODY ============================================ */}
+      {count === 0 ? (
+        <EmptyState onAdd={handleOpenAddPasswordPopUp} />
+      ) : isBlockView ? (
+        <PasswordManagerBlocks
+          dataPasswords={dataPasswords}
+          handleSaveChanges={handleSaveChanges}
+          currentUser={currentUser}
+          consultPlatforms={consultPlatforms}
+        />
+      ) : (
+        <PasswordManagerTable
+          dataPasswords={dataPasswords}
+          handleSaveChanges={handleSaveChanges}
+        />
+      )}
+
       {isOpenNewPasswordPopup && (
         <NewPasswordPupup
           onClose={handleClosePopup}
@@ -299,41 +282,64 @@ export default function PasswordManager() {
   );
 }
 
+/* ---------- Empty state ---------- */
+const EmptyState = ({ onAdd }) => (
+  <div className="pm__empty">
+    <pre className="pm__empty-art" aria-hidden="true">{`
+   ┌──────────────────┐
+   │  // VAULT EMPTY  │
+   │                  │
+   │   ░░░░░░░░░░░░   │
+   │   ░░░░░░░░░░░░   │
+   │                  │
+   └──────────────────┘
+            │
+            ▼
+       NO BLOCKS
+`}</pre>
+    <h3 className="pm__empty-title">// LEDGER UNINITIALIZED</h3>
+    <p className="pm__empty-text">
+      Anchor your first credential to bootstrap the chain.
+    </p>
+    <button type="button" className="main-btn main-btn--plasma" onClick={onAdd}>
+      <span className="main-btn__text">+ FORGE FIRST BLOCK</span>
+      <span className="main-btn__arrow">→</span>
+    </button>
+  </div>
+);
+
+/* ---------- Block (chain) view ---------- */
 const PasswordManagerBlocks = ({
   dataPasswords,
   handleSaveChanges,
   currentUser,
   consultPlatforms,
-}) => {
-  return (
-    <section className="password-manager-block">
-      <div className="blocks">
-        {dataPasswords.map((block, index) => (
-          <div className="blocks-lines" key={index}>
-            <PasswordBlock
-              block={block}
-              saveChanges={handleSaveChanges}
-              currentUser={currentUser}
-              consultPlatforms={consultPlatforms}
-            />
-            <img
-              src={chainLine}
-              className={
-                index == dataPasswords.length - 1
-                  ? "invisible"
-                  : "chian_line_icon"
-              }
-              alt="Chain line"
-            />
+}) => (
+  <section className="pm__chain pb-stagger">
+    {dataPasswords.map((block, index) => (
+      <div className="pm__chain-row" key={`${block.platform}-${index}`}>
+        <PasswordBlock
+          block={block}
+          index={index}
+          saveChanges={handleSaveChanges}
+          currentUser={currentUser}
+          consultPlatforms={consultPlatforms}
+        />
+        {index < dataPasswords.length - 1 && (
+          <div className="pm__chain-connector" aria-hidden="true">
+            <span className="pm__chain-line" />
+            <span className="pm__chain-hex" />
+            <span className="pm__chain-line" />
           </div>
-        ))}
+        )}
       </div>
-    </section>
-  );
-};
+    ))}
+  </section>
+);
 
 const PasswordBlock = ({
   block,
+  index,
   saveChanges,
   currentUser,
   consultPlatforms,
@@ -344,29 +350,14 @@ const PasswordBlock = ({
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [editableTexts, setEditableTexts] = useState(false);
 
-  // Cambiar el texto cuando se editan los inputs
-  const handlePlatformChange = async (text) => {
-    setPlatform(text);
-  };
-  const handleKeyChange = (text) => {
-    setKey(text);
-  };
-
-  // Guardar los cambios editados
-  const handleModifyText = async (e) => {
+  const handleModifyText = async () => {
     setErrorMessage("");
 
-    // La contraseña y la plataforma no pueden estar vacías
-    if (editableTexts && (key == "" || platform == "")) {
-      return;
-    }
-    // No se guarda si no hay cambios
+    if (editableTexts && (key == "" || platform == "")) return;
     if (editableTexts && key == block.key && platform == block.platform) {
       setEditableTexts(!editableTexts);
       return;
     }
-
-    // setEditableTexts(!editableTexts);
 
     if (editableTexts) {
       if (
@@ -384,253 +375,238 @@ const PasswordBlock = ({
     }
   };
 
-  // Eliminar una contraseña
   const handleDelatePassword = () => {
     if (editableTexts) {
-      // Eliminar plataforma
       removePlatform(currentUser.uid, block.platform)
         .then(() => {
           consultPlatforms();
           setEditableTexts(!editableTexts);
         })
         .catch((error) => {
-          // Manejar cualquier error de consulta
           console.log("Error al eliminar la platafroma en firebase:", error);
           setEditableTexts(!editableTexts);
         });
     }
   };
 
-  // Cancelar edición
   const handleCancelModifyText = () => {
     setEditableTexts(!editableTexts);
-
     setPlatform(block.platform);
     setKey(block.key);
     setErrorMessage("");
   };
 
+  const blockHash = `0x${(block.proofOfWork || "0000")
+    .toString()
+    .slice(0, 8)
+    .padEnd(8, "0")}`;
+
   return (
-    <div className="block">
-      {/* Platform */}
-      <div className="block-section">
-        <span className="tittle-block-section">{TEXTS.platform.en}</span>
-        {editableTexts ? (
-          <input
-            className="input-modify-platform"
-            type="text"
-            value={platform}
-            onChange={(e) => handlePlatformChange(e.target.value)}
-            required
-          />
-        ) : (
-          <span className="text-block-section platform">{platform}</span>
-          // <span className="text-block-section">{key}</span>
-        )}
-      </div>
-      {/* Key */}
-      <div className="block-section">
-        <span className="tittle-block-section">{TEXTS.password.en}</span>
-        <div className="key-block-section">
+    <article className={`pm__block ${editableTexts ? "pm__block--edit" : ""}`}>
+      <header className="pm__block-head">
+        <span className="pm__block-coord pb-coord pb-coord--alive">
+          // BLOCK {String(index).padStart(4, "0")} :: ANCHORED
+        </span>
+        <span className="pm__block-num">{String(index + 1).padStart(2, "0")}</span>
+      </header>
+
+      <div className="pm__block-body">
+        {/* platform */}
+        <div className="pm__block-cell">
+          <span className="pm__block-label">// {TEXTS.platform.en.toUpperCase()}</span>
           {editableTexts ? (
             <input
-              className="input-modify-key"
-              type={visiblePassword ? "text" : "password"}
-              value={key}
-              onChange={(e) => handleKeyChange(e.target.value)}
+              className="pb-input pm__block-input"
+              type="text"
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
               required
             />
-          ) : visiblePassword ? (
-            <span className="text-block-section">{key}</span>
           ) : (
-            <span className="text-block-section">{key.replace(/./g, "*")}</span>
+            <span className="pm__block-value pm__block-value--display">
+              {platform}
+            </span>
           )}
-          <img
-            src={!visiblePassword ? visibleIcon : notVisibleIcon}
-            onClick={() => setVisiblePassword(!visiblePassword)}
-            className="eye_icon"
-            alt={!visiblePassword ? "Eye visible icon" : "Eye not visible icon"}
-          />
         </div>
-        {errorMessage != "" && (
-          <div className="error-block-container">
-            <img src={ErrorIcon} className="error-icon" alt="Error icon" />
-            <span className="error-block-message">{errorMessage}</span>
+
+        {/* key */}
+        <div className="pm__block-cell">
+          <span className="pm__block-label">// {TEXTS.password.en.toUpperCase()}</span>
+          <div className="pm__block-key">
+            {editableTexts ? (
+              <input
+                className="pb-input pm__block-input pm__block-input--mono"
+                type={visiblePassword ? "text" : "password"}
+                value={key}
+                onChange={(e) => setKey(e.target.value)}
+                required
+              />
+            ) : (
+              <span className="pm__block-value pm__block-value--mono">
+                {visiblePassword ? key : key.replace(/./g, "•")}
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={() => setVisiblePassword(!visiblePassword)}
+              className="pm__block-eye"
+              aria-label={visiblePassword ? "Hide" : "Show"}
+            >
+              <img
+                src={!visiblePassword ? visibleIcon : notVisibleIcon}
+                alt=""
+              />
+            </button>
           </div>
-        )}
+          {errorMessage && (
+            <div className="pb-error pm__block-error">
+              <span className="pb-error__bar" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+        </div>
       </div>
-      {/* Timestamp */}
-      <div className="block-section">
-        <span className="tittle-block-section">{TEXTS.timestamp.en}</span>
-        <span className="text-block-section">{block.timestamp}</span>
-      </div>
-      {/* Proof of Work */}
-      <div className="block-section">
-        <span className="tittle-block-section">{TEXTS.proofOfWork.en}</span>
-        <span className="text-block-section">{block.proofOfWork}</span>
-      </div>
-      {/* Modify */}
-      <div className="modify-block-section">
-        <button
-          type="submit"
-          className="btn-modify-password"
-          onClick={() => handleModifyText()}
-        >
-          {editableTexts ? TEXTS.save.en : TEXTS.modify.en}
-        </button>
-        {editableTexts && (
+
+      <footer className="pm__block-foot">
+        <div className="pm__block-meta">
+          <span className="pm__block-meta-cell">
+            <span className="pm__block-meta-label">// HASH</span>
+            <span className="pm__block-meta-val pb-mono">{blockHash}</span>
+          </span>
+          <span className="pm__block-meta-cell">
+            <span className="pm__block-meta-label">// TIMESTAMP</span>
+            <span className="pm__block-meta-val pb-mono">
+              {block.timestamp || "—"}
+            </span>
+          </span>
+          <span className="pm__block-meta-cell">
+            <span className="pm__block-meta-label">// PoW</span>
+            <span className="pm__block-meta-val pb-mono">
+              {String(block.proofOfWork || "—").slice(0, 12)}
+            </span>
+          </span>
+        </div>
+
+        <div className="pm__block-actions">
           <button
-            className="btn-modify-password"
-            onClick={() => handleCancelModifyText()}
+            type="button"
+            className={`main-btn main-btn--sm ${editableTexts ? "main-btn--plasma" : "main-btn--ghost"}`}
+            onClick={handleModifyText}
+            style={{ minWidth: 120, minHeight: 38 }}
           >
-            {TEXTS.cancel.en}
+            <span className="main-btn__text">
+              {editableTexts ? TEXTS.save.en : TEXTS.modify.en}
+            </span>
           </button>
-        )}
-        {editableTexts && (
-          <img
-            src={trashIcon}
-            onClick={() => handleDelatePassword()}
-            className="trash_icon"
-            alt="trash_icon"
+          {editableTexts && (
+            <>
+              <button
+                type="button"
+                className="main-btn main-btn--ghost main-btn--sm"
+                onClick={handleCancelModifyText}
+                style={{ minWidth: 100, minHeight: 38 }}
+              >
+                <span className="main-btn__text">{TEXTS.cancel.en}</span>
+              </button>
+              <button
+                type="button"
+                className="pm__block-trash"
+                onClick={handleDelatePassword}
+                aria-label="Delete"
+              >
+                <img src={trashIcon} alt="" />
+              </button>
+            </>
+          )}
+        </div>
+      </footer>
+    </article>
+  );
+};
+
+/* ---------- Table (ledger) view ---------- */
+const PasswordManagerTable = ({ dataPasswords, handleSaveChanges }) => (
+  <div className="pm__ledger-wrap">
+    <table className="pb-ledger pm__ledger">
+      <thead>
+        <tr>
+          <th style={{ width: "8%" }}>BLOCK</th>
+          <th style={{ width: "32%" }}>{TEXTS.platform.en}</th>
+          <th>{TEXTS.password.en}</th>
+          <th style={{ width: "100px" }} aria-label="reveal" />
+          <th style={{ width: "20%" }}>HASH</th>
+        </tr>
+      </thead>
+      <tbody>
+        {dataPasswords.map((row, index) => (
+          <PasswordRow
+            key={index}
+            row={row}
+            index={index}
+            saveChanges={handleSaveChanges}
           />
-        )}
-      </div>
-    </div>
-  );
-};
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 
-const PasswordManagerTable = ({ dataPasswords, handleSaveChanges }) => {
-  return (
-    <div className="table-vertical-scroll">
-      <table className="password-manager-table">
-        <colgroup>
-          <col style={{ width: "45%" }} />
-          <col style={{ width: "25%" }} />
-          <col style={{ width: "10%" }} />
-          <col style={{ width: "20%" }} />
-        </colgroup>
-        <thead>
-          <tr>
-            <th className="column-tittle">{TEXTS.platform.en}</th>
-            <th className="column-tittle">{TEXTS.password.en}</th>
-            <th className="column-tittle"></th>
-            <th className="column-tittle">
-              {/* <button className="btn-add-password">{TEXTS.addPassword.en}</button> */}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {dataPasswords.map((row, index) => (
-            <PasswordRow
-              key={index}
-              row={row}
-              saveChanges={handleSaveChanges}
-            />
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-const PasswordRow = ({ row, saveChanges }) => {
+const PasswordRow = ({ row, index, saveChanges }) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [editableTexts, setEditableTexts] = useState(false);
   const [platform, setPlatform] = useState(row.platform);
   const [key, setKey] = useState(row.key);
 
-  // Cambiar el texto cuando se editan los inputs
-  const handlePlatformChange = (text) => {
-    setPlatform(text);
-  };
-  const handleKeyChange = (text) => {
-    setKey(text);
-  };
-
-  // Guardar los cambios editados
-  const handleModifyText = () => {
-    // La contraseña y la plataforma no pueden estar vacías
-    if (editableTexts && (key == "" || platform == "")) {
-      return;
-    }
-    // No se guarda si no hay cambios
-    if (editableTexts && key == row.key && platform == row.platform) {
-      setEditableTexts(!editableTexts);
-      return;
-    }
-
-    setEditableTexts(!editableTexts);
-
-    if (editableTexts) {
-      saveChanges(row.platform, platform, key);
-    }
-  };
-  // Cancelar edición
-  const handleCancelModifyText = () => {
-    setEditableTexts(!editableTexts);
-
-    setPlatform(row.platform);
-    setKey(row.key);
-  };
+  const blockHash = `0x${(row.proofOfWork || "0000")
+    .toString()
+    .slice(0, 8)
+    .padEnd(8, "0")}`;
 
   return (
     <tr>
-      {/* Columna 1 */}
+      <td>
+        <span className="pm__ledger-num">{String(index).padStart(4, "0")}</span>
+      </td>
       <td>
         {editableTexts ? (
           <input
-            className="input-modify-platform"
+            className="pb-input pm__ledger-input"
             type="text"
             value={platform}
-            onChange={(e) => handlePlatformChange(e.target.value)}
+            onChange={(e) => setPlatform(e.target.value)}
             required
           />
         ) : (
-          <span>{platform}</span>
+          <span className="pm__ledger-platform">{platform}</span>
         )}
       </td>
-      {/* Columna 2 */}
       <td>
         {editableTexts ? (
           <input
-            className="input-modify-key"
+            className="pb-input pm__ledger-input"
             type={visiblePassword ? "text" : "password"}
             value={key}
-            onChange={(e) => handleKeyChange(e.target.value)}
+            onChange={(e) => setKey(e.target.value)}
           />
-        ) : visiblePassword ? (
-          key
         ) : (
-          key.replace(/./g, "*")
+          <span className="pm__ledger-key">
+            {visiblePassword ? key : key.replace(/./g, "•")}
+          </span>
         )}
       </td>
-      {/* Columna 3 */}
       <td>
-        <img
-          src={!visiblePassword ? visibleIcon : notVisibleIcon}
-          onClick={() => setVisiblePassword(!visiblePassword)}
-          className="eye_icon"
-          alt={!visiblePassword ? "Eye visible icon" : "Eye not visible icon"}
-        />
-      </td>
-      {/* Columna 4 */}
-      {/* <td>
         <button
-          className="btn-modify-password"
-          onClick={() => handleModifyText()}
+          type="button"
+          onClick={() => setVisiblePassword(!visiblePassword)}
+          className="pm__ledger-eye"
+          aria-label={visiblePassword ? "Hide" : "Show"}
         >
-          {editableTexts ? TEXTS.save.en : TEXTS.modify.en}
+          <img src={!visiblePassword ? visibleIcon : notVisibleIcon} alt="" />
         </button>
-        {editableTexts && (
-          <button
-            style={{ marginLeft: "50px" }}
-            className="btn-modify-password"
-            onClick={() => handleCancelModifyText()}
-          >
-            {TEXTS.cancel.en}
-          </button>
-        )}
-      </td> */}
+      </td>
+      <td>
+        <span className="pm__ledger-hash">{blockHash}</span>
+      </td>
     </tr>
   );
 };

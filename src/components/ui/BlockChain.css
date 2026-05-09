@@ -1,0 +1,25 @@
+.pb-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-left: var(--s-7);
+  pointer-events: none;
+}
+.pb-chain__line {
+  flex: 1;
+  width: 2px;
+  background: var(--ash);
+}
+.pb-chain__hex {
+  width: 14px;
+  height: 14px;
+  background: var(--ash-soft);
+  flex-shrink: 0;
+  transition: background var(--d-mid) var(--ease-snap);
+}
+.pb-chain--alive .pb-chain__line { background: var(--plasma-dp); }
+.pb-chain--alive .pb-chain__hex {
+  background: var(--plasma);
+  animation: pb-plasma-pulse 2.4s var(--ease-out) infinite;
+}

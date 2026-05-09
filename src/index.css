@@ -1,45 +1,17 @@
-:root {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: weight;
-  font-style: normal;
+/* ============================================================
+   PLASMA · BLOCK — Design system entry
+   Import order is load-bearing. Do not reorder lightly:
+     1. tokens     → CSS variables
+     2. base       → reset + typography baseline
+     3. animations → @keyframes
+     4. utilities  → layout / atomic helpers
+     5. components → buttons / inputs / panels / ledger / etc.
+   Per-page CSS files imported by their pages run AFTER this entry,
+   so they can override safely via the `pb-` namespace.
+   ============================================================ */
 
-  color-scheme: light dark;
-  color: #f4f4f4;
-  background-color: #1c1c1c;
-
-  /* background-image: url('./assets/images/background.svg');  */
-  /* background-size: cover;  */
-  /* background-position: center;  */
-}
-
-a {
-  text-decoration: inherit;
-}
-
-button {
-  font-family: "Montserrat", sans-serif;
-}
-
-input {
-  font-family: "Montserrat", sans-serif;
-}
-
-/* a:hover {
-  color: #535bf2;
-} */
-
-body {
-  margin: 0;
-}
-
-h1 {
-  font-size: 4.5em;
-  font-weight: 200;
-}
-
-/* background: #1c1c1c; */
-/* background: #f4f4f4; */
-
-/* background: #0096D2; */
-/* background: #84af6d; */
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/animations.css";
+@import "./styles/utilities.css";
+@import "./styles/components.css";

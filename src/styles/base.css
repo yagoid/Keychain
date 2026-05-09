@@ -1,0 +1,91 @@
+/* ============================================================
+   PLASMA · BLOCK — Base reset + typography baseline
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+html {
+  background: var(--obsidian);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body {
+  min-height: 100vh;
+  background: var(--obsidian);
+  overflow-x: hidden;
+}
+
+/* fluid headings — light/airy by default; weight is opt-in */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  text-transform: none;
+}
+h1 { font-size: var(--fs-h1); font-weight: 300; }
+h2 { font-size: var(--fs-h2); font-weight: 300; }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+
+p { margin: 0 0 var(--s-3); }
+
+a {
+  color: var(--plasma);
+  text-decoration: none;
+  transition: color var(--d-fast) var(--ease-snap);
+}
+a:hover { color: var(--bone); }
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+button { cursor: pointer; }
+
+::selection {
+  background: var(--plasma);
+  color: var(--obsidian);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb {
+  background: var(--ash);
+  border: 2px solid var(--obsidian);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--plasma-dp); }
+
+:focus-visible {
+  outline: 2px solid var(--plasma);
+  outline-offset: 2px;
+}
+
+img { display: block; max-width: 100%; }
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--ash);
+  margin: var(--s-5) 0;
+}
+
+/* utility — use sparingly */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}

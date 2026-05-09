@@ -1,50 +1,40 @@
-.manage-access {
-    display: flex;
-    /* justify-content: center;
-    align-items: center; */
-    height: 100vh;
+/* ============================================================
+   Manage — VAULT / LEDGER shell
+   ============================================================ */
+
+.vault {
+  position: relative;
+  min-height: 100vh;
+  background: var(--obsidian);
+}
+.vault::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(900px 480px at 92% 12%, var(--plasma-haze), transparent 60%);
+  z-index: 0;
+}
+.vault > * { position: relative; z-index: 1; }
+
+.vault__locator {
+  position: fixed;
+  right: var(--s-4);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@media (max-width: 880px) { .vault__locator { display: none; } }
+
+.vault__main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 130px var(--s-7) var(--s-9);
 }
 
-.manage-passwpord {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.access-section {
-    margin-top: 10vh;
-    margin-left: 30vh;
-}
-
-.password-manager-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.hexagons2-background-managepage {
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    z-index: -1;
-    height: auto;
-}
-
-@media (max-width: 1050px) {
-    .manage {
-        justify-content: center;
-    }
-
-    .access-section {
-        margin-top: 15vh;
-        margin-left: 5vh;
-    }
-}
-
-@media (max-width: 800px) {
-    .hexagons2-background-managepage {
-        display: none;
-    }
+@media (max-width: 720px) {
+  .vault__main { padding: 110px var(--s-4) var(--s-7); }
 }

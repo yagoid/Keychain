@@ -1,26 +1,49 @@
-.icon-set {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 25px;
-    line-height: 0.9;
+/* Side rail — matches design-reference SideRail exactly */
+
+/* wrapper: the aside that holds all items */
+/* items are laid out by the parent via flex-direction: column, gap: 18px */
+
+.pb-loc__link {
+  text-decoration: none;
+  display: block;
 }
 
-.icon-set a {
-    margin: -1px 0;
+.pb-loc__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--bone-mute);
+  transition: color var(--d-fast);
+}
+.pb-loc__item:hover { color: var(--bone-dim); }
+.pb-loc__item--active { color: var(--bone); }
+
+.pb-loc__num {
+  line-height: 1;
+  user-select: none;
 }
 
-.locator-square {
-    max-width: 25px;
-    cursor: pointer;
+.pb-loc__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: transparent;
+  transition:
+    background var(--d-fast),
+    box-shadow var(--d-fast),
+    border-color var(--d-fast);
+  flex-shrink: 0;
 }
-.locator-line {
-    align-items: center;
-    max-width: 3px;
-    margin: -3px 0;
-    z-index: -1;
-}
-
-.invisible-line {
-    opacity: 0;
+.pb-loc__item--active .pb-loc__dot {
+  background: var(--plasma);
+  border-color: var(--plasma);
+  box-shadow: 0 0 0 4px rgba(28, 176, 230, 0.18);
 }

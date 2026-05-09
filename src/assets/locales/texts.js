@@ -156,24 +156,24 @@ export const TEXTS = {
       en: " The password is secure"
     },
     aboutSections: {
-      es: ["Main", "Soluciones", "Servicios", "Fundadores"],
-      en: ["Main", "Solutions", "Services", "Founders"]
+      es: ["Main", "Soluciones", "Servicios"],
+      en: ["Main", "Solutions", "Services"]
     },
     homeSections: {
       es: ["Home", "Administrador", "Generador"],
       en: ["Home", "Manage", "Generator"]
     },
     trust: {
-      es: "CONFÍA",
-      en: "TRUST"
+      es: "confía.",
+      en: "trust."
     },
     decentralize: {
-      es: "DESCENTRALIZA",
-      en: "DECENTRALIZE"
+      es: "descentraliza.",
+      en: "decentralize."
     },
     enjoy: {
-      es: "DIVIÉRTETE",
-      en: "ENJOY"
+      es: "disfruta.",
+      en: "enjoy."
     },
     homeText: {
       es: "Tu memoria es valiosa. Déjanos recordar tus contraseñas",
