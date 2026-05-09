@@ -1,0 +1,29 @@
+# ── Content Security Policy ──────────────────────────────────────────────────
+# unsafe-eval is required by the SWC runtime bundled by @vitejs/plugin-react-swc
+<IfModule mod_headers.c>
+    Header always set Content-Security-Policy "\
+default-src 'self'; \
+script-src 'self' 'unsafe-eval' 'unsafe-inline'; \
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; \
+font-src 'self' https://fonts.gstatic.com; \
+img-src 'self' data: blob:; \
+connect-src 'self' \
+    https://*.googleapis.com \
+    https://*.firebaseio.com \
+    https://securetoken.googleapis.com \
+    https://identitytoolkit.googleapis.com \
+    wss://*.firebaseio.com; \
+object-src 'none'; \
+frame-src 'none'"
+</IfModule>
+
+# ── SPA routing (React Router) ────────────────────────────────────────────────
+# Redirect all non-file requests to index.html so client-side routes work
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>
