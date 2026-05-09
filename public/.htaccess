@@ -21,9 +21,9 @@ frame-src 'none'"
 # Redirect all non-file requests to index.html so client-side routes work
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /keychain/
     RewriteRule ^index\.html$ - [L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.html [L]
+    RewriteRule . /keychain/index.html [L]
 </IfModule>
